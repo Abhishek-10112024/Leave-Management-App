@@ -1,17 +1,22 @@
 import express from "express";
 import cors from "cors";
 import sequelize from "./db.js";
-import exp from "constants";
+import authRoute from "./routes/authRoute.js";
+import leaveRoute from "./routes/leaveRoute.js";
+// import userRoute from "./routes/userRoute.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors({
-    "origin": 'http://localhost:3000',
+    "origin": 'http://localhost:5173',
     credentials: true
 }));
 
-const port = 5000;
+app.use('/api/auth', authRoute);
+app.use('/api/leaves', leaveRoute);
+
+const port = 3000;
 
 sequelize.sync().then(() => {
     console.log('Synchronized')
