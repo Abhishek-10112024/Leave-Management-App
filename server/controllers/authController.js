@@ -2,23 +2,35 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 
-const secretKey = 'your-jwt-secret-key';
+const secretKey = process.env.JWT_SECRET || 'your-jwt-secret-key';
 
 export const register = async (req, res) => {
     try {
-        const { name, team, email, password, role = 'employee' } = req.body;
-        
-        if (!name || !email || !password || !team) {
-            return res.status(422).json({ message: 'Please enter all fields' });
+        const { e_name, e_team, e_email, e_password, e_role } = req.body;
+
+        const { role: adminRole } = req.user; 
+        if (adminRole !== 'admin') {
+            return res.status(403).json({ message: "Only admins can register new users." });
         }
 
-        const userExists = await User.findOne({ where: { email } });
+        if (!e_name || !e_email || !e_password || !e_team) {
+            return res.status(400).json({ message: 'Please enter all fields' });
+        }
+
+        const userExists = await User.findOne({ where: { e_email } });
         if (userExists) {
-            return res.status(409).json({ message: "User already exists!" });
+            return res.status(400).json({ message: "User already exists!" });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await User.create({ name, team, email, password: hashedPassword, role });
+        const hashedPassword = await bcrypt.hash(e_password, 10);
+        await User.create({ 
+            e_name, 
+            e_team, 
+            e_email, 
+            e_password: hashedPassword, 
+            e_role: e_role || 'employee' // Default to 'employee' if no role is provided
+        });
+
         return res.status(201).json({ message: "User created successfully" });
 
     } catch (error) {
@@ -28,21 +40,20 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { e_email, e_password } = req.body;
 
-        if (!email || !password) {
-            return res.status(422).json({ message: "Please enter all fields" });
+        if (!e_email || !e_password) {
+            return res.status(400).json({ message: "Please enter all fields" });
         }
 
-        const user = await User.findOne({ where: { email } });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        const user = await User.findOne({ where: { e_email } });
+        if (!user || !(await bcrypt.compare(e_password, user.e_password))) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        if (user.role !== role) {
-            return res.status(400).json({ message: 'Role mismatch' });
-          }
-        const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, secretKey, { expiresIn: '1h' });  // jwt token generation with payload, secretKey, expiration time
-        return res.status(200).json({ message: "Log in successful!" , token, userRole: user.role});
+
+        const token = jwt.sign({ id: user.e_id, email: user.e_email, role: user.e_role }, secretKey, { expiresIn: '1h' });
+
+        return res.status(200).json({ message: "Log in successful!", token, userRole: user.e_role });
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -50,5 +61,5 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-        res.json({ message: "Logout successful" });
+    res.json({ message: "Logout successful" });
 };

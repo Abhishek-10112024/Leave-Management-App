@@ -2,29 +2,29 @@ import { DataTypes } from "sequelize";
 import sequelize from "../db.js";
 
 const User = sequelize.define('User', {
-    id: {
+    e_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
     },
-    name: {
+    e_name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    team: {
+    e_team: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    role: {
+    e_role: {
         type: DataTypes.ENUM('admin', 'employee'),
         allowNull: false,
     },
-    email: {
+    e_email: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
     },
-    password: {
+    e_password: {
         type: DataTypes.STRING,
         allowNull: false,
     },

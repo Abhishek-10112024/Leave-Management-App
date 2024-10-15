@@ -8,14 +8,14 @@ const Leave = sequelize.define('Leave', {
         autoIncrement: true,
         primaryKey: true,
     },
-    id: {
+    e_id: {
         type: DataTypes.INTEGER,
         references: {
             model: User,
             key: 'id',
         },
     },
-    name: {
+    e_name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -37,11 +37,11 @@ const Leave = sequelize.define('Leave', {
     },
     total_leaves: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        defaultValue: 30,
     },
     remaining_leaves: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        defaultValue: 30,
     },
 });
 
