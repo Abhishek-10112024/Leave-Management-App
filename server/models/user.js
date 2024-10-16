@@ -11,7 +11,7 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    e_team: {
+    e_dept: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -28,6 +28,16 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    total_leaves: {
+        type: DataTypes.INTEGER,
+        defaultValue: 30,
+    },
+    remaining_leaves: {
+        type: DataTypes.INTEGER,
+        defaultValue: 30,
+    }},
+    {
+        timestamps:false
 });
 
 export default User;

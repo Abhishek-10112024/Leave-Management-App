@@ -12,7 +12,7 @@ const Leave = sequelize.define('Leave', {
         type: DataTypes.INTEGER,
         references: {
             model: User,
-            key: 'id',
+            key: 'e_id',
         },
     },
     e_name: {
@@ -34,15 +34,9 @@ const Leave = sequelize.define('Leave', {
     status: {
         type: DataTypes.ENUM('pending', 'rejected', 'accepted'),
         defaultValue: 'pending',
-    },
-    total_leaves: {
-        type: DataTypes.INTEGER,
-        defaultValue: 30,
-    },
-    remaining_leaves: {
-        type: DataTypes.INTEGER,
-        defaultValue: 30,
-    },
+    }},
+    {
+        timestamps:false
 });
 
 export default Leave;

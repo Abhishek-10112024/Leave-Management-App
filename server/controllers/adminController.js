@@ -12,14 +12,20 @@ export const updateLeaveStatus = async (req, res) => {
         }
 
         leave.status = status;
+        
+        const user = await User.findByPk(leave.e_id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-        if (status === 'approved') {
-            leave.remaining_leaves -= 1; 
+        if (status === 'accepted') {
+            User.remaining_leaves -= 1; 
         } else if (status === 'rejected') {
-            leave.remaining_leaves += 1; 
+            User.remaining_leaves += 1; 
         }
 
         await leave.save();
+        await user.save();
 
         res.status(200).json(leave);
     } catch (error) {
