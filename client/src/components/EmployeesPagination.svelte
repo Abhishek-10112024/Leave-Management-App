@@ -1,32 +1,31 @@
 <script>
-    import { page, totalPages, fetchEmployees } from '../store';
-    import { onMount } from 'svelte';
-  
-    const goToPage = (newPage) => {
+  import { page, totalPages, fetchEmployees } from '../store';
+
+  const goToPage = (newPage) => {
       if (newPage > 0 && newPage <= $totalPages) {
-        page.set(newPage);
-        fetchEmployees();
+          page.set(newPage);
+          fetchEmployees();
       } else {
-        console.warn('Page number out of range:', newPage);
+          console.warn('Page number out of range:', newPage);
       }
-    };
-  </script>
-  
-  <div class="pagination-controls">
-    <button on:click={() => goToPage(1)}>
-      First
-    </button>
-    <button on:click={() => goToPage($page - 1)}>
-      &lt;
-    </button>
-    <span id="pageDisplay">Page {$page} of {$totalPages}</span>
-    <button on:click={() => goToPage($page + 1)}>
-      &gt;
-    </button>
-    <button on:click={() => goToPage($totalPages)}>
-      Last
-    </button>
-  </div>
+  };
+</script>
+
+<div class="pagination-controls">
+  <button on:click={() => goToPage(1)}>
+    First
+  </button>
+  <button on:click={() => goToPage($page - 1)}>
+    &lt;
+  </button>
+  <span id="pageDisplay">Page {$page} of {$totalPages}</span>
+  <button on:click={() => goToPage($page + 1)}>
+    &gt;
+  </button>
+  <button on:click={() => goToPage($totalPages)}>
+    Last
+  </button>
+</div>
   
   <style>
     .pagination-controls {

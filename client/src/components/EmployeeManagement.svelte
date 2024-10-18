@@ -2,10 +2,9 @@
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
     import Logout from './Logout.svelte';
-    import {employees, fetchEmployees} from '../store';
+    import { employees, fetchEmployees } from '../store';
     import EmployeesPagination from './EmployeesPagination.svelte';
 
-    let userRole = localStorage.getItem('userRole') || 'Employee';
     let error = '';
 
     const signUpNewEmployee = () => {
@@ -15,7 +14,15 @@
     const goToAdminDashboard = () => {
         navigate('/admin');
     };
-    onMount(fetchEmployees);
+
+    onMount(async () => {
+        try {
+            await fetchEmployees();
+        } catch (err) {
+            error = 'Failed to fetch employees. Please try again later.';
+            console.error('Error fetching employees:', err);
+        }
+    });
 </script>
 
 <div class="employee-management">
@@ -24,7 +31,7 @@
         <p class="error">{error}</p>
     {/if}
 
-    <table>
+    <table class="employee-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -52,60 +59,114 @@
     </table>
 
     <div class="button-container">
-        <button on:click={signUpNewEmployee}>Sign Up New Employee</button>
-        <button on:click={goToAdminDashboard}>Back to Admin Dashboard</button>
+        <button class="btn sign-up" on:click={signUpNewEmployee}>Sign Up New Employee</button>
+        <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>
     </div>
 </div>
 <Logout/>
 <EmployeesPagination/>
+
 <style>
     .employee-management {
-        padding: 20px;
-        max-width: 800px;
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;
         margin: auto;
     }
 
     h1 {
-        margin-bottom: 20px;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 25px;
         color: #333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    th, td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f4f4f4;
+        text-align: center;
+        font-size: 24px;
     }
 
     .error {
         color: red;
         margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .employee-table {
+        width: 100%;
+        border-collapse: collapse;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .employee-table thead{
+        background-color: #f5f6f9;
+    }
+
+    .employee-table thead th{
+        padding: 15px;
+        text-align: left;
+        font-size: 16px;
+        font-weight: 600;
+        color: #555;
+        border-bottom: 2px solid #eaeaea;
+    }
+
+    .employee-table tbody {
+        background-color: #ffffff;
+    }
+
+    .employee-table tbody tr {
+        border-bottom: 1px dotted #ddd;
+    }
+
+    .employee-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .employee-table tbody td {
+        padding: 15px;
+        font-size: 15px;
+        color: #333;
+    }
+
+    .employee-table tbody tr:hover {
+        background-color: #f1f1f1;
     }
 
     .button-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        margin-top: 20px;
     }
 
-    button {
-        padding: 10px 15px;
+    .btn {
+        padding: 12px 20px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.3s;
+        margin: 0 10px;
+        width: 150px;
     }
 
-    button:hover {
-        background-color: #ddd;
+    .btn.sign-up {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn.sign-up:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    .btn.dashboard {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn.dashboard:hover {
+        background-color: #0069d9;
+        transform: translateY(-2px);
     }
 </style>

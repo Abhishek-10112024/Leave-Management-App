@@ -1,6 +1,5 @@
 <script>
     import { page, totalPages, fetchLeaveRequests } from '../store';
-    import { onMount } from 'svelte';
   
     const goToPage = (newPage) => {
       if (newPage > 0 && newPage <= $totalPages) {

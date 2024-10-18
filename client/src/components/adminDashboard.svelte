@@ -1,6 +1,6 @@
 <script>
     import { navigate } from 'svelte-routing';
-  import Logout from './Logout.svelte';
+    import Logout from './Logout.svelte';
 
     const goToLeaveManagement = () => {
         navigate('/leave-management');
