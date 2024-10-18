@@ -6,31 +6,44 @@
   let password = '';
   let role = 'employee';
   let team = '';
+  let errorMessage = '';
 
   const fetchData = async () => {
-    const response = await fetch('http://localhost:3000/api/auth/register', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name, team, email, password, role})
-    });
+        try {
+            const token = localStorage.getItem('token');
 
-    if (response.ok) {
-      alert('Sign Up Successful!');
-      navigate('/');
-    } else {
-      alert('Error while signing up');
-    }
-  };
+            const response = await fetch('http://localhost:3000/api/auth/register', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ e_name: name, e_dept: team, e_email: email, e_password: password, e_role: role })
+            });
 
-  const handleLogin = () => {
-    navigate('/');
-  };
+            if (response.ok) {
+                alert('Sign Up Successful!');
+                navigate('/');
+            } else {
+                const { message } = await response.json();
+                errorMessage = message || 'Error while signing up';
+            }
+        } catch (error) {
+            console.error('Error during signup:', error);
+            errorMessage = 'An unexpected error occurred';
+        }
+    };
+
+    const handleLogin = () => {
+        navigate('/');
+    };
 </script>
 
 <div class="container">
+  {#if errorMessage}
+        <p style="color: red;">{errorMessage}</p>
+  {/if}
   <h2>Sign Up</h2>
   <input type="text" placeholder="Name" bind:value={name} />
   <input type="team" placeholder="Team" bind:value={team} />

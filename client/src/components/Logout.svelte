@@ -2,25 +2,36 @@
     import { navigate } from 'svelte-routing';
   
     const logout = async () => {
-      const response = await fetch('http://localhost:3000/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      const token = localStorage.getItem('token');
+
+        if (!token) {
+            alert('No user is currently logged in.');
+            return;
         }
-      });
-  
-      if (response.ok) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userRole');
-        navigate('/',{replace:true});
-  
-      } else {
-        alert('Error while logging out');
-      }
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userRole');
+                navigate('/', { replace: true });
+            } else {
+                const { message } = await response.json();
+                alert(message || 'Error while logging out');
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('An unexpected error occurred while logging out.');
+        }
     };
-  </script>
+</script>
   
   <div class="buttonContainer">
     <button class="btn1" on:click={logout}>Log Out</button>

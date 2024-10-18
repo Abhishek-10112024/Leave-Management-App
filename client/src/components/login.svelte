@@ -11,14 +11,14 @@
       const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ e_email: email, e_password: password, e_role: role }),
         credentials: 'include'
       });
       if (response.ok) {
-    const data = await response.json();
+        const data = await response.json();
         console.log('Response data:', data); // Debug log
 
-        const { token, userRole, id } = data;
+        const { token, userRole } = data;
 
         
         if (!userRole || !token) {
@@ -62,6 +62,9 @@
 
 <div class="container">
   <h2>Login</h2>
+{#if error}
+  <p style="color: red;">{error}</p>
+{/if}
   <input type="email" placeholder="Email" bind:value={email} />
   <input type="password" placeholder="Password" bind:value={password} />
   <select bind:value={role} class="role-select">
