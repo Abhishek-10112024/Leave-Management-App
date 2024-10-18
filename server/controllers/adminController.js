@@ -11,17 +11,24 @@ export const updateLeaveStatus = async (req, res) => {
             return res.status(404).json({ message: 'Leave request not found' });
         }
 
-        leave.status = status;
-        
         const user = await User.findByPk(leave.e_id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        if (leave.status === 'accepted') {
+            return res.status(400).json({ message: 'Leave request is already accepted' });
+        }
+        if (leave.status === 'rejected') {
+            return res.status(400).json({ message: 'Leave request is already rejected' });
+        }
+
+        leave.status = status;
+
         if (status === 'accepted') {
-            User.remaining_leaves -= 1; 
+            user.remaining_leaves -= 1; 
         } else if (status === 'rejected') {
-            User.remaining_leaves += 1; 
+            user.remaining_leaves += 1; 
         }
 
         await leave.save();
