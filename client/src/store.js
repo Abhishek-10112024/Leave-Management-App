@@ -11,7 +11,7 @@ export const fetchEmployees = async () => {
     try {
       const page_num = get(page);
       const limit_val = get(limit);
-      const token = localStorage.getItem('token'); // Retrieve JWT token
+      const token = localStorage.getItem('token'); 
       console.log('Stored token:', token);
       if (!token) {
         throw new Error('No token found');
@@ -21,7 +21,7 @@ export const fetchEmployees = async () => {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Include token in header
+          'Authorization': `Bearer ${token}` 
         },
       });
   

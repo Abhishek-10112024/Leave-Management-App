@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { addToBlacklist } from '../middlewares/tokenBlacklist.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const secretKey = process.env.JWT_SECRET || 'your-jwt-secret-key';
 
@@ -41,9 +43,9 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const { e_email, e_password, e_role } = req.body;
+        const { e_email, e_password } = req.body;
 
-        if (!e_email || !e_password || !e_role) {
+        if (!e_email || !e_password) {
             return res.status(400).json({ message: "Please enter all fields" });
         }
 
@@ -53,9 +55,6 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.e_id, name: user.e_name, email: user.e_email, role: user.e_role }, secretKey, { expiresIn: '1h' });
-        if (user.e_role !== e_role) {
-            return res.status(403).json({ message: 'Role mismatch' });
-        }
         return res.status(200).json({ message: "Log in successful!", token, userRole: user.e_role });
 
     } catch (error) {
