@@ -42,8 +42,22 @@ export const updateLeaveStatus = async (req, res) => {
 
 export const getAllEmployees = async (req, res) => {
     try {
-        const users = await User.findAll();
-        return res.status(200).json(users);
+        const page = parseInt(req.query.page, 10) || 1; 
+        const limit = parseInt(req.query.limit, 10) || 10; 
+        const offset = (page - 1) * limit;
+
+        const { rows, count } = await User.findAndCountAll({
+            order: [['e_id', 'ASC']],
+            limit,
+            offset
+        });
+
+        return res.status(200).json({
+            employees: rows,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page,
+            totalCount: count
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -51,8 +65,22 @@ export const getAllEmployees = async (req, res) => {
 
 export const getAllLeaveRequests = async (req, res) => {
     try {
-        const leaves = await Leave.findAll();
-        return res.status(200).json(leaves);
+        const page = parseInt(req.query.page, 10) || 1; 
+        const limit = parseInt(req.query.limit, 10) || 10; 
+        const offset = (page - 1) * limit;
+
+        const { rows, count } = await Leave.findAndCountAll({
+            order: [['leave_id', 'ASC']], 
+            limit,
+            offset
+        });
+
+        return res.status(200).json({
+            leaves: rows,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page,
+            totalCount: count
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
