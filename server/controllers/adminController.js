@@ -26,9 +26,18 @@ export const updateLeaveStatus = async (req, res) => {
         leave.status = status;
 
         if (status === 'accepted') {
+            if (user.remaining_leaves <= 0) {
+                return res.status(400).json({ message: 'Not enough remaining leaves to accept this request' });
+            }
             user.remaining_leaves -= 1; 
         } else if (status === 'rejected') {
-            user.remaining_leaves += 1; 
+            if (req.user.role !== 'admin') {
+                const totalLeaves = user.total_leaves; 
+                if (user.remaining_leaves + 1 > totalLeaves) {
+                    return res.status(400).json({ message: 'Remaining leaves cannot exceed total leaves' });
+                }
+                user.remaining_leaves += 1; 
+            }
         }
 
         await leave.save();
