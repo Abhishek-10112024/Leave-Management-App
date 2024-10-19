@@ -50,8 +50,8 @@
                 <th>ID</th>
                 <th>Employee ID</th>
                 <th>Employee Name</th>
-                <th>Leave From</th>
-                <th>Leave To</th>
+                <th>Leave From<br>(MM/DD/YYYY)</th>
+                <th>Leave To<br>(MM/DD/YYYY)</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>

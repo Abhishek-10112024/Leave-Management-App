@@ -77,7 +77,7 @@
                     <td>{new Date(leaveRequest.leave_to).toLocaleDateString()}</td>
                     <td>{leaveRequest.reason}</td>
                     <td>
-                        <span class={leaveRequest.status === 'pending' ? 'status pending' : leaveRequest.status === 'approved' ? 'status approved' : 'status rejected'}>
+                        <span class={leaveRequest.status === 'pending' ? 'status pending' : leaveRequest.status === 'accepted' ? 'status accepted' : 'status rejected'}>
                             {leaveRequest.status}
                         </span>
                     </td>
@@ -209,7 +209,7 @@
     background-color: #FFA500; 
 }
 
-.status.approved {
+.status.accepted {
     background-color: #28a745; 
 }
 
