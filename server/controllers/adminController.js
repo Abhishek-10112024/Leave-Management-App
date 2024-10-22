@@ -1,5 +1,5 @@
 import Leave from '../models/leave.js';
-import User from '../models/user.js'
+import User from '../models/user.js';
 
 export const updateLeaveStatus = async (req, res) => {
     try {
@@ -17,10 +17,10 @@ export const updateLeaveStatus = async (req, res) => {
         }
 
         if (leave.status === 'accepted') {
-            return res.status(400).json({ message: 'Leave request is already accepted' });
+            return res.status(409).json({ message: 'Leave request is already accepted' }); // 409 - conflict
         }
         if (leave.status === 'rejected') {
-            return res.status(400).json({ message: 'Leave request is already rejected' });
+            return res.status(409).json({ message: 'Leave request is already rejected' });
         }
 
         leave.status = status;
@@ -38,6 +38,8 @@ export const updateLeaveStatus = async (req, res) => {
                 }
                 user.remaining_leaves += 1; 
             }
+        } else {
+            return res.status(400).json({ message: 'Invalid status provided' }); 
         }
 
         await leave.save();
@@ -45,7 +47,7 @@ export const updateLeaveStatus = async (req, res) => {
 
         res.status(200).json(leave);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -91,6 +93,6 @@ export const getAllLeaveRequests = async (req, res) => {
             totalCount: count
         });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

@@ -37,7 +37,8 @@ export const register = async (req, res) => {
         return res.status(201).json({ message: "User created successfully" });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Registration error:", error); // Log the error for debugging
+        res.status(500).json({ message: "Internal server error." });
     }
 };
 
@@ -50,7 +51,12 @@ export const login = async (req, res) => {
         }
 
         const user = await User.findOne({ where: { e_email } });
-        if (!user || !(await bcrypt.compare(e_password, user.e_password))) {
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const passwordMatch = await bcrypt.compare(e_password, user.e_password);
+        if (!passwordMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
@@ -58,7 +64,8 @@ export const login = async (req, res) => {
         return res.status(200).json({ message: "Log in successful!", token, userRole: user.e_role });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Login error:", error); // Log the error for debugging
+        res.status(500).json({ message: "Internal server error." });
     }
 };
 
@@ -67,5 +74,5 @@ export const logout = (req, res) => {
     if (token) {
         addToBlacklist(token); 
     }
-    res.json({ message: "Logout successful" });
+    res.status(200).json({ message: "Logout successful" });
 };

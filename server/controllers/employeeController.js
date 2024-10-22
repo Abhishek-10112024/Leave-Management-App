@@ -4,8 +4,8 @@ import User from '../models/user.js';
 
 export const createLeaveRequest = async (req, res) => {
     try {
-        const {leave_from, leave_to, reason } = req.body;
-        const {  id: e_id, name: e_name } = req.user;
+        const { leave_from, leave_to, reason } = req.body;
+        const { id: e_id, name: e_name } = req.user;
 
         if (!leave_from || !leave_to || !reason) {
             return res.status(400).json({ message: 'Please provide all required fields' });
@@ -45,7 +45,8 @@ export const createLeaveRequest = async (req, res) => {
 
         res.status(201).json(newLeave);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error("Error creating leave request:", error);
+        res.status(500).json({ message: "Internal server error." });
     }
 };
 
@@ -53,8 +54,7 @@ export const modifyLeaveRequest = async (req, res) => {
     try {
         const { leave_id } = req.params;
         const e_id = req.user.id;
-        const { leave_from, leave_to , reason} = req.body;
-        const updates = req.body;
+        const { leave_from, leave_to, reason } = req.body;
 
         const leave = await Leave.findByPk(leave_id);
 
@@ -86,17 +86,18 @@ export const modifyLeaveRequest = async (req, res) => {
             return res.status(400).json({ message: 'Leave request overlaps with an existing accepted or rejected request.' });
         }
 
-        await leave.update(updates);
+        await leave.update({ leave_from, leave_to, reason });
         res.status(200).json(leave);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error("Error modifying leave request:", error);
+        res.status(500).json({ message: "Internal server error." });
     }
 };
 
 export const deleteLeaveRequest = async (req, res) => {
     try {
         const { leave_id } = req.params;
-        const e_id  = req.user.id;
+        const e_id = req.user.id;
 
         const leave = await Leave.findByPk(leave_id);
 
@@ -107,10 +108,10 @@ export const deleteLeaveRequest = async (req, res) => {
         await leave.destroy();
         res.status(200).send();
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error("Error deleting leave request:", error);
+        res.status(500).json({ message: "Internal server error." });
     }
 };
-
 
 export const getLeaveRequests = async (req, res) => {
     try {
@@ -135,6 +136,7 @@ export const getLeaveRequests = async (req, res) => {
             leaves
         });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error("Error fetching leave requests:", error);
+        res.status(500).json({ message: "Internal server error." });
     }
 };
