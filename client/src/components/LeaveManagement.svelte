@@ -35,6 +35,14 @@
         navigate('/admin');
     };
 
+    const truncateReason = (reason, limit) => {
+    // Insert a space every 50 characters for long continuous strings
+    const formattedReason = reason.replace(/(.{50})/g, '$1 ');
+
+    const words = formattedReason.split(' ');
+    return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
+};
+
     onMount(fetchLeaveRequests);
 </script>
 
@@ -65,7 +73,11 @@
                     <td>{leave.e_name}</td>
                     <td>{new Date(leave.leave_from).toLocaleDateString()}</td>
                     <td>{new Date(leave.leave_to).toLocaleDateString()}</td>
-                    <td>{leave.reason}</td>
+                    <td>
+                        <span class="truncated-reason" title={leave.reason}>
+                            {truncateReason(leave.reason, 5)}
+                        </span>
+                    </td>
                     <td>
                         <span class={`status ${leave.status}`}>{leave.status}</span>
                     </td>
@@ -223,5 +235,23 @@
     .btn.dashboard:hover {
         background-color: #0069d9;
         transform: translateY(-2px);
+    }
+    .truncated-reason {
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
+    }
+
+    .truncated-reason:hover::after {
+        content: attr(title);
+        position: absolute;
+        left: 0;
+        top: 100%;
+        white-space: nowrap;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 5px;
+        z-index: 10;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 </style>
