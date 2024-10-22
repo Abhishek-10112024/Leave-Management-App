@@ -47,10 +47,6 @@
           error = 'Login failed';
       }
   };
-
-  const handleSignUp = () => {
-      navigate('/register');
-  };
 </script>
 
 <div class="container">
@@ -62,9 +58,6 @@
   <input type="password" placeholder="Password" bind:value={password} required />
   <div class="btn1Container">
       <button class="btn1" on:click={handleLogin}>Login</button>
-  </div>
-  <div class="btn2">
-      <button class="btn2" on:click={handleSignUp}>Create an account</button>
   </div>
 </div>
 
@@ -124,31 +117,6 @@
   }
 
   .btn1:active {
-    transform: scale(0.98);
-  }
-
-  .btn2 {
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .btn2 button {
-    padding: 12px;
-    font-size: 16px;
-    border: 2px solid #0056b3;
-    background-color: white;
-    color: #0056b3;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-  }
-
-  .btn2 button:hover {
-    background-color: #0056b3;
-    color: white;
-    transform: scale(1.05);
-  }
-  .btn2:active {
     transform: scale(0.98);
   }
 </style>
