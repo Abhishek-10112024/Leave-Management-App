@@ -21,7 +21,7 @@ export const createLeaveRequest = async (req, res) => {
         const existingLeaves = await Leave.findAll({
             where: {
                 e_id,
-                status: 'pending', 
+                status: { [Op.or]: ['accepted', 'rejected'] }, 
                 [Op.or]: [
                     { leave_from: { [Op.between]: [leave_from, leave_to] } },
                     { leave_to: { [Op.between]: [leave_from, leave_to] } },
@@ -53,7 +53,7 @@ export const modifyLeaveRequest = async (req, res) => {
     try {
         const { leave_id } = req.params;
         const e_id = req.user.id;
-        const { leave_from, leave_to } = req.body;
+        const { leave_from, leave_to , reason} = req.body;
         const updates = req.body;
 
         const leave = await Leave.findByPk(leave_id);

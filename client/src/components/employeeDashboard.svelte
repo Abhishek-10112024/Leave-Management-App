@@ -11,7 +11,7 @@
 
     const fetchLeaveRequests = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/employees', {
+            const response = await fetch('http://localhost:3000/api/employees/leaves', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
