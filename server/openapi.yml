@@ -1,0 +1,684 @@
+openapi: 3.0.0
+info:
+  title: Employee Leave Management System
+  description: APIs for registering employees and managing their leaves
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: This is a dev server
+tags:
+  - name: Authentication
+    description: Login, Signup, and Logout
+  - name: Employees
+    description: Operations related to the employee's personal account
+  - name: Admin
+    description: Operations related to other employees and leaves. It can only be accessed by admins.
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User Login
+      description: Authenticate a user and generate a JWT token for access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                e_email:
+                  type: string
+                  format: email
+                  description: The email of the user.
+                e_password:
+                  type: string
+                  description: The password of the user.
+              required:
+                - e_email
+                - e_password
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Log in successful!
+                  token:
+                    type: string
+                    description: JWT token for authentication.
+                  userRole:
+                    type: string
+                    enum: [admin, employee]
+                    description: Role of the user.
+        '400':
+          description: Bad Request - Missing fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Please enter all fields
+        '401':
+          description: Unauthorized - Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid credentials
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred during login.
+
+
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: User Registration
+      description: Register a new user. Only admin users can register new users.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                e_name:
+                  type: string
+                  description: The name of the user.
+                e_dept:
+                  type: string
+                  description: The department of the user.
+                e_email:
+                  type: string
+                  format: email
+                  description: The email of the user.
+                e_password:
+                  type: string
+                  description: The password for the user account.
+                e_role:
+                  type: string
+                  enum: [admin, employee]
+                  description: The role of the user. Defaults to 'employee'.
+              required:
+                - e_name
+                - e_email
+                - e_password
+                - e_dept
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User created successfully
+        '400':
+          description: Bad Request - Missing fields or user already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Please enter all fields
+        '403':
+          description: Forbidden - Only admins can register new users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Only admins can register new users.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred during registration.
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User Logout
+      description: Logs out the user by adding the JWT token to a blacklist.
+      security:
+        - bearerAuth: []  # Requires authentication
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+        '401':
+          description: Unauthorized - No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No token provided
+
+
+  /admin/employees:
+    get:
+      tags:
+        - Admin
+      summary: Retrieve all employees
+      description: Fetch a paginated list of all employees.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            example: 1
+          description: The page number to retrieve (default is 1).
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            example: 10
+          description: The number of employees per page (default is 10).
+      responses:
+        '200':
+          description: Successfully retrieved employees
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employees:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        e_id:
+                          type: integer
+                          description: The unique identifier for the employee.
+                        e_name:
+                          type: string
+                          description: The name of the employee.
+                        e_dept:
+                          type: string
+                          description: The department of the employee.
+                        e_role:
+                          type: string
+                          enum: [admin, employee]
+                          description: The role of the employee.
+                        e_email:
+                          type: string
+                          format: email
+                          description: The email address of the employee.
+                        total_leaves:
+                          type: integer
+                          description: The total number of leave days allocated to the employee.
+                        remaining_leaves:
+                          type: integer
+                          description: The number of leave days remaining for the employee.
+                  totalPages:
+                    type: integer
+                    description: The total number of pages available.
+                  currentPage:
+                    type: integer
+                    description: The current page number.
+                  totalCount:
+                    type: integer
+                    description: The total number of employees.
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred while retrieving employees.
+
+  /admin/leaves:
+    get:
+      tags:
+        - Admin
+      summary: Retrieve all leave requests
+      description: Fetch a paginated list of all leave requests.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            example: 1
+          description: The page number to retrieve (default is 1).
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            example: 10
+          description: The number of leave requests per page (default is 10).
+      responses:
+        '200':
+          description: Successfully retrieved leave requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leaves:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        leave_id:
+                          type: integer
+                          description: The unique identifier for the leave request.
+                        e_id:
+                          type: integer
+                          description: The ID of the employee who made the leave request.
+                        leave_from:
+                          type: string
+                          format: date
+                          description: The start date of the leave.
+                        leave_to:
+                          type: string
+                          format: date
+                          description: The end date of the leave.
+                        reason:
+                          type: string
+                          description: The reason for the leave request.
+                        status:
+                          type: string
+                          enum: [pending, approved, rejected]
+                          description: The status of the leave request.
+                  totalPages:
+                    type: integer
+                    description: The total number of pages available.
+                  currentPage:
+                    type: integer
+                    description: The current page number.
+                  totalCount:
+                    type: integer
+                    description: The total number of leave requests.
+        '400':
+          description: Bad Request - Client error due to invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred while retrieving leave requests.
+
+
+  /admin/leaves/{leave_id}:
+    put:
+      tags:
+        - Admin
+      summary: Update the status of a leave request
+      description: Modify the status of a specific leave request based on its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: leave_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the leave request to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [accepted, rejected]
+                  description: The new status for the leave request.
+              required:
+                - status
+      responses:
+        '200':
+          description: Leave request status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leave_id:
+                    type: integer
+                    description: The ID of the updated leave request.
+                  status:
+                    type: string
+                    enum: [accepted, rejected]
+                    description: The updated status of the leave request.
+        '400':
+          description: Bad Request - Client error due to invalid input or logic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not enough remaining leaves to accept this request.
+        '404':
+          description: Not Found - Leave request or user not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Leave request not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred while updating the leave status.
+
+
+  /employees/leaves:
+    get:
+      tags:
+        - Employees
+      summary: Retrieve all leave requests for the authenticated user
+      description: Fetches leave requests associated with the currently logged-in user.
+      security:
+        - bearerAuth: []  # Requires authentication
+      responses:
+        '200':
+          description: Successfully retrieved leave requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Leaves'
+        '400':
+          description: Bad Request - Unable to retrieve leave requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to retrieve leave requests
+
+    post:
+      tags:
+        - Employees
+      summary: Create a new leave request
+      description: Allows the authenticated user to submit a new leave request.
+      security:
+        - bearerAuth: []  # Requires authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leave_from:
+                  type: string
+                  format: date
+                  description: Start date of the leave
+                leave_to:
+                  type: string
+                  format: date
+                  description: End date of the leave
+                reason:
+                  type: string
+                  description: Reason for the leave
+              required:
+                - leave_from
+                - leave_to
+                - reason
+              additionalProperties: false
+      responses:
+        '201':
+          description: Leave request created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leave_id:
+                    type: integer
+                  e_id:
+                    type: integer
+                  e_name:
+                    type: string
+                  leave_from:
+                    type: string
+                    format: date
+                  leave_to:
+                    type: string
+                    format: date
+                  reason:
+                    type: string
+                  status:
+                    type: string
+                    example: pending
+        '400':
+          description: Bad Request - Invalid input or insufficient leave balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not enough remaining leaves to apply for this request or Leave request overlaps with an existing request.
+
+
+  /employees/leaves/{leave_id}:
+    patch:
+      tags:
+        - Employees
+      summary: Modify an existing leave request
+      description: Allows the authenticated user to modify a pending leave request.
+      security:
+        - bearerAuth: []  # Requires authentication
+      parameters:
+        - in: path
+          name: leave_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the leave request to be modified
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                leave_from:
+                  type: string
+                  format: date
+                  description: Updated start date of the leave
+                leave_to:
+                  type: string
+                  format: date
+                  description: Updated end date of the leave
+                reason:
+                  type: string
+                  description: Reason for the leave
+              additionalProperties: false
+      responses:
+        '200':
+          description: Leave request modified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leave_id:
+                    type: integer
+                  e_id:
+                    type: integer
+                  leave_from:
+                    type: string
+                    format: date
+                  leave_to:
+                    type: string
+                    format: date
+                  reason:
+                    type: string
+                  status:
+                    type: string
+                    example: pending
+        '400':
+          description: Bad Request - Invalid input or insufficient leave balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not enough remaining leaves to apply for this request or Leave request overlaps with an existing accepted or rejected request.
+        '404':
+          description: Not Found - Leave request not found or cannot be modified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Leave request not found or cannot be modified.
+
+    delete:
+      tags:
+        - Employees
+      summary: Delete a pending leave request
+      description: Allows the authenticated user to delete a pending leave request.
+      security:
+        - bearerAuth: []  # Requires authentication
+      parameters:
+        - in: path
+          name: leave_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the leave request to be deleted
+      responses:
+        '200':
+          description: Leave request deleted successfully
+        '404':
+          description: Not Found - Leave request not found or cannot be deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Leave request not found or cannot be deleted
+        '400':
+          description: Bad Request - Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error message detailing the issue
+
+components:
+  schemas:
+    Leaves:
+      type: object
+      properties:
+        leave_id:
+          type: integer
+        e_id:
+          type: integer
+        e_name:
+          type: string
+        leave_from:
+          type: string
+          format: date
+        leave_to:
+          type: string
+          format: date
+        reason:
+          type: string
+        status:
+          type: string
+          enum: [pending, rejected, accepted]
+    Users:
+      type: object
+      properties:
+        e_id:
+          type: integer
+        e_name:
+          type: string
+        e_dept:
+          type: string
+        e_role:
+          type: string
+          enum: [admin, employee]
+        e_email:
+          type: string
+          format: email
+        total_leaves:
+          type: integer
+        remaining_leaves:
+          type: integer
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
