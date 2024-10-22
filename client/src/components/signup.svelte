@@ -24,7 +24,7 @@
 
             if (response.ok) {
                 alert('Sign Up Successful!');
-                navigate('/');
+                navigate('/employee-management');
             } else {
                 const { message } = await response.json();
                 errorMessage = message || 'Error while signing up';
