@@ -9,9 +9,13 @@
     let showEditModal = false;
     let showApplyModal = false;
 
+    let currentPage = 1;
+    let itemsPerPage = 5; 
+    let totalItems = 0;
+
     const fetchLeaveRequests = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/employees/leaves', {
+            const response = await fetch(`http://localhost:3000/api/employees/leaves?page=${currentPage}&limit=${itemsPerPage}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -20,13 +24,20 @@
             });
 
             if (response.ok) {
-                leaveRequests = await response.json();
+                const data = await response.json();
+                leaveRequests = data.leaves;
+                totalItems = data.totalItems; 
             } else {
                 console.error('Failed to fetch leave requests');
             }
         } catch (error) {
             console.error('Error fetching leave requests:', error);
         }
+    };
+
+    const changePage = (page) => {
+        currentPage = page;
+        fetchLeaveRequests();
     };
 
     const openEditModal = (leaveRequest) => {
@@ -50,12 +61,10 @@
     };
 
     const truncateReason = (reason, limit) => {
-    // Insert a space every 50 characters for long continuous strings
-    const formattedReason = reason.replace(/(.{50})/g, '$1 ');
-
-    const words = formattedReason.split(' ');
-    return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
-};
+        const formattedReason = reason.replace(/(.{50})/g, '$1 ');
+        const words = formattedReason.split(' ');
+        return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
+    };
 
     onMount(() => {
         fetchLeaveRequests();
@@ -102,6 +111,19 @@
             {/each}
         </tbody>
     </table>
+
+    <div class="pagination">
+        {#if totalItems > itemsPerPage}
+            {#each Array(Math.ceil(totalItems / itemsPerPage)) as _, index}
+                <button 
+                    class="btn page-button" 
+                    on:click={() => changePage(index + 1)} 
+                    class:selected={currentPage === index + 1}>
+                    {index + 1}
+                </button>
+            {/each}
+        {/if}
+    </div>
 
     {#if showEditModal}
         <EditLeaveModal leaveRequest={selectedLeaveRequest} on:close={closeEditModal} />
@@ -247,5 +269,39 @@
         z-index: 10;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
+    .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-button {
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: 2px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.page-button:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.page-button.selected {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.page-button:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
 </style>
 

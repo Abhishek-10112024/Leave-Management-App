@@ -115,8 +115,25 @@ export const deleteLeaveRequest = async (req, res) => {
 export const getLeaveRequests = async (req, res) => {
     try {
         const { id: e_id } = req.user;
-        const leaves = await Leave.findAll({ where: { e_id } });
-        res.status(200).json(leaves);
+
+        const page = parseInt(req.query.page, 10) || 1; 
+        const limit = parseInt(req.query.limit, 10) || 10; 
+        const offset = (page - 1) * limit; 
+
+        const { count, rows: leaves } = await Leave.findAndCountAll({
+            where: { e_id },
+            limit, 
+            offset 
+        });
+
+        const totalPages = Math.ceil(count / limit);
+
+        res.status(200).json({
+            totalItems: count,
+            totalPages,
+            currentPage: page,
+            leaves
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

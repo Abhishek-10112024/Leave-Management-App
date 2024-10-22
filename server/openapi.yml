@@ -428,19 +428,46 @@ paths:
     get:
       tags:
         - Employees
-      summary: Retrieve all leave requests for the authenticated user
-      description: Fetches leave requests associated with the currently logged-in user.
+      summary: Retrieve leave requests for the authenticated user with pagination
+      description: Fetches leave requests associated with the currently logged-in user, supporting pagination.
       security:
         - bearerAuth: []  # Requires authentication
+      parameters:
+        - in: query
+          name: page
+          required: false
+          description: The page number to retrieve.
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          required: false
+          description: The number of leave requests to retrieve per page.
+          schema:
+            type: integer
+            example: 10
       responses:
         '200':
           description: Successfully retrieved leave requests
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Leaves'
+                type: object
+                properties:
+                  totalItems:
+                    type: integer
+                    example: 25
+                  totalPages:
+                    type: integer
+                    example: 3
+                  currentPage:
+                    type: integer
+                    example: 1
+                  leaves:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Leaves'
         '400':
           description: Bad Request - Unable to retrieve leave requests
           content:
