@@ -52,6 +52,7 @@
                 <th>Employee Name</th>
                 <th>Leave From<br>(MM/DD/YYYY)</th>
                 <th>Leave To<br>(MM/DD/YYYY)</th>
+                <th>Reason</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -64,6 +65,7 @@
                     <td>{leave.e_name}</td>
                     <td>{new Date(leave.leave_from).toLocaleDateString()}</td>
                     <td>{new Date(leave.leave_to).toLocaleDateString()}</td>
+                    <td>{leave.reason}</td>
                     <td>
                         <span class={`status ${leave.status}`}>{leave.status}</span>
                     </td>
