@@ -5,12 +5,14 @@
     import Logout from './Logout.svelte';
 
     let leaveRequests = [];
+    let filteredLeaves = [];
     let selectedLeaveRequest = null;
     let showEditModal = false;
     let showApplyModal = false;
 
+    let currentStatus = 'all'; // Default status to show all leaves
     let currentPage = 1;
-    let itemsPerPage = 5; 
+    let itemsPerPage = 5;
     let totalItems = 0;
 
     const fetchLeaveRequests = async () => {
@@ -26,7 +28,8 @@
             if (response.ok) {
                 const data = await response.json();
                 leaveRequests = data.leaves;
-                totalItems = data.totalItems; 
+                totalItems = data.totalItems;
+                filterLeaves(); // Filter leaves after fetching
             } else {
                 console.error('Failed to fetch leave requests');
             }
@@ -35,9 +38,21 @@
         }
     };
 
+    const filterLeaves = () => {
+        filteredLeaves = currentStatus === 'all' 
+            ? leaveRequests 
+            : leaveRequests.filter(leave => leave.status === currentStatus);
+    };
+
     const changePage = (page) => {
         currentPage = page;
         fetchLeaveRequests();
+    };
+
+    const changeStatus = (status) => {
+        currentStatus = status;
+        // currentPage = 1; // Reset to first page on status change
+        filterLeaves(); // Filter leaves based on the new status
     };
 
     const openEditModal = (leaveRequest) => {
@@ -48,7 +63,7 @@
     const closeEditModal = () => {
         showEditModal = false;
         selectedLeaveRequest = null;
-        fetchLeaveRequests(); 
+        fetchLeaveRequests();
     };
 
     const openApplyModal = () => {
@@ -57,11 +72,11 @@
 
     const closeApplyModal = () => {
         showApplyModal = false;
-        fetchLeaveRequests(); 
+        fetchLeaveRequests();
     };
 
     const truncateReason = (reason, limit) => {
-        const formattedReason = reason.replace(/(.{50})/g, '$1 ');
+        const formattedReason = reason.replace(/(.{20})/g, '$1 ');
         const words = formattedReason.split(' ');
         return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
     };
@@ -75,6 +90,12 @@
     <h2>Employee Dashboard</h2>
     <div class="button-container">
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
+        <div class="status-buttons">
+            <button class="btn" on:click={() => changeStatus('all')}>All Leaves</button>
+            <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
+            <button class="btn" on:click={() => changeStatus('accepted')}>Accepted</button>
+            <button class="btn" on:click={() => changeStatus('rejected')}>Rejected</button>
+        </div>
     </div>
 
     <table class="leave-table">
@@ -88,7 +109,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each leaveRequests as leaveRequest}
+            {#each filteredLeaves as leaveRequest}
                 <tr>
                     <td>{new Date(leaveRequest.leave_from).toLocaleDateString()}</td>
                     <td>{new Date(leaveRequest.leave_to).toLocaleDateString()}</td>
@@ -302,6 +323,35 @@
     background-color: #e0e0e0;
     color: #a0a0a0;
     cursor: not-allowed;
+}
+.status-buttons {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+    margin-left: auto; /* Align to the right */
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px); /* Lift effect on hover */
+}
+
+.btn {
+    background-color: #007bff; /* Default button color */
+    color: white; /* Text color */
+}
+
+.btn.selected {
+    font-weight: bold; /* Bold text for the selected button */
+    border: 2px solid white; /* Outline for the selected button */
+    background-color: #0056b3; /* Darker background for selected */
 }
 </style>
 
