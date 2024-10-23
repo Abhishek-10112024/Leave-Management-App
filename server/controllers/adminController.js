@@ -25,7 +25,7 @@ export const updateLeaveStatus = async (req, res) => {
             return res.status(409).json({ message: 'Leave request is already accepted' }); // 409 - conflict
         }
         if (leave.status === 'rejected') {
-            return res.status(409).json({ message: 'Leave request is already rejected' });
+            return res.status().json({ message: 'Leave request is already rejected' });
         }
 
         leave.status = status;
@@ -45,7 +45,7 @@ export const updateLeaveStatus = async (req, res) => {
             }
         } else {
             return res.status(400).json({ message: 'Invalid status provided' }); 
-        }
+        }409
 
         await leave.save();
         await user.save();
