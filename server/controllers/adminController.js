@@ -6,6 +6,11 @@ export const updateLeaveStatus = async (req, res) => {
         const { leave_id } = req.params;
         const { status } = req.body; 
 
+        const validStatuses = ['accepted', 'rejected'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Invalid status provided' });
+        }
+
         const leave = await Leave.findByPk(leave_id);
         if (!leave) {
             return res.status(404).json({ message: 'Leave request not found' });
@@ -79,8 +84,15 @@ export const getAllLeaveRequests = async (req, res) => {
         const page = parseInt(req.query.page, 10) || 1; 
         const limit = parseInt(req.query.limit, 10) || 10; 
         const offset = (page - 1) * limit;
+        const status = req.query.status;
+
+        const where = {}; // Define a where clause for filtering
+        if (status && ['pending', 'accepted', 'rejected'].includes(status)) {
+            where.status = status; // Add status filter if provided and valid
+        }
 
         const { rows, count } = await Leave.findAndCountAll({
+            where, // Use the where clause for filtering
             order: [['leave_id', 'ASC']], 
             limit,
             offset

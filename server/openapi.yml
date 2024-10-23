@@ -87,7 +87,6 @@ paths:
                     type: string
                     example: An error occurred during login.
 
-
   /auth/register:
     post:
       tags:
@@ -195,7 +194,6 @@ paths:
                     type: string
                     example: No token provided
 
-
   /admin/employees:
     get:
       tags:
@@ -228,31 +226,7 @@ paths:
                   employees:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        e_id:
-                          type: integer
-                          description: The unique identifier for the employee.
-                        e_name:
-                          type: string
-                          description: The name of the employee.
-                        e_dept:
-                          type: string
-                          description: The department of the employee.
-                        e_role:
-                          type: string
-                          enum: [admin, employee]
-                          description: The role of the employee.
-                        e_email:
-                          type: string
-                          format: email
-                          description: The email address of the employee.
-                        total_leaves:
-                          type: integer
-                          description: The total number of leave days allocated to the employee.
-                        remaining_leaves:
-                          type: integer
-                          description: The number of leave days remaining for the employee.
+                      $ref: '#/components/schemas/Users'
                   totalPages:
                     type: integer
                     description: The total number of pages available.
@@ -278,7 +252,7 @@ paths:
       tags:
         - Admin
       summary: Retrieve all leave requests
-      description: Fetch a paginated list of all leave requests.
+      description: Fetch a paginated list of all leave requests, optionally filtered by status.
       parameters:
         - in: query
           name: page
@@ -294,6 +268,14 @@ paths:
             type: integer
             example: 10
           description: The number of leave requests per page (default is 10).
+        - in: query
+          name: status
+          required: false
+          schema:
+            type: string
+            enum: [pending, accepted, rejected]
+            example: pending
+          description: Filter leave requests by their status. Valid values are pending, accepted, and rejected.
       responses:
         '200':
           description: Successfully retrieved leave requests
@@ -305,29 +287,7 @@ paths:
                   leaves:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        leave_id:
-                          type: integer
-                          description: The unique identifier for the leave request.
-                        e_id:
-                          type: integer
-                          description: The ID of the employee who made the leave request.
-                        leave_from:
-                          type: string
-                          format: date
-                          description: The start date of the leave.
-                        leave_to:
-                          type: string
-                          format: date
-                          description: The end date of the leave.
-                        reason:
-                          type: string
-                          description: The reason for the leave request.
-                        status:
-                          type: string
-                          enum: [pending, approved, rejected]
-                          description: The status of the leave request.
+                      $ref: '#/components/schemas/Leaves'
                   totalPages:
                     type: integer
                     description: The total number of pages available.
@@ -347,7 +307,6 @@ paths:
                   message:
                     type: string
                     example: An error occurred while retrieving leave requests.
-
 
   /admin/leaves/{leave_id}:
     put:
@@ -422,7 +381,6 @@ paths:
                   message:
                     type: string
                     example: An error occurred while updating the leave status.
-
 
   /employees/leaves:
     get:
@@ -544,7 +502,6 @@ paths:
                   message:
                     type: string
                     example: Not enough remaining leaves to apply for this request or Leave request overlaps with an existing request.
-
 
   /employees/leaves/{leave_id}:
     patch:
