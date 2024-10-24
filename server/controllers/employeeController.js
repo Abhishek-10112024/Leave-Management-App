@@ -6,31 +6,37 @@ export const createLeaveRequest = async (req, res) => {
     try {
         const { leave_from, leave_to, reason } = req.body;
         const { id: e_id, name: e_name } = req.user;
+        // req.user: This object typically contains information about the authenticated user. It is populated by authentication middleware after a user successfully logs in.
+        // The id property is being renamed to e_id, and the name property is being renamed to e_name which are being extracted from a req.user object.
 
         if (!leave_from || !leave_to || !reason) {
             return res.status(400).json({ message: 'Please provide all required fields' });
         }
 
         const leaveDays = Math.ceil((new Date(leave_to) - new Date(leave_from)) / (1000 * 60 * 60 * 24)) + 1;
-
+        // ceil: Returns the smallest integer greater than or equal to its numeric argument.
+        // new Date(leave_from) and new Date(leave_to): These expressions convert the leave_from and leave_to values into JavaScript Date objects. This allows for date manipulation and calculations.
+        // (new Date(leave_to) - new Date(leave_from)): This subtraction calculates the difference between the two dates in milliseconds. The result is a number representing the total milliseconds between the two dates.
+        // /(1000 * 60 * 60 * 24): This division converts the millisecond difference into days.
+        // + 1: This addition accounts for the fact that both the start and end days are typically considered full leave days.
         const user = await User.findByPk(e_id);
         if (!user || user.remaining_leaves < leaveDays) {
             return res.status(400).json({ message: 'Not enough remaining leaves to apply for this request.' });
         }
 
         const existingLeaves = await Leave.findAll({
-            where: {
-                e_id,
-                status: { [Op.or]: ['accepted', 'rejected'] }, 
-                [Op.or]: [
-                    { leave_from: { [Op.between]: [leave_from, leave_to] } },
-                    { leave_to: { [Op.between]: [leave_from, leave_to] } },
-                    { leave_from: { [Op.lte]: leave_from }, leave_to: { [Op.gte]: leave_to } }
+            where: { // The where clause defines the conditions for the query, specifying which records to retrieve.
+                e_id, // e_id: This condition filters the results to only include leaves associated with the specific employee ID.
+                status: { [Op.or]: ['accepted', 'rejected'] }, // This condition uses Sequelize’s operator (Op.or) to filter leaves that have a status of either "accepted" or "rejected".
+                [Op.or]: [ // The query checks for overlaps with the given leave period (leave_from to leave_to)
+                    { leave_from: { [Op.between]: [leave_from, leave_to] } }, // Checks if the leave_from date of existing leaves falls within the new leave period.
+                    { leave_to: { [Op.between]: [leave_from, leave_to] } }, // Checks if the leave_to date of existing leaves falls within the new leave period.
+                    { leave_from: { [Op.lte]: leave_from }, leave_to: { [Op.gte]: leave_to } } // Checks if the existing leave fully encompasses the new leave period (i.e., the existing leave starts before or on the new start date and ends after or on the new end date).
                 ]
             }
         });
 
-        if (existingLeaves.length > 0) {
+        if (existingLeaves.length > 0) { // This condition checks if the existingLeaves array has any entries. If its length is greater than 0, it indicates that there are one or more existing leave requests that overlap with the new leave request being submitted.
             return res.status(400).json({ message: 'Leave request overlaps with an existing request.' });
         }
 
@@ -105,8 +111,8 @@ export const deleteLeaveRequest = async (req, res) => {
             return res.status(404).json({ message: 'Leave request not found or cannot be deleted' });
         }
 
-        await leave.destroy();
-        res.status(200).send();
+        await leave.destroy(); // If the validation checks pass, this line deletes the leave request from the database using the destroy method.
+        res.status(200).send(); // After successfully deleting the leave request, the send method can be used without any content if no additional information is needed in the response.
     } catch (error) {
         console.error("Error deleting leave request:", error);
         res.status(500).json({ message: "Internal server error." });
