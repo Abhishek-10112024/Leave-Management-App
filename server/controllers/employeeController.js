@@ -149,19 +149,26 @@ export const getLeaveRequests = async (req, res) => {
             return res.status(403).json({ message: "Only employee can get their leaves." });
         }
 
-        const { count, rows: leaves } = await Leave.findAndCountAll({
-            where: { e_id },
+        const status = req.query.status; // get the status value being passed in query parameter as string value and saves in status variable
+        const where = {e_id}; // This initializes an object named where. This object will be used to build the conditions for filtering the data in a database query. It already contains a condition to check the required id which it got from req.user object
+        if (status && ['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
+            // This line checks two things:
+            //Whether the status variable is defined (not null or undefined).
+            //Whether the value of status is one of the valid statuses: 'pending', 'accepted', or 'rejected'.
+            where.status = status; // If both conditions in the if statement are met, this line adds a property to the where object, setting where.status to the value of status.
+        }
+
+        const { count, rows } = await Leave.findAndCountAll({
+            where,
             limit, 
             offset 
         });
 
-        const totalPages = Math.ceil(count / limit);
-
-        res.status(200).json({
-            totalItems: count,
-            totalPages,
+        return res.status(200).json({
+            leaves: rows,
+            totalPages: Math.ceil(count / limit),
             currentPage: page,
-            leaves
+            totalCount: count
         });
     } catch (error) {
         console.error("Error fetching leave requests:", error);
