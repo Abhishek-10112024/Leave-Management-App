@@ -9,6 +9,11 @@ export const createLeaveRequest = async (req, res) => {
         // req.user: This object typically contains information about the authenticated user. It is populated by authentication middleware after a user successfully logs in.
         // The id property is being renamed to e_id, and the name property is being renamed to e_name which are being extracted from a req.user object.
 
+        const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
+        if (adminRole !== 'employee') {
+            return res.status(403).json({ message: "Only employee can apply for leave." });
+        }
+
         if (!leave_from || !leave_to || !reason) {
             return res.status(400).json({ message: 'Please provide all required fields' });
         }
@@ -62,6 +67,11 @@ export const modifyLeaveRequest = async (req, res) => {
         const e_id = req.user.id;
         const { leave_from, leave_to, reason } = req.body;
 
+        const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
+        if (adminRole !== 'employee') {
+            return res.status(403).json({ message: "Only employee can edit leave." });
+        }
+
         const leave = await Leave.findByPk(leave_id);
 
         if (!leave || leave.status !== 'pending' || leave.e_id !== e_id) {
@@ -105,6 +115,11 @@ export const deleteLeaveRequest = async (req, res) => {
         const { leave_id } = req.params;
         const e_id = req.user.id;
 
+        const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
+        if (adminRole !== 'employee') {
+            return res.status(403).json({ message: "Only employee can delete leave." });
+        }
+
         const leave = await Leave.findByPk(leave_id);
 
         if (!leave || leave.status !== 'pending' || leave.e_id !== e_id) {
@@ -126,6 +141,11 @@ export const getLeaveRequests = async (req, res) => {
         const page = parseInt(req.query.page, 10) || 1; 
         const limit = parseInt(req.query.limit, 10) || 10; 
         const offset = (page - 1) * limit; 
+
+        const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
+        if (adminRole !== 'employee') {
+            return res.status(403).json({ message: "Only employee can get their leaves." });
+        }
 
         const { count, rows: leaves } = await Leave.findAndCountAll({
             where: { e_id },

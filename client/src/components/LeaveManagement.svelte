@@ -9,7 +9,7 @@
 
     const updateLeaveStatus = async (leave_id, status) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/admin/leaves/${leave_id}`, {
+            const response = await fetch(`http://localhost:3000/api/leaves/${leave_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

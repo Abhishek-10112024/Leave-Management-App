@@ -19,7 +19,7 @@ export const fetchEmployees = async () => {
             return;
         }
 
-        const response = await fetch(`http://localhost:3000/api/admin/employees?page=${page_num}&limit=${limit_val}`, {
+        const response = await fetch(`http://localhost:3000/api/employees?page=${page_num}&limit=${limit_val}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export const fetchLeaveRequests = async () => {
             throw new Error('No token found');
         }
 
-        const response = await fetch(`http://localhost:3000/api/admin/leaves?page=${page_num}&limit=${limit_val}`, {
+        const response = await fetch(`http://localhost:3000/api/leaves?page=${page_num}&limit=${limit_val}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

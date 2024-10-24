@@ -194,7 +194,7 @@ paths:
                     type: string
                     example: No token provided
 
-  /admin/employees:
+  /employees:
     get:
       tags:
         - Admin
@@ -247,7 +247,7 @@ paths:
                     type: string
                     example: An error occurred while retrieving employees.
 
-  /admin/leaves:
+  /leaves:
     get:
       tags:
         - Admin
@@ -308,8 +308,8 @@ paths:
                     type: string
                     example: An error occurred while retrieving leave requests.
 
-  /admin/leaves/{leave_id}:
-    put:
+  /leaves/{leave_id}:
+    patch:
       tags:
         - Admin
       summary: Update the status of a leave request

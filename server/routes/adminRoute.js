@@ -3,10 +3,10 @@ import {getAllLeaveRequests, getAllEmployees, updateLeaveStatus} from '../contro
 import { userAuthentication } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
-router.use(userAuthentication(['admin']));
+// router.use(userAuthentication);
 
-router.get('/leaves', getAllLeaveRequests);
-router.get('/employees', getAllEmployees);
-router.put('/leaves/:leave_id', updateLeaveStatus);
+router.get('/leaves', userAuthentication(), getAllLeaveRequests);
+router.get('/employees', userAuthentication(), getAllEmployees);
+router.patch('/leaves/:leave_id', userAuthentication(), updateLeaveStatus);
 
 export default router;

@@ -76,7 +76,7 @@ app.use(
 );
 
 app.use('/api/auth', authRoute);
-app.use('/api/admin', adminRoute);
+app.use('/api', adminRoute);
 app.use('/api/employees', employeeRoute);
 
 // Error handling middleware for OpenAPI validation errors
