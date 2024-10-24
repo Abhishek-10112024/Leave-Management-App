@@ -6,7 +6,7 @@ export const createLeaveRequest = async (req, res) => {
     try {
         const { leave_from, leave_to, reason } = req.body;
         const { id: e_id, name: e_name } = req.user;
-        // req.user: This object typically contains information about the authenticated user. It is populated by authentication middleware after a user successfully logs in.
+        // req.user: This object contains information about the authenticated user. It is populated by authentication middleware after a user successfully logs in.
         // The id property is being renamed to e_id, and the name property is being renamed to e_name which are being extracted from a req.user object.
 
         const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
@@ -53,6 +53,8 @@ export const createLeaveRequest = async (req, res) => {
             reason,
             status: 'pending',
         });
+        user.remaining_leaves -= 1; // if all good, update remaining leaves by subtracting 1
+        await user.save(); // saves/updates the user model, called as "const user = await User.findByPk(e_id);"
 
         res.status(201).json(newLeave);
     } catch (error) {

@@ -4,7 +4,12 @@ import User from '../models/user.js';
 export const updateLeaveStatus = async (req, res) => { // asyn function with two paramters, req and res, data sent by client and response sent by server
     try {
         const { leave_id } = req.params; //this is getting the leave_id from path parameter in variable leave_id
-        const { status } = req.body; // this is getting the status from req body in variable named status
+        const { status, rejectionReason } = req.body; // this is getting the status and rejectionReason from req body in variables named status & rejectionReason
+
+        // check block to fill all fields
+        if (!status || !rejectionReason) {
+            return res.status(400).json({ message: 'Please provide all required fields' });
+        }
 
 // This snippet of code performs validation on a status variable to ensure it contains a valid value. 
         const validStatuses = ['accepted', 'rejected']; //This line defines an array called validStatuses that contains two acceptable values: 'accepted' and 'rejected'.
@@ -25,23 +30,24 @@ export const updateLeaveStatus = async (req, res) => { // asyn function with two
         }
         const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
         if (adminRole !== 'admin') {
-            return res.status(403).json({ message: "Only admins can register new users." });
+            return res.status(403).json({ message: "Only admins can accept or reject leave request" });
         }
 
         if (leave.status === 'accepted') {
             return res.status(409).json({ message: 'Leave request is already accepted' }); // 409 - conflict
         }
         if (leave.status === 'rejected') {
-            return res.status().json({ message: 'Leave request is already rejected' });
+            return res.status(409).json({ message: 'Leave request is already rejected' });
         }
 
-        leave.status = status; // If all is good, leave.status will be updated to the status which is being passed in req.body 
+        leave.status = status; // If all is good, leave.status will be updated to the status which is being passed in req.body
+        leave.rejectionReason = rejectionReason; // If all is good, leave.rejectionReason will be updated to the rejectionReason which is being passed in req.body
 
         if (status === 'accepted') { // if req body has status value set to accepted
             if (user.remaining_leaves <= 0) { // if in user table the remaining leaves is less than or equal to zero, then throw below given error
                 return res.status(400).json({ message: 'Not enough remaining leaves to accept this request' });
             }
-            user.remaining_leaves -= 1; // if all good, update remaining leaves by subtracting 1
+            
         }
         else if (status === 'rejected') { // if req body has status value set to rejected
                 if (user.remaining_leaves + 1 > user.total_leaves) {  // check for the condition, if at present remaining leaves +1 > toatl leaves

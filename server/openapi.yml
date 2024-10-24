@@ -334,8 +334,12 @@ paths:
                   type: string
                   enum: [accepted, rejected]
                   description: The new status for the leave request.
+                rejectionReason:
+                  type: string
+                  description: The rejection reason for the leave request.
               required:
                 - status
+                - rejectionReason
       responses:
         '200':
           description: Leave request status updated successfully
@@ -351,6 +355,9 @@ paths:
                     type: string
                     enum: [accepted, rejected]
                     description: The updated status of the leave request.
+                  rejectionReason:
+                    type: string
+                    description: The updated rejection Reason of the leave request.
         '400':
           description: Bad Request - Client error due to invalid input or logic
           content:
@@ -489,6 +496,9 @@ paths:
                     format: date
                   reason:
                     type: string
+                  rejectionReason:
+                    type: string
+                    example: in process   
                   status:
                     type: string
                     example: pending
@@ -557,6 +567,9 @@ paths:
                     format: date
                   reason:
                     type: string
+                  rejectionReason:
+                    type: string
+                    example: in process 
                   status:
                     type: string
                     example: pending
@@ -638,6 +651,8 @@ components:
           format: date
         reason:
           type: string
+        rejectionReason:
+          type: string  
         status:
           type: string
           enum: [pending, rejected, accepted]
