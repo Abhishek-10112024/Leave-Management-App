@@ -2,7 +2,8 @@
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
     import Logout from './Logout.svelte';
-    import { employees, fetchEmployees } from '../store';
+    import { employees } from '../store';
+    import { fetchEmployees } from '../exportFunction';
     import EmployeesPagination from './EmployeesPagination.svelte';
 
     let error = '';

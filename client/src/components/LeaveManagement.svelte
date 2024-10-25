@@ -1,21 +1,23 @@
 <script>
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
-    import {leaves, fetchLeaveRequests} from '../store';
+    import {leaves} from '../store';
+    import { fetchLeaveRequests } from '../exportFunction';
     import Logout from './Logout.svelte';
     import LeavesPagination from './LeavesPagination.svelte';
 
     let error = '';
+    let rejectionReason = '';
 
     const updateLeaveStatus = async (leave_id, status) => {
         try {
             const response = await fetch(`http://localhost:3000/api/leaves/${leave_id}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({ status })
+                body: JSON.stringify({ status, rejectionReason })
             });
 
             if (!response.ok) {
@@ -63,6 +65,7 @@
                 <th>Reason</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th>Rejection Reason</th>
             </tr>
         </thead>
         <tbody>
@@ -89,6 +92,7 @@
                             {/if}
                         </div>
                     </td>
+                    <td>{leave.rejectionReason}</td>
                 </tr>
             {/each}
         </tbody>
@@ -103,12 +107,12 @@
 
 <style>
     .leave-management {
-        padding: 30px;
+        padding: 5px;
         background-color: #f9f9f9;
         border-radius: 10px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        max-width: 1000px; 
         margin: auto;
+        width: 100%;
     }
 
     h1 {

@@ -1,5 +1,6 @@
 <script>
-  import { page, totalPages, fetchEmployees } from '../store';
+  import { page, totalPages } from '../store';
+  import { fetchEmployees } from '../exportFunction';
 
   const goToPage = (newPage) => {
       if (newPage > 0 && newPage <= $totalPages) {

@@ -12,7 +12,7 @@
 
     let currentStatus = 'all'; // Default status to show all leaves
     let currentPage = 1;
-    let itemsPerPage = 5;
+    let itemsPerPage = 30;
     let totalItems = 0;
 
     const fetchLeaveRequests = async () => {
@@ -106,6 +106,7 @@
                 <th>Reason</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th>Rejection Reason</th>
             </tr>
         </thead>
         <tbody>
@@ -128,6 +129,7 @@
                             <button class="btn edit" on:click={() => openEditModal(leaveRequest)}>Edit</button>
                         {/if}
                     </td>
+                    <td>{leaveRequest.rejectionReason}</td>
                 </tr>
             {/each}
         </tbody>
