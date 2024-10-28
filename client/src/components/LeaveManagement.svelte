@@ -5,11 +5,14 @@
     import { fetchLeaveRequests } from '../exportFunction';
     import Logout from './Logout.svelte';
     import LeavesPagination from './LeavesPagination.svelte';
+    import RejectionReasonModal from './RejectionReasonModal.svelte';
 
     let error = '';
     let rejectionReason = '';
+    let showRejectionModal = false;
+    let selectedLeave = null;
 
-    const updateLeaveStatus = async (leave_id, status) => {
+    const updateLeaveStatus = async (leave_id, status, rejectionReason) => {
         try {
             const response = await fetch(`http://localhost:3000/api/leaves/${leave_id}`, {
                 method: 'PATCH',
@@ -53,6 +56,24 @@
 // words.slice(0, limit): This takes the first limit words from the words array.
 // .join(' '): This combines the sliced words back into a single string, separated by spaces.
 // (words.length > limit ? '...' : ''): This appends an ellipsis (...) if the original reason had more words than the specified limit, indicating that the text has been truncated.
+    };
+
+    const openRejectionModal = (leave) => {
+        selectedLeave = leave;
+// This line assigns the passed leaveRequest object to the selectedLeaveRequest variable. 
+// This variable is used to store the specific leave request that the user has chosen to edit.
+// By doing this, the modal can access the details of this leave request and populate the fields in the edit form.
+        showRejectionModal = true;
+// This line sets the showEditModal variable to true, indicating that the edit modal should be displayed to the user.
+    };
+
+    const closeRejectionModal = () => {
+        showRejectionModal = false;
+// This line sets the showEditModal variable to false, indicating that the edit modal should no longer be displayed.
+        selectedLeave = null;
+// This line resets the selectedLeaveRequest variable to null. 
+// This is important for clearing the previously selected leave request and ensuring that when the modal is opened again, it doesn't display outdated or incorrect data.
+        fetchLeaveRequests();
     };
 
     onMount(fetchLeaveRequests);
@@ -109,17 +130,26 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
                     </td>
                     <td>
                         <div class="action-buttons">
-                            {#if leave.status === 'pending'}
-                                <button class="btn accept" on:click={() => updateLeaveStatus(leave.leave_id, 'accepted')}>Accept</button>
-                                <button class="btn reject" on:click={() => updateLeaveStatus(leave.leave_id, 'rejected')}>Reject</button>
+                            {#if leave.rejectionReason === 'in process' && leave.status === 'pending'}
+                                <button class="btn accept" on:click={() => updateLeaveStatus(leave.leave_id, 'accepted', 'Granted')}>Accept</button>
+                                <button class="btn reject" on:click={() => openRejectionModal(leave)}>Reject</button>
                             {/if}
                         </div>
                     </td>
-                    <td>{leave.rejectionReason}</td>
+                    <td>
+                        {leave.rejectionReason}
+                    </td>
                 </tr>
             {/each}
         </tbody>
     </table>
+
+    {#if showRejectionModal}
+    <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
+            <RejectionReasonModal leave={selectedLeave} on:close={closeRejectionModal} />
+    <!-- Props: leaveRequest={selectedLeaveRequest}: This passes the currently selected leave request to the modal as a prop, allowing the modal to display and edit the details of that specific leave request.
+     on:close={closeEditModal}: This sets up an event listener that calls the closeEditModal function when a close event is emitted from the EditLeaveModal -->
+        {/if}
 
     <div class="button-container">
         <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>

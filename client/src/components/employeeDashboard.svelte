@@ -5,14 +5,14 @@
     import Logout from './Logout.svelte';
 
     let leaveRequests = [];
-    let filteredLeaves = [];
+    // let filteredLeaves = [];
     let selectedLeaveRequest = null;
     let showEditModal = false;
     let showApplyModal = false;
 
-    let currentStatus = 'all'; // Default status to show all leaves
+    // let currentStatus = 'all'; // Default status to show all leaves
     let currentPage = 1;
-    let itemsPerPage = 30;
+    let itemsPerPage = 10;
     let totalItems = 0;
 
     const fetchLeaveRequests = async () => {
@@ -32,7 +32,7 @@
 // leaves: rows,totalPages: Math.ceil(count / limit),currentPage: page, totalCount: count), it holds an array (or a collection) of leave request objects.
                 totalItems = data.totalItems;
                 // same as above
-                filterLeaves(); // Filter leaves after fetching
+                // filterLeaves(); // Filter leaves after fetching
             } else {
                 console.error('Failed to fetch leave requests');
             }
@@ -41,32 +41,32 @@
         }
     };
 
-    const filterLeaves = () => {
-// It doesn’t take any parameters, so it operates on variables that are presumably defined in the surrounding scope.
-        filteredLeaves = currentStatus === 'all' 
-            ? leaveRequests 
-            : leaveRequests.filter(leave => leave.status === currentStatus);
-// Conditional (Ternary) Operator: This line uses a conditional operator to determine how to set the filteredLeaves variable.
-// If currentStatus is equal to 'all', it means the user wants to see all leave requests without any filtering. In this case, filteredLeaves is assigned the entire leaveRequests array.
-// If currentStatus is not 'all', the function filters the leaveRequests array. This method creates a new array containing only the leave requests whose status matches the value of currentStatus.
-    };
+//     const filterLeaves = () => {
+// // It doesn’t take any parameters, so it operates on variables that are presumably defined in the surrounding scope.
+//         filteredLeaves = currentStatus === 'all' 
+//             ? leaveRequests 
+//             : leaveRequests.filter(leave => leave.status === currentStatus);
+// // Conditional (Ternary) Operator: This line uses a conditional operator to determine how to set the filteredLeaves variable.
+// // If currentStatus is equal to 'all', it means the user wants to see all leave requests without any filtering. In this case, filteredLeaves is assigned the entire leaveRequests array.
+// // If currentStatus is not 'all', the function filters the leaveRequests array. This method creates a new array containing only the leave requests whose status matches the value of currentStatus.
+//     };
 
-    const changePage = (page) => {
-// This declares an arrow function named changePage that takes one parameter, page. This parameter represents the page number that the user wants to navigate to.
-        currentPage = page;
-// This line sets the currentPage variable to the value of the page parameter passed to the function. This variable typically keeps track of which page of results the user is currently viewing.
-        fetchLeaveRequests();
-// By calling this function, you likely ensure that the displayed leave requests are updated according to the newly selected page.
-    };
+//     const changePage = (page) => {
+// // This declares an arrow function named changePage that takes one parameter, page. This parameter represents the page number that the user wants to navigate to.
+//         currentPage = page;
+// // This line sets the currentPage variable to the value of the page parameter passed to the function. This variable typically keeps track of which page of results the user is currently viewing.
+//         fetchLeaveRequests();
+// // By calling this function, you likely ensure that the displayed leave requests are updated according to the newly selected page.
+//     };
 
-    const changeStatus = (status) => {
-// This declares an arrow function, with status parameter, representing the status that user wants to filter
-        currentStatus = status;
-// This line updates the currentStatus variable with the value passed as the status parameter. 
-// This variable is used to keep track of which status filter is currently applied.
-        // currentPage = 1; // Reset to first page on status change
-        filterLeaves(); // Filter leaves based on the new status
-    };
+//     const changeStatus = (status) => {
+// // This declares an arrow function, with status parameter, representing the status that user wants to filter
+//         currentStatus = status;
+// // This line updates the currentStatus variable with the value passed as the status parameter. 
+// // This variable is used to keep track of which status filter is currently applied.
+//         currentPage = 1; // Reset to first page on status change
+//         filterLeaves(); // Filter leaves based on the new status
+//     };
 
     const openEditModal = (leaveRequest) => {
         selectedLeaveRequest = leaveRequest;
@@ -122,14 +122,14 @@
     <h2>Employee Dashboard</h2>
     <div class="button-container">
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
-        <div class="status-buttons">
-            <button class="btn" on:click={() => changeStatus('all')}>All Leaves</button>
+        <!-- <div class="status-buttons">
+            <button class="btn" on:click={() => changeStatus('all')}>All Leaves</button> -->
 <!-- on:click={() => changeStatus('all')}: This specifies an event listener for the button's click event. When the button is clicked, the function changeStatus is called with the argument 'all'.
  The use of an arrow function here (() => changeStatus('all')) allows for passing the string 'all' as an argument when the button is clicked. -->
-            <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
+            <!-- <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
             <button class="btn" on:click={() => changeStatus('accepted')}>Accepted</button>
             <button class="btn" on:click={() => changeStatus('rejected')}>Rejected</button>
-        </div>
+        </div> -->
     </div>
 
     <table class="leave-table">
@@ -144,7 +144,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each filteredLeaves as leaveRequest}
+            {#each leaveRequests as leaveRequest}
 <!-- This line uses the Svelte {#each} block to iterate over the filteredLeaves array, where each item is assigned to the variable leaveRequest. 
  This means that for each leave request in the array, a new table row (<tr>) will be created. -->
                 <tr> 
@@ -177,26 +177,26 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        {#if totalItems > itemsPerPage}
+    <!-- <div class="pagination">
+        {#if totalItems > itemsPerPage} -->
 <!-- This line checks if the total number of items (totalItems) is greater than the number of items displayed per page (itemsPerPage). 
  If true, it indicates that pagination is necessary, and the following code block will render the pagination buttons. -->
-            {#each Array(Math.ceil(totalItems / itemsPerPage)) as _, index}
+            <!-- {#each Array(Math.ceil(totalItems / itemsPerPage)) as _, index} -->
 <!-- This line creates an array with a length equal to the total number of pages. 
  The Math.ceil(totalItems / itemsPerPage) calculates the total number of pages by dividing the total items by the items per page and rounding up to ensure all items are accounted for. 
  The as _ syntax is used because the actual value of the elements in the array is not needed; only the index is used to render the buttons.-->
-                <button 
+                <!-- <button 
                     class="btn page-button" 
                     on:click={() => changePage(index + 1)} 
-                    class:selected={currentPage === index + 1}>
+                    class:selected={currentPage === index + 1}> -->
 <!-- The on:click event calls the changePage function with the page number (index + 1), which will set the current page to the clicked page.
  The class:selected={currentPage === index + 1} conditionally applies the selected class if the currentPage matches the index of the button (adjusted by 1 for 1-based indexing). 
  This can be used to style the currently active page button differently. -->
-                    {index + 1}
+                    <!-- {index + 1}
                 </button>
             {/each}
         {/if}
-    </div>
+    </div> -->
 
     {#if showEditModal}
 <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
@@ -356,7 +356,7 @@
         z-index: 10;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
-    .pagination {
+/* .pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
@@ -389,12 +389,12 @@
     background-color: #e0e0e0;
     color: #a0a0a0;
     cursor: not-allowed;
-}
-.status-buttons {
+} */
+/*.status-buttons {
     display: flex;
-    gap: 15px; /* Space between buttons */
-    margin-left: auto; /* Align to the right */
-}
+    gap: 15px;  Space between buttons 
+    margin-left: auto;  Align to the right 
+} */
 
 .btn {
     padding: 12px 20px;
@@ -414,10 +414,10 @@
     color: white; /* Text color */
 }
 
-.btn.selected {
-    font-weight: bold; /* Bold text for the selected button */
-    border: 2px solid white; /* Outline for the selected button */
-    background-color: #0056b3; /* Darker background for selected */
-}
+/*.btn.selected {
+    font-weight: bold;  Bold text for the selected button 
+    border: 2px solid white;  Outline for the selected button 
+    background-color: #0056b3;  Darker background for selected 
+}*/
 </style>
 
