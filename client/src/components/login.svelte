@@ -92,6 +92,7 @@
   input:focus {
     border-color: #007bff;
     outline: none;
+    /* outline: none; is used to remove the outline that browsers typically apply to focused elements */
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
   }
 

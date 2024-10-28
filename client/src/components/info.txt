@@ -1,0 +1,327 @@
+// Flow of code between employeeDashboard and EditLeaveModal:
+Parent Component (employeeDashboard):
+
+    Props and State Management:
+        The parent component manages the state of the leave requests in the leaveRequests and filteredLeaves arrays.
+        When the user wants to edit a leave request, the openEditModal function is called, which sets selectedLeaveRequest to the specific leave request that the user wants to edit and changes showEditModal to true.
+
+    Displaying the Modal:
+        In the parent component, the EditLeaveModal is conditionally rendered using {#if showEditModal}.
+        The leaveRequest prop is passed to the modal as leaveRequest={selectedLeaveRequest}. This means that the modal has access to the specific leave request data that the user is editing.
+
+    Event Handling:
+        The parent component listens for the close event from the EditLeaveModal using on:close={closeEditModal}.
+        When this event is dispatched from the child component, the parent calls the closeEditModal function, which resets the modal state (sets showEditModal to false and selectedLeaveRequest to null) and optionally fetches updated leave requests.
+
+Child Component (EditLeaveModal)
+
+    Receiving Props:
+        The child component receives the leaveRequest prop, which contains the details of the leave request to be edited (e.g., leave_from, leave_to, reason).
+
+    Updating Leave Requests:
+        The updateLeave function is responsible for sending the updated leave request back to the server using a PATCH request.
+        If the request is successful, it dispatches a close event, which is caught by the parent component to close the modal and potentially refresh the leave requests.
+
+    Deleting Leave Requests:
+        The deleteLeave function allows users to delete the leave request. If the deletion is successful, it also dispatches the close event.
+
+    Handling Errors:
+        If there are any errors during updating or deleting the leave request, the error message is displayed in the modal, allowing users to see feedback directly.
+
+    Modal Control:
+        The closeModal function dispatches the close event, which signals the parent component to close the modal without any action.
+
+Interaction Flow
+
+    Opening the Modal:
+        The user clicks the "Edit" button in the parent component's table. This calls openEditModal, passing the selected leave request.
+        The modal is displayed with the details of the leave request.
+
+    Updating or Deleting:
+        The user can update the leave request details and click "Update Leave Request." This triggers the updateLeave function in the child.
+        If the update is successful, the modal dispatches a close event, closing the modal in the parent and fetching updated leave requests.
+        Alternatively, if the user clicks "Delete Leave Request," the deleteLeave function is called, and a similar event flow occurs if the deletion is successful.
+
+    Closing the Modal:
+        Whether the user clicks "Cancel" or if an update/delete is successful, the modal is closed by dispatching a close event, which is handled by the parent component to reset state.
+
+
+// Flow of code between employeeDashboard and ApplyLeaveModal & ApplyLeaveModal and EditLeaveModal:
+
+Interactivity Between Parent and Child Components:
+1. Data Flow from Parent to Child:
+
+    Props: In both child components (EditLeaveModal and ApplyLeaveModal), the parent component passes data as props. For ApplyLeaveModal, the parent does not pass any specific data, but it likely uses the modal's visibility state to determine when to render it.
+    Functionality: Each modal is responsible for handling its own data and actions:
+        ApplyLeaveModal gathers input data (leave dates and reason) and handles leave application.
+        EditLeaveModal handles editing existing leave requests.
+
+2. Event Dispatching:
+
+    Close Event: Both child components dispatch a close event to notify the parent when they should be closed:
+        In ApplyLeaveModal, after a successful leave application, the modal dispatches the close event and navigates the user to the /employee route.
+        In EditLeaveModal, the close event is dispatched after updating or deleting a leave request.
+
+    Parent Listening: In the parent component, you listen for the close event emitted from each modal, allowing the parent to execute the appropriate logic (like resetting state or updating the UI).
+
+Sibling Component Interactivity:
+1. Interaction Through Parent:
+
+    While ApplyLeaveModal and EditLeaveModal are siblings, they do not interact directly with each other. Instead, their interaction is mediated through the parent component:
+        Visibility Control: The parent component controls which modal is displayed using showEditModal and showApplyModal. When one modal is opened (e.g., showEditModal = true), the other should not be displayed (e.g., showApplyModal = false).
+    State Management: The parent can maintain shared state if necessary. For example, if an action in one modal affects the data displayed or the state of the other modal, the parent can manage that state and trigger updates as needed.
+
+2. User Experience:
+
+    When a user applies for leave using ApplyLeaveModal:
+        Upon successful submission, the modal closes, and the user is navigated back to the employee dashboard.
+        If a user wants to edit an existing leave request, they can open EditLeaveModal and make changes. Once they submit those changes, it will also close, potentially updating the displayed list of leave requests in the parent component.
+
+Summary
+
+    Interactivity: The parent component serves as the central hub for controlling the behavior of both child modals. Each child component handles its own logic for submitting leave requests or editing existing requests, dispatching events to the parent to signal completion or closure.
+    Sibling Interaction: There’s no direct interaction between the sibling components; instead, they rely on the parent for visibility and state management, ensuring a clear separation of concerns while maintaining a cohesive user experience.
+
+
+
+
+
+
+// Key Svelte Concepts:
+1. Props
+
+    Definition: Props are a way to pass data from a parent component to a child component in Svelte.
+    Usage: In the child component, you declare props using export let propName;. In the parent component, you use the child component and assign values to these props.
+    Example:
+
+    // Parent.svelte
+    <Child propValue={someValue} />
+
+    // Child.svelte
+    <script>
+        export let propValue;
+    </script>
+
+2. Event Handling
+
+    Definition: Svelte allows you to handle user events such as clicks, input changes, and more.
+    Usage: You can bind event handlers directly in your markup using the on:eventName syntax.
+    Example:
+
+    <button on:click={handleClick}>Click me</button>
+
+    <script>
+        function handleClick() {
+            console.log('Button clicked!');
+        }
+    </script>
+
+3. Stores
+
+    Definition: Stores are a way to manage state in Svelte applications, especially for shared state across components.
+    Types: Svelte has three built-in store types:
+        Writable: Can be read and updated.
+        Readable: Can only be read, useful for derived data.
+        Derived: Computes values from one or more other stores.
+    Usage: You import the store and subscribe to it using the $ prefix for automatic reactivity.
+    Example:
+
+    // store.js
+    import { writable } from 'svelte/store';
+
+    export const count = writable(0);
+
+    // Component.svelte
+    <script>
+        import { count } from './store.js';
+    </script>
+
+    <button on:click={() => $count += 1}>Increment</button>
+    <p>Count: {$count}</p>
+
+4. Slots
+
+    Definition: Slots allow you to create flexible components by letting parent components provide content to child components.
+    Default Slot: Use <slot></slot> in the child to specify where the parent content should go.
+    Named Slots: You can create named slots to organize content more clearly.
+    Example:
+
+    // Child.svelte
+    <slot></slot>
+
+    // Parent.svelte
+    <Child>
+        <p>This content goes into the child component's slot!</p>
+    </Child>
+
+5. Reactive Statements
+
+    Definition: Svelte provides a simple syntax for declaring reactive statements that automatically update when their dependencies change.
+    Usage: Use the $: syntax to create a reactive statement.
+    Example:
+
+    <script>
+        let count = 0;
+        $: doubleCount = count * 2; // Automatically updates when count changes
+    </script>
+
+6. Lifecycle Functions
+
+    Definition: Svelte provides lifecycle functions that allow you to run code at specific times in a component’s lifecycle.
+    Common Lifecycle Functions:
+        onMount: Runs after the component is first rendered.
+        beforeUpdate: Runs before the component updates.
+        afterUpdate: Runs after the component updates.
+        onDestroy: Runs when the component is destroyed.
+    Example:
+
+    <script>
+        import { onMount } from 'svelte';
+        
+        onMount(() => {
+            console.log('Component mounted');
+        });
+    </script>
+
+7. Transitions and Animations
+
+    Definition: Svelte supports built-in transitions and animations to enhance the user experience.
+    Usage: You can use the transition directive to apply transitions when elements enter or leave the DOM.
+    Example:
+
+    <script>
+        import { fade } from 'svelte/transition';
+        let show = true;
+    </script>
+
+    {#if show}
+        <div transition:fade>Fade in and out</div>
+    {/if}
+
+    <button on:click={() => show = !show}>Toggle</button>
+
+8. Context API
+
+    Definition: The Context API allows you to pass data deeply through the component tree without having to pass props at every level.
+    Usage: Use setContext to provide data and getContext to consume it.
+    Example:
+
+// Parent.svelte
+import { setContext } from 'svelte';
+const theme = { color: 'blue' };
+setContext('theme', theme);
+
+// Child.svelte
+import { getContext } from 'svelte';
+const theme = getContext('theme');
+
+
+
+
+
+// Different ways of interaction between Different svelte components:
+1. Props
+
+    Sending Data: You can pass data from a parent component to a child component using props.
+    Listening to Changes: The child component can use the props directly and react to changes.
+
+Example:
+
+<!-- Parent.svelte -->
+<Child propData={someData} />
+
+<!-- Child.svelte -->
+<script>
+    export let propData;
+</script>
+
+2. Event Dispatching
+
+    Sending Data: Child components can use createEventDispatcher to send events back to their parent component.
+    Listening to Events: The parent component listens for these events and can react accordingly.
+
+Example:
+
+<!-- Child.svelte -->
+<script>
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+    
+    function sendData() {
+        dispatch('dataSent', { someData: 'Hello' });
+    }
+</script>
+<button on:click={sendData}>Send Data</button>
+
+<!-- Parent.svelte -->
+<Child on:dataSent={event => console.log(event.detail.someData)} />
+
+3. Svelte Stores
+
+    Global State Management: Svelte stores (writable, readable, derived) allow you to share data between any components, regardless of their relationship.
+    Listening to Changes: Components can subscribe to store changes and react accordingly.
+
+Example:
+
+// store.js
+import { writable } from 'svelte/store';
+export const sharedStore = writable('Initial Value');
+
+// Component A
+<script>
+    import { sharedStore } from './store.js';
+    let value;
+    sharedStore.subscribe(val => value = val);
+</script>
+
+// Component B
+<script>
+    import { sharedStore } from './store.js';
+    
+    function updateValue() {
+        sharedStore.set('New Value');
+    }
+</script>
+<button on:click={updateValue}>Update Value</button>
+
+// Difference between subscribe and set:
+Feature	                    subscribe	                                           set
+Purpose	                    Listen for changes to the store's value	               Update the store's value
+Use Case	                Use when you need to react to value changes	           Use when you want to change the value
+Return Value	            Returns an unsubscribe function	                       Does not return anything
+Invocation	                Takes a callback function	                           Takes a new value as an argument
+
+4. Context API
+
+    Sharing Data: The context API allows you to share data across a component hierarchy without having to pass props down through every level.
+    Setting Context: Use setContext in a parent component.
+    Getting Context: Use getContext in any descendant component.
+
+Example:
+
+// Parent.svelte
+<script>
+    import { setContext } from 'svelte';
+    setContext('key', 'Shared Data');
+</script>
+
+// Child.svelte
+<script>
+    import { getContext } from 'svelte';
+    const data = getContext('key');
+</script>
+
+5. Slots
+
+    Passing Content: Slots allow you to pass HTML or components from a parent to a child, enabling flexible content rendering.
+    Listening to Events: You can combine slots with event dispatching to create interactive components.
+
+Example:
+
+<!-- Parent.svelte -->
+<Child>
+    <button on:click={() => console.log('Slot button clicked')}>Click Me</button>
+</Child>
+
+<!-- Child.svelte -->
+<slot></slot>

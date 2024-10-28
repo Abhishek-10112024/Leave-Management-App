@@ -20,8 +20,11 @@
 
             if (response.ok) {
                 localStorage.removeItem('token');
+// removeItem('token'): This method removes the item associated with the key 'token' from localStorage.
                 localStorage.removeItem('userRole');
                 navigate('/', { replace: true });
+// navigate: This function is part of routing libraries (like svelte-routing or others) that manage navigation in single-page applications (SPAs).
+// { replace: true }: If replace is set to true, when the user navigates back, they will not go back to the previous route, as it has been replaced.
             } else {
                 const { message } = await response.json();
                 alert(message || 'Error while logging out');

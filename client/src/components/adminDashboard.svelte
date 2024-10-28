@@ -32,9 +32,12 @@
         color: #333;
     }
 
+/* Flexbox, or the Flexible Box Layout, is a CSS layout model that provides an efficient way to arrange and distribute space among items in a container, even when their size is unknown or dynamic */
     .button-container {
         display: flex;
+/* An element with display: flex; or display: inline-flex; becomes a flex container, enabling flexbox properties for its children (flex items). */
         flex-direction: column;
+/* set the direction of flex items using the flex-direction property */
         gap: 15px; /* Space between buttons */
         align-items: center;
     }

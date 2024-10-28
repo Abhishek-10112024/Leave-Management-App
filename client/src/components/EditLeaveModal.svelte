@@ -2,7 +2,10 @@
     import { createEventDispatcher } from 'svelte';
     
     export let leaveRequest;
+// Exported Variable: leaveRequest is exported, which allows it to be passed from a parent component.
+// The child component receives the leaveRequest prop, which contains the details of the leave request to be edited (e.g., leave_from, leave_to, reason).
     const dispatch = createEventDispatcher();
+// createEventDispatcher() is used to send events from the component, typically to notify the parent about changes or actions.
 
     let leave_from = leaveRequest.leave_from;
     let leave_to = leaveRequest.leave_to;
@@ -108,8 +111,11 @@
     }
 
     @keyframes fadeIn {
+/* The @keyframes fadeIn animation defined creates a fade-in effect combined with a slight upward movement. */
         from { opacity: 0; transform: translateY(-10px); }
+/* The element starts completely transparent. The element starts 10 pixels higher than its final position. */
         to { opacity: 1; transform: translateY(0); }
+/* The element ends fully visible. The element ends at its original position. */
     }
 
     h2 {
@@ -120,6 +126,9 @@
 
     input[type="date"],
     textarea {
+/* targets two specific types of elements: 
+targets all <input> elements that have a type attribute set to "date"
+targets all <textarea> elements, which are used for multi-line text input. */
         width: 100%;
         padding: 12px;
         margin: 10px 0;
@@ -131,6 +140,9 @@
 
     input[type="date"]:focus,
     textarea:focus {
+/* targets specific form elements when they are focused (i.e., when the user clicks on them or navigates to them using the keyboard)
+Targets <input> elements with a type of "date" that are currently focused.
+Targets <textarea> elements that are currently focused. */
         border-color: #4CAF50;
         outline: none;
     }

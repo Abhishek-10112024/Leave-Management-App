@@ -11,20 +11,38 @@
   const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
+            // syntax: const value = localStorage.getItem(key);
+            // key: The name of the item you want to retrieve from storage (a string)
+            // If the key exists in storage, getItem returns the associated value as a string.
+            // If the key does not exist, it returns null.
+            // String Storage: All values are stored as strings, 
+            // so if you need to store objects or arrays, you would typically convert them to a string using JSON.stringify() before storing and parse them with JSON.parse() when retrieving.
 
             const response = await fetch('http://localhost:3000/api/auth/register', {
+// The await keyword is used to pause the execution of the function until the promise returned by fetch is resolved. This makes it easier to work with asynchronous code.
                 method: 'POST',
                 credentials: 'include',
+// Controls whether credentials (like cookies and authorization headers) are sent with the request, especially for cross-origin resources.
+// omit: No credentials are sent (default for cross-origin).
+// same-origin: Credentials are sent only for same-origin requests.
+// include: Credentials are always sent, regardless of origin.
                 headers: {
                     'Content-Type': 'application/json',
+// This header indicates the media type of the resource being sent to the server.
+// In this case, it tells the server that the request body contains JSON data. 
                     'Authorization': `Bearer ${token}`
+// The Bearer scheme indicates that the client is providing a token to access a protected resource.
+// The ${token} part should be replaced with the actual token retrieved from localStorage, which we already got uppser in code using getItem method.
                 },
                 body: JSON.stringify({ e_name: name, e_dept: team, e_email: email, e_password: password, e_role: role })
             });
+// body: This key in the request options specifies the data you want to send to the server. It’s used primarily with POST or PUT requests.
+// JSON.stringify(...): This method converts a JavaScript object into a JSON string. This is necessary because the body of the request needs to be in a format that the server can understand, and JSON is a common format for APIs.
 
             if (response.ok) {
                 alert('Sign Up Successful!');
                 navigate('/employee-management');
+// navigate: This function is part of routing libraries (like svelte-routing or others) that manage navigation in single-page applications (SPAs).
             } else {
                 const { message } = await response.json();
                 errorMessage = message || 'Error while signing up';
@@ -61,17 +79,25 @@
 
 <style>
   .container {
-    max-width: 400px;
+    max-width: 400px; 
+    /* This ensures the element doesn't exceed this width, making it responsive on larger screens */
     margin: auto;
+    /* Centers the element horizontally within its parent container. When used with a defined width (or max-width), it will center the element on the page. */
     padding: 2rem;
+    /* This creates space between the content and the border, improving readability */
     border: 1px solid #ddd;
+    /* Adds a light gray border (hex code #ddd) around the element, giving it a defined edge */
     border-radius: 10px;
+    /* Rounds the corners of the element with a radius of 10 pixels, creating a softer, more modern appearance. */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    /* Applies a subtle shadow effect beneath the element. The values define the horizontal offset (0), vertical offset (6px), blur radius (12px), and color (a semi-transparent black), giving a sense of depth. */
     background-color: #fff;
+    /* Sets the background color of the element to white (#fff), providing a clean and simple look. */
   }
 
   h2 {
     text-align: center;
+    /* Centers the text horizontally within the element. This is useful for headings, titles, or any text that you want to draw attention to. */
     color: #333;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
@@ -79,36 +105,53 @@
 
   input {
     width: 95%;
+    /* Sets the width of the input element to 95% of its parent container, allowing for responsiveness while maintaining some margin on the sides. */
     padding: 12px;
     margin-bottom: 1rem;
+    /* Creates space below the input field, helping to separate it from other elements (like buttons or subsequent inputs). */
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 16px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Applies a subtle inner shadow effect, which gives the input a slightly recessed look. This enhances depth and focus on the input area. */
     transition: border-color 0.3s, box-shadow 0.3s;
+    /* Enables smooth transitions for the border color and box shadow when these properties change (e.g., on focus). This improves the visual feedback for user interactions. */
   }
 
   input:focus {
+    /* The CSS snippet styles input elements when they are focused (i.e., when the user clicks or tabs into them). */
     border-color: #28a745;
+    /* Changes the border color of the input to a shade of green */
     box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+    /* Adds an outer glow effect around the input field with a green tint. */
     outline: none;
+    /* Removes the default outline that browsers apply to focused elements. */
   }
 
   .button1 {
     width: 100%;
     padding: 12px;
     background: linear-gradient(45deg, #28a745, #218838);
+    /* The background property is a shorthand for several background-related properties, including background-color, background-image, background-repeat, background-position, background-size, and background-attachment.
+    You can use it to define multiple background aspects in one line. For example, you can set a color and an image simultaneously. */
+    /* The background-color property specifically targets only the background color of an element. */
     color: white;
+    /* Sets the text color to white */
     border: none;
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
+    /* Press cltr + space to get the list of all the possible values for cursor property of CSS */
+    /* Changes the cursor to pointer while hovering over the button */
     transition: background 0.3s, transform 0.3s;
+    /* Specifies that changes to the background and transform properties will animate over 0.3 seconds, creating a smooth transition effect when the button state changes (e.g., on hover). */
   }
 
   .button1:hover {
     background: linear-gradient(45deg, #218838, #1e7e34);
+    /* When the element is hovered over, its background changes to a linear gradient that transitions from a dark green shade (#218838) to a slightly lighter green (#1e7e34), oriented at a 45-degree angle. */
     transform: scale(1.05);
+    /* The transform: scale(1.05) property slightly increases the size of the element, making it appear larger when hovered. */
   }
 
   .button1:active {
@@ -125,6 +168,8 @@
     font-size: 16px;
     border: 2px solid #007bff;
     background-color: white;
+    /* sets the background color to white 
+    The background-color property specifically targets only the background color of an element.*/
     color: #007bff;
     border-radius: 6px;
     cursor: pointer;

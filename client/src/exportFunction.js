@@ -2,11 +2,11 @@ import { get } from 'svelte/store';
 import { navigate } from 'svelte-routing';
 import { employees, page, limit, totalPages, leaves } from './store';
 
-export const fetchEmployees = async () => {
+export const fetchEmployees = async () => { // This defines an async function that can handle asynchronous operations, allowing the use of await for promises (await being used in down in the code during fetching response)
     try {
-        const page_num = get(page);
+        const page_num = get(page); // Inside the function, it retrieves the current page number and limit from the Svelte stores
         const limit_val = get(limit);
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); // the user’s token and role from local storage.
         const userRole = localStorage.getItem('userRole');
 
         if (!userRole || !token) {
@@ -24,12 +24,12 @@ export const fetchEmployees = async () => {
 
         if (response.ok) {
             const data = await response.json();
-            employees.set(data.employees);
+            employees.set(data.employees); // Upon a successful response, it updates the employees and totalPages stores with the fetched data (as set in controller in server)
             totalPages.set(data.totalPages);
         } else if (response.status === 401) {
-            localStorage.removeItem('token');
+            localStorage.removeItem('token'); // If the response indicates an unauthorized error (401), it clears the token and navigates the user to the login page
             navigate('/');
-        } else if (response.status === 403) {
+        } else if (response.status === 403) { // For forbidden access (403), it logs the error message returned from the server.
             const errorData = await response.json();
             console.error('Access denied:', errorData.message); 
         } else {
@@ -40,6 +40,8 @@ export const fetchEmployees = async () => {
     }
 };
 
+// When using await with fetch, the function pauses execution until the promise resolves. 
+// This means that you will always have a response object available right after the await fetch(...) line, allowing you to evaluate its status immediately.
 export const fetchLeaveRequests = async () => {
     try {
         const page_num = get(page);
