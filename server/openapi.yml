@@ -273,7 +273,6 @@ paths:
           required: false
           schema:
             type: string
-            enum: [pending, accepted, rejected]
             example: pending
           description: Filter leave requests by their status. Valid values are pending, accepted, and rejected.
       responses:
@@ -417,7 +416,6 @@ paths:
           required: false
           schema:
             type: string
-            enum: [pending, accepted, rejected]
             example: pending
           description: Filter leave requests by their status. Valid values are pending, accepted, and rejected.
       responses:

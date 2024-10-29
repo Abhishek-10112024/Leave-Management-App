@@ -109,18 +109,22 @@ export const getAllLeaveRequests = async (req, res) => {  // asnnc funtion with 
         const status = req.query.status; // get the status value being passed in query parameter as string value and saves in status variable
 
         const where = {}; // This initializes an empty object named where. This object will be used to build the conditions for filtering the data in a database query.
-        if (status && ['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
+        if (['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
             // This line checks two things:
             //Whether the status variable is defined (not null or undefined).
             //Whether the value of status is one of the valid statuses: 'pending', 'accepted', or 'rejected'.
             where.status = status; // If both conditions in the if statement are met, this line adds a property to the where object, setting where.status to the value of status.
         }
-
-        const { rows, count } = await Leave.findAndCountAll({
-            where, // This is an object that contains filtering criteria. It include properties like status, which is set up earlier in the code, allowing for dynamic filtering based on user input.
-            order: [['leave_id', 'ASC']], 
-            limit,
-            offset
+        else if (status === null || undefined || ''){
+            const { count, rows } = await Leave.findAndCountAll({
+                limit, 
+                offset 
+            });
+        }
+        const { count, rows } = await Leave.findAndCountAll({
+            where,
+            limit, 
+            offset 
         });
 
         return res.status(200).json({

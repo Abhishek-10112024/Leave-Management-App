@@ -151,13 +151,18 @@ export const getLeaveRequests = async (req, res) => {
 
         const status = req.query.status; // get the status value being passed in query parameter as string value and saves in status variable
         const where = {e_id}; // This initializes an object named where. This object will be used to build the conditions for filtering the data in a database query. It already contains a condition to check the required id which it got from req.user object
-        if (status && ['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
+        if (['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
             // This line checks two things:
             //Whether the status variable is defined (not null or undefined).
             //Whether the value of status is one of the valid statuses: 'pending', 'accepted', or 'rejected'.
             where.status = status; // If both conditions in the if statement are met, this line adds a property to the where object, setting where.status to the value of status.
         }
-
+        else if (status === null || undefined || ''){
+            const { count, rows } = await Leave.findAndCountAll({
+                limit, 
+                offset 
+            });
+        }
         const { count, rows } = await Leave.findAndCountAll({
             where,
             limit, 
