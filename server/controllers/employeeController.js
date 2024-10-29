@@ -159,11 +159,20 @@ export const getLeaveRequests = async (req, res) => {
         }
         else if (status === null || undefined || ''){
             const { count, rows } = await Leave.findAndCountAll({
+                order: [['leave_id', 'ASC']],
                 limit, 
                 offset 
             });
+
+            return res.status(200).json({
+                leaves: rows,
+                totalPages: Math.ceil(count / limit),
+                currentPage: page,
+                totalCount: count
+            });
         }
         const { count, rows } = await Leave.findAndCountAll({
+            order: [['leave_id', 'ASC']],
             where,
             limit, 
             offset 
