@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
-    import {leaves} from '../store';
+    import {leaves, status} from '../store';
     import { fetchLeaveRequests } from '../exportFunction';
     import Logout from './Logout.svelte';
     import LeavesPagination from './LeavesPagination.svelte';
@@ -41,6 +41,15 @@
 
     const goToAdminDashboard = () => {
         navigate('/admin');
+    };
+
+    const changeStatus = (currentstatus) => {
+// // This declares an arrow function, with status parameter, representing the status that user wants to filter
+        status.set(currentstatus);
+// // This line updates the currentStatus variable with the value passed as the status parameter. 
+// // This variable is used to keep track of which status filter is currently applied.
+        // currentPage = 1; // Reset to first page on status change
+        fetchLeaveRequests(); // Filter leaves based on the new status
     };
 
     const truncateReason = (reason, limit) => {
@@ -84,6 +93,15 @@
     {#if error}
         <p class="error">{error}</p>
     {/if}
+
+    <div class="status-buttons">
+        <button class="btn" on:click={() => changeStatus(null)}>All Leaves</button>
+      <!-- on:click={() => changeStatus('all')}: This specifies an event listener for the button's click event. When the button is clicked, the function changeStatus is called with the argument 'all'.
+      The use of an arrow function here (() => changeStatus('all')) allows for passing the string 'all' as an argument when the button is clicked. -->
+        <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
+        <button class="btn" on:click={() => changeStatus('accepted')}>Accepted</button>
+        <button class="btn" on:click={() => changeStatus('rejected')}>Rejected</button>
+      </div>
 
     <table class="leave-table">
         <thead>
@@ -315,5 +333,30 @@ nowrap, it prevents the text from wrapping onto the next line. */
         padding: 5px;
         z-index: 10;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-buttons {
+    display: flex;
+    gap: 15px;   /*Space between buttons  */
+    margin-bottom: 5px;
+    margin-left: 400px;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.3s;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px); /* Lift effect on hover */
+    }
+
+    .btn {
+        background-color: #007bff; /* Default button color */
+        color: white; /* Text color */
     }
 </style>

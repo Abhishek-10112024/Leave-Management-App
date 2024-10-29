@@ -8,9 +8,10 @@ export const limit = writable(10);
 export const totalPages = writable(1);
 export const employees = writable([]);
 export const leaves = writable([]);
+export const status = writable(null);
 
 // Flow of code:
 // When the application starts, all writable stores are initialized with default values
 // As the user interacts with the application (like changing the page or loading employee data), the values in these stores can be updated using the set or update methods
-// Components that use these stores will reactively update when the values change
+// Components that use these stores will reactively update when the values change.
 
