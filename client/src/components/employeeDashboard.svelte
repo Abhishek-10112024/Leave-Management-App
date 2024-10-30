@@ -3,70 +3,25 @@
     import EditLeaveModal from './EditLeaveModal.svelte';
     import ApplyLeaveModal from './AppyLeaveModal.svelte';
     import Logout from './Logout.svelte';
+    import { fetchLeaves } from '../exportFunction';
+    import EmployeeLeavesPagination from './EmployeeLeavesPagination.svelte';
+    import {status, leaveRequests} from '../store'
 
-    let leaveRequests = [];
-    // let filteredLeaves = [];
+   
     let selectedLeaveRequest = null;
     let showEditModal = false;
     let showApplyModal = false;
 
-    // let currentStatus = 'all'; // Default status to show all leaves
-    let currentPage = 1;
-    let itemsPerPage = 10;
-    let totalItems = 0;
+    let currentStatus = null; // Default status to show all leaves
 
-    const fetchLeaveRequests = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/api/employees/leaves?page=${currentPage}&limit=${itemsPerPage}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                credentials: 'include'
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                leaveRequests = data.leaves;
-// This variable is being assigned the value of data.leaves (Which is being asigned some value in controller, as the result when the API call is made.
-// leaves: rows,totalPages: Math.ceil(count / limit),currentPage: page, totalCount: count), it holds an array (or a collection) of leave request objects.
-                totalItems = data.totalItems;
-                // same as above
-                // filterLeaves(); // Filter leaves after fetching
-            } else {
-                console.error('Failed to fetch leave requests');
-            }
-        } catch (error) {
-            console.error('Error fetching leave requests:', error);
-        }
-    };
-
-//     const filterLeaves = () => {
-// // It doesn’t take any parameters, so it operates on variables that are presumably defined in the surrounding scope.
-//         filteredLeaves = currentStatus === 'all' 
-//             ? leaveRequests 
-//             : leaveRequests.filter(leave => leave.status === currentStatus);
-// // Conditional (Ternary) Operator: This line uses a conditional operator to determine how to set the filteredLeaves variable.
-// // If currentStatus is equal to 'all', it means the user wants to see all leave requests without any filtering. In this case, filteredLeaves is assigned the entire leaveRequests array.
-// // If currentStatus is not 'all', the function filters the leaveRequests array. This method creates a new array containing only the leave requests whose status matches the value of currentStatus.
-//     };
-
-//     const changePage = (page) => {
-// // This declares an arrow function named changePage that takes one parameter, page. This parameter represents the page number that the user wants to navigate to.
-//         currentPage = page;
-// // This line sets the currentPage variable to the value of the page parameter passed to the function. This variable typically keeps track of which page of results the user is currently viewing.
-//         fetchLeaveRequests();
-// // By calling this function, you likely ensure that the displayed leave requests are updated according to the newly selected page.
-//     };
-
-//     const changeStatus = (status) => {
+    const changeStatus = (currentstatus) => {
 // // This declares an arrow function, with status parameter, representing the status that user wants to filter
-//         currentStatus = status;
+        status.set(currentstatus);
 // // This line updates the currentStatus variable with the value passed as the status parameter. 
 // // This variable is used to keep track of which status filter is currently applied.
-//         currentPage = 1; // Reset to first page on status change
-//         filterLeaves(); // Filter leaves based on the new status
-//     };
+        // currentPage = 1; // Reset to first page on status change
+        fetchLeaves(); // Filter leaves based on the new status
+    };
 
     const openEditModal = (leaveRequest) => {
         selectedLeaveRequest = leaveRequest;
@@ -83,7 +38,7 @@
         selectedLeaveRequest = null;
 // This line resets the selectedLeaveRequest variable to null. 
 // This is important for clearing the previously selected leave request and ensuring that when the modal is opened again, it doesn't display outdated or incorrect data.
-        fetchLeaveRequests();
+        fetchLeaves();
     };
 
     const openApplyModal = () => {
@@ -94,7 +49,7 @@
     const closeApplyModal = () => {
         showApplyModal = false;
 // This line sets the showApplyModal variable to false, indicating that the apply modal should no longer be displayed. 
-        fetchLeaveRequests();
+        fetchLeaves();
 // This line calls the fetchLeaveRequests function, which presumably retrieves the current list of leave requests from an API or data source.
     };
 
@@ -114,7 +69,7 @@
     };
 
     onMount(() => {
-        fetchLeaveRequests();
+        fetchLeaves();
     });
 </script>
 
@@ -122,14 +77,14 @@
     <h2>Employee Dashboard</h2>
     <div class="button-container">
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
-        <!-- <div class="status-buttons">
-            <button class="btn" on:click={() => changeStatus('all')}>All Leaves</button> -->
+        <div class="status-buttons">
+            <button class="btn" on:click={() => changeStatus(null)}>All Leaves</button>
 <!-- on:click={() => changeStatus('all')}: This specifies an event listener for the button's click event. When the button is clicked, the function changeStatus is called with the argument 'all'.
  The use of an arrow function here (() => changeStatus('all')) allows for passing the string 'all' as an argument when the button is clicked. -->
-            <!-- <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
+            <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
             <button class="btn" on:click={() => changeStatus('accepted')}>Accepted</button>
             <button class="btn" on:click={() => changeStatus('rejected')}>Rejected</button>
-        </div> -->
+        </div>
     </div>
 
     <table class="leave-table">
@@ -144,7 +99,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each leaveRequests as leaveRequest}
+            {#each $leaveRequests as leaveRequest}
 <!-- This line uses the Svelte {#each} block to iterate over the filteredLeaves array, where each item is assigned to the variable leaveRequest. 
  This means that for each leave request in the array, a new table row (<tr>) will be created. -->
                 <tr> 
@@ -177,27 +132,6 @@
         </tbody>
     </table>
 
-    <!-- <div class="pagination">
-        {#if totalItems > itemsPerPage} -->
-<!-- This line checks if the total number of items (totalItems) is greater than the number of items displayed per page (itemsPerPage). 
- If true, it indicates that pagination is necessary, and the following code block will render the pagination buttons. -->
-            <!-- {#each Array(Math.ceil(totalItems / itemsPerPage)) as _, index} -->
-<!-- This line creates an array with a length equal to the total number of pages. 
- The Math.ceil(totalItems / itemsPerPage) calculates the total number of pages by dividing the total items by the items per page and rounding up to ensure all items are accounted for. 
- The as _ syntax is used because the actual value of the elements in the array is not needed; only the index is used to render the buttons.-->
-                <!-- <button 
-                    class="btn page-button" 
-                    on:click={() => changePage(index + 1)} 
-                    class:selected={currentPage === index + 1}> -->
-<!-- The on:click event calls the changePage function with the page number (index + 1), which will set the current page to the clicked page.
- The class:selected={currentPage === index + 1} conditionally applies the selected class if the currentPage matches the index of the button (adjusted by 1 for 1-based indexing). 
- This can be used to style the currently active page button differently. -->
-                    <!-- {index + 1}
-                </button>
-            {/each}
-        {/if}
-    </div> -->
-
     {#if showEditModal}
 <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
         <EditLeaveModal leaveRequest={selectedLeaveRequest} on:close={closeEditModal} />
@@ -211,6 +145,7 @@
 <!-- on:close={closeApplyModal}: This sets up an event listener for a close event emitted from the ApplyLeaveModal. -->
     {/if}
 </div>
+<EmployeeLeavesPagination/>
 <Logout />
 <style>
     .dashboard {
@@ -356,45 +291,17 @@
         z-index: 10;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
-/* .pagination {
+/* /* .pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-}
-
-.page-button {
-    padding: 10px 15px;
-    margin: 0 5px;
-    border: 2px solid #007bff;
-    background-color: white;
-    color: #007bff;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s;
-}
-
-.page-button:hover {
-    background-color: #007bff;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.page-button.selected {
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-}
-
-.page-button:disabled {
-    background-color: #e0e0e0;
-    color: #a0a0a0;
-    cursor: not-allowed;
 } */
-/*.status-buttons {
+
+.status-buttons {
     display: flex;
-    gap: 15px;  Space between buttons 
-    margin-left: auto;  Align to the right 
-} */
+    gap: 15px;   /*Space between buttons  */
+    margin-left: auto;  /* Align to the right */
+}
 
 .btn {
     padding: 12px 20px;
@@ -414,10 +321,5 @@
     color: white; /* Text color */
 }
 
-/*.btn.selected {
-    font-weight: bold;  Bold text for the selected button 
-    border: 2px solid white;  Outline for the selected button 
-    background-color: #0056b3;  Darker background for selected 
-}*/
 </style>
 

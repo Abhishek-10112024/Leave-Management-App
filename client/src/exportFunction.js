@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { navigate } from 'svelte-routing';
-import { status, employees, page, limit, totalPages, leaves } from './store';
+import { status, employees, page, limit, totalPages, leaves, leaveRequests } from './store';
 
 export const fetchEmployees = async () => { // This defines an async function that can handle asynchronous operations, allowing the use of await for promises (await being used in down in the code during fetching response)
     try {
@@ -64,6 +64,42 @@ export const fetchLeaveRequests = async () => {
         if (response.ok) {
             const data = await response.json();
             leaves.set(data.leaves);
+            totalPages.set(data.totalPages);
+            status.set(data.status);
+        } else if (response.status === 401) {
+            localStorage.removeItem('token');
+            navigate('/');
+        } else {
+            console.error('Failed to fetch leave requests:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+};
+
+export const fetchLeaves = async () => {
+    try {
+
+        const currentPage = get(page);
+        const itemsPerPage = get(limit);
+        const currentStatus = get(status);
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            throw new Error('No token found');
+        }
+
+        const response = await fetch(`http://localhost:3000/api/employees/leaves?page=${currentPage}&limit=${itemsPerPage}&status=${currentStatus}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            leaveRequests.set(data.leaves);
             totalPages.set(data.totalPages);
             status.set(data.status);
         } else if (response.status === 401) {

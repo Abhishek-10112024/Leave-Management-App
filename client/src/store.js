@@ -9,6 +9,7 @@ export const totalPages = writable(1);
 export const employees = writable([]);
 export const leaves = writable([]);
 export const status = writable(null);
+export const leaveRequests = writable([]);
 
 // Flow of code:
 // When the application starts, all writable stores are initialized with default values
