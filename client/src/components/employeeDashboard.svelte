@@ -172,13 +172,13 @@
     }
 
     .btn {
-        padding: 12px 20px;
+        padding: 12px 20px;  /*right left top bottom*/
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s ease, transform 0.3s;
-        margin: 0 10px;
+        margin: 0 10px; /*right left top bottom*/
         width: 150px;
     }
 
