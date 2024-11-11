@@ -65,7 +65,7 @@ export const fetchLeaveRequests = async () => {
             const data = await response.json();
             leaves.set(data.leaves);
             totalPages.set(data.totalPages);
-            status.set(data.status);
+            // status.set(data.status); // no need of this as I am not setting this in backend
         } else if (response.status === 401) {
             localStorage.removeItem('token');
             navigate('/');
