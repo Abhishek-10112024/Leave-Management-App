@@ -101,7 +101,7 @@ export const fetchLeaves = async () => {
             const data = await response.json();
             leaveRequests.set(data.leaves);
             totalPages.set(data.totalPages);
-            status.set(data.status);
+            // status.set(data.status); no need and I am not returing any status through my backend, whose valuse will be set to this status store.
         } else if (response.status === 401) {
             localStorage.removeItem('token');
             navigate('/');

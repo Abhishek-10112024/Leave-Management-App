@@ -77,15 +77,22 @@
     <h2>Employee Dashboard</h2>
     <div class="button-container">
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
-        <div class="status-buttons">
-            <button class="btn" on:click={() => changeStatus(null)}>All Leaves</button>
+        <!-- <div class="status-buttons">
+            <button class="btn" on:click={() => changeStatus(null)}>All Leaves</button> -->
 <!-- on:click={() => changeStatus('all')}: This specifies an event listener for the button's click event. When the button is clicked, the function changeStatus is called with the argument 'all'.
  The use of an arrow function here (() => changeStatus('all')) allows for passing the string 'all' as an argument when the button is clicked. -->
-            <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
+            <!-- <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
             <button class="btn" on:click={() => changeStatus('accepted')}>Accepted</button>
             <button class="btn" on:click={() => changeStatus('rejected')}>Rejected</button>
-        </div>
+        </div> -->
     </div>
+
+    <select bind:value={currentStatus} on:change={() => changeStatus(currentStatus)}>
+        <option value="all">All</option>
+        <option value="accepted">Accepted</option>
+        <option value="pending">Pending</option>
+        <option value="rejected">Rejected</option>
+    </select>
 
     <table class="leave-table">
         <thead>
@@ -297,11 +304,11 @@
     margin-top: 20px;
 } */
 
-.status-buttons {
-    display: flex;
-    gap: 15px;   /*Space between buttons  */
-    margin-left: auto;  /* Align to the right */
-}
+/* .status-buttons { */
+    /* display: flex; */
+    /* gap: 15px;   Space between buttons  */
+    /* margin-left: auto;  Align to the right */
+/* } */
 
 .btn {
     padding: 12px 20px;
@@ -320,6 +327,46 @@
     background-color: #007bff; /* Default button color */
     color: white; /* Text color */
 }
+
+select {
+    font-size: 16px;
+    padding: 10px 15px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    width: 200px; /* Adjust the width of the dropdown */
+    transition: all 0.3s ease;
+  }
+
+  /* Hover and focus styles for the select element */
+  select:hover {
+    border-color: #007bff; /* Blue border on hover */
+  }
+
+  select:focus {
+    border-color: #0056b3; /* Darker blue on focus */
+    outline: none; /* Remove default outline */
+  }
+
+  /*Add a box shadow to give it a 3D effect */
+  select:focus {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+
+  /* Style for the dropdown options */
+  option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  /*Add a hover effect to each option */
+  option:hover {
+    background-color: #f0f0f0;
+  }
 
 </style>
 

@@ -11,7 +11,7 @@
     let showRejectionModal = false;
     let selectedLeave = null;
 
-    const options = ['all', 'pending', 'accepted', 'rejected']; // The filter options for the dropdown
+    // const options = ['all', 'pending', 'accepted', 'rejected']; // The filter options for the dropdown, will be useful if I am using the each block to loop through this array, rather than setting the options manually.
     let currentStatus = '';
 
     const updateLeaveStatus = async (leave_id, status, rejectionReason) => {
