@@ -201,7 +201,25 @@
     .button-container {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 12px 20px;  /*right left top bottom*/
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background-color 0.3s ease, transform 0.3s;
+        margin: 0 10px; /*right left top bottom*/
+        width: 150px;
+        background-color: #007bff; /* Default button color */
+        color: white; /* Text color */
+    }
+
+    .btn:hover {
+        transform: translateY(-2px); /* Lift effect on hover */
     }
 
     .btn.apply-leave {
@@ -272,115 +290,50 @@
     }
 
     .status {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    color: white; 
-}
-
-.status.pending {
-    background-color: #FFA500; 
-}
-
-.status.accepted {
-    background-color: #28a745; 
-}
-
-.status.rejected {
-    background-color: #dc3545; 
-}
-
-.truncated-reason {
-        cursor: pointer;
-/* converts the cursor to pointer type when it is hovered over */
-        position: relative;
-/* This is useful if you want to absolutely position child elements relative to this one */
-        display: inline-block;
-/* This allows the element to be treated as an inline element (allowing other inline elements to sit next to it) while still being able to set width, height, padding, and margin. */
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        color: white; 
     }
 
-    .truncated-reason:hover::after {
-/* targets the ::after pseudo-element of any element with the class truncated-reason when it is hovered over. */
-        content: attr(title);
-        position: absolute;
-/* An element with position: absolute; is removed from the normal document flow. This means it does not affect the layout of surrounding elements, and those elements will behave as if the absolutely positioned element is not there. */
-        left: 0;
-        top: 100%;
-        white-space: nowrap;
-        background: #fff;
-        border: 1px solid #ccc;
-        padding: 5px;
-        z-index: 10;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    .status.pending {
+        background-color: #FFA500; 
     }
-/* /* .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-} */
 
-/* .status-buttons { */
-    /* display: flex; */
-    /* gap: 15px;   Space between buttons  */
-    /* margin-left: auto;  Align to the right */
-/* } */
+    .status.accepted {
+        background-color: #28a745; 
+    }
 
-.btn {
-    padding: 12px 20px;  /*right left top bottom*/
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background-color 0.3s ease, transform 0.3s;
-    margin: 0 10px; /*right left top bottom*/
-    width: 150px;
-    background-color: #007bff; /* Default button color */
-    color: white; /* Text color */
-}
+    .status.rejected {
+        background-color: #dc3545; 
+    }
 
-.btn:hover {
-    transform: translateY(-2px); /* Lift effect on hover */
-}
+    /* .truncated-reason class styles the element that will show the tooltip */
+    .truncated-reason {
+        cursor: pointer; /* Changes the cursor to a pointer (hand) when hovering over the element, indicating it's interactive */
+        position: relative; /* Positions the element relative to its normal position, enabling positioning of the pseudo-element (::after) */
+        display: inline-block; /* Makes the element behave like an inline element but also allows block-level styling (padding, width, etc.) */
+    }
 
-/* select {
-    font-size: 16px;
-    padding: 10px 15px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-    width: 200px; Adjust the width of the dropdown
-    transition: all 0.3s ease;
-  } */
-
-  /* Hover and focus styles for the select element */
-  /* select:hover { */
-    /* border-color: #007bff; Blue border on hover */
-  /* } */
-
-  /* select:focus { */
-    /* border-color: #0056b3; Darker blue on focus */
-    /* outline: none; Remove default outline */
-  /* } */
-
-  /*Add a box shadow to give it a 3D effect */
-  /* select:focus {
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-  } */
-
-  /* Style for the dropdown options */
-  /* option {
-    padding: 10px;
-    background-color: #fff;
-    color: #333;
-    border-bottom: 1px solid #f0f0f0;
-  } */
-
-  /*Add a hover effect to each option */
-  /* option:hover {
-    background-color: #f0f0f0;
-  } */
+    /* Hover state for the .truncated-reason element */
+    /* .truncated-reason:hover::after { */
+        /* content: attr(title); Uses the value of the 'title' attribute as the content for the tooltip */
+        /* position: absolute; Absolutely positions the tooltip relative to the .truncated-reason element */
+        /* left: 0; Aligns the tooltip's left edge with the left edge of the parent element */
+        /* top: 100%; Positions the tooltip just below the .truncated-reason element (100% means the bottom of the parent) */
+        
+        /* white-space: nowrap; Prevents the tooltip text from wrapping onto multiple lines, keeping it in a single line */
+        
+        /* background: #fff; Sets the background color of the tooltip to white */
+        /* border: 1px solid #ccc; Adds a light gray border around the tooltip */
+        /* padding: 5px; Adds padding inside the tooltip to provide space around the text */
+        
+        /* z-index: 10; Ensures the tooltip appears above other elements on the page (higher z-index means it sits on top) */
+        
+        /* Adds a subtle shadow to the tooltip, making it appear lifted off the page */
+        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); */
+        /* The shadow is 2px vertically offset, with a 10px blur, and a semi-transparent black color (20% opacity) */
+    /* } */
 
 </style>
 

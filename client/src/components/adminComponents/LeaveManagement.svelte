@@ -312,6 +312,8 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         display: flex;
         justify-content: center;
         margin-top: 10px;
+        margin-bottom: 10px;
+        gap: 15px;
     }
 
     .action-buttons {
@@ -359,27 +361,32 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         background-color: #0069d9;
         transform: translateY(-2px);
     }
+    /* .truncated-reason class styles the element that will show the tooltip */
     .truncated-reason {
-        cursor: pointer;
-        position: relative;
-        display: inline-block;
+        cursor: pointer; /* Changes the cursor to a pointer (hand) when hovering over the element, indicating it's interactive */
+        position: relative; /* Positions the element relative to its normal position, enabling positioning of the pseudo-element (::after) */
+        display: inline-block; /* Makes the element behave like an inline element but also allows block-level styling (padding, width, etc.) */
     }
 
-    .truncated-reason:hover::after {
-        content: attr(title);
-        position: absolute;
-        left: 0;
-        top: 100%;
-        white-space: nowrap;
-/* white-space: nowrap; is used to control how whitespace inside an element is handled.
-nowrap, it prevents the text from wrapping onto the next line. */
-        background: #fff;
-        border: 1px solid #ccc;
-        padding: 5px;
-        z-index: 10;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    }
-
+    /* Hover state for the .truncated-reason element */
+    /* .truncated-reason:hover::after { */
+        /* content: attr(title); Uses the value of the 'title' attribute as the content for the tooltip */
+        /* position: absolute; Absolutely positions the tooltip relative to the .truncated-reason element */
+        /* left: 0; Aligns the tooltip's left edge with the left edge of the parent element */
+        /* top: 100%; Positions the tooltip just below the .truncated-reason element (100% means the bottom of the parent) */
+        
+        /* white-space: nowrap; Prevents the tooltip text from wrapping onto multiple lines, keeping it in a single line */
+        
+        /* background: #fff; Sets the background color of the tooltip to white */
+        /* border: 1px solid #ccc; Adds a light gray border around the tooltip */
+        /* padding: 5px; Adds padding inside the tooltip to provide space around the text */
+        
+        /* z-index: 10; Ensures the tooltip appears above other elements on the page (higher z-index means it sits on top) */
+        
+        /* Adds a subtle shadow to the tooltip, making it appear lifted off the page */
+        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); */
+        /* The shadow is 2px vertically offset, with a 10px blur, and a semi-transparent black color (20% opacity) */
+    /* } */
     .status-buttons {
     display: flex;
     gap: 15px;   /*Space between buttons  */
