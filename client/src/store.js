@@ -1,14 +1,14 @@
 import { writable } from 'svelte/store';
 
-export const page = writable(1); // The writable function creates a store that can be updated
+// export const page = writable(1); // The writable function creates a store that can be updated
 // subscribe: Allows components to listen for changes
 // set: Updates the store's value
 // update: A method to modify the current value based on a function
-export const limit = writable(10);
+// export const limit = writable(10);
 export const totalPages = writable(1);
 export const employees = writable([]);
 export const leaves = writable([]);
-export const status = writable(null);
+// export const status = writable(null);
 export const leaveRequests = writable([]);
 
 // Flow of code:

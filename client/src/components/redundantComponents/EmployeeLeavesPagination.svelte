@@ -1,0 +1,86 @@
+<script>
+  import { createEventDispatcher } from 'svelte';
+  import { totalPages } from '../../store';
+
+  const dispatch = createEventDispatcher(); // Event dispatcher to communicate with the parent
+
+  export let currentPage = 1;  // Current page as a prop
+
+  // const goToPage = (newPage) => {
+  //   if (newPage > 0 && newPage <= $totalPages) {
+  //     page.set(newPage);
+  //     fetchLeaveRequests();
+  //   } else {
+  //     console.warn('Page number out of range:', newPage);
+  //   }
+  // };
+
+  
+// Function to handle page changes
+const changePage = (newPage) => {
+  if (newPage >= 1) {
+    dispatch('pageChange', newPage);  // Dispatch the new page number to the parent
+  }
+};
+</script>
+  
+<!-- <div class="pagination-controls">
+  <button on:click={() => changePage(1)}>
+    First
+  </button>
+  <button on:click={() => changePage($page - 1)}>
+    &lt;
+  </button>
+  <span id="pageDisplay">Page {$page} of {$totalPages}</span>
+  <button on:click={() => changePage($page + 1)}>
+    &gt;
+  </button>
+  <button on:click={() => changePage($totalPages)}>
+    Last
+  </button>
+</div> 
+-->
+<div class="pagination">
+  <button on:click={() => changePage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+  <span id="pageDisplay">Page {currentPage}</span>
+  <button on:click={() => changePage(currentPage + 1)} disabled={currentPage === $totalPages}>Next</button>
+</div>  
+
+<style>
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .pagination button {
+    margin: 0 8px;
+    padding: 8px 15px;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+
+  .pagination button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+
+  .pagination button:disabled {
+    background-color: #d6d6d6;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    border-color: #d6d6d6;
+  }
+
+  #pageDisplay {
+    margin: 0 12px;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+</style>

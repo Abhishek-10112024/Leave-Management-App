@@ -1,11 +1,11 @@
 import { get } from 'svelte/store';
 import { navigate } from 'svelte-routing';
-import { status, employees, page, limit, totalPages, leaves, leaveRequests } from './store';
+import { employees, totalPages, leaves, leaveRequests } from './store';
 
-export const fetchEmployees = async () => { // This defines an async function that can handle asynchronous operations, allowing the use of await for promises (await being used in down in the code during fetching response)
+export const fetchEmployees = async (page_num, limit_val) => { // This defines an async function that can handle asynchronous operations, allowing the use of await for promises (await being used in down in the code during fetching response)
     try {
-        const page_num = get(page); // Inside the function, it retrieves the current page number and limit from the Svelte stores
-        const limit_val = get(limit);
+        // const page_num = get(page); // Inside the function, it retrieves the current page number and limit from the Svelte stores
+        // const limit_val = get(limit);
         const token = localStorage.getItem('token'); // the user’s token and role from local storage.
         const userRole = localStorage.getItem('userRole');
 
@@ -42,11 +42,11 @@ export const fetchEmployees = async () => { // This defines an async function th
 
 // When using await with fetch, the function pauses execution until the promise resolves. 
 // This means that you will always have a response object available right after the await fetch(...) line, allowing you to evaluate its status immediately.
-export const fetchLeaveRequests = async () => {
+export const fetchLeaveRequests = async (page_num, limit_val, currentStatus) => {
     try {
-        const page_num = get(page);
-        const limit_val = get(limit);
-        const currentStatus = get(status);
+        // const page_num = get(page);
+        // const limit_val = get(limit);
+        // const currentStatus = get(status);
         const token = localStorage.getItem('token');
 
         if (!token) {
@@ -77,12 +77,12 @@ export const fetchLeaveRequests = async () => {
     }
 };
 
-export const fetchLeaves = async () => {
+export const fetchLeaves = async (currentPage, itemsPerPage, currentStatus) => {
     try {
 
-        const currentPage = get(page);
-        const itemsPerPage = get(limit);
-        const currentStatus = get(status);
+        // const currentPage = get(page);
+        // const itemsPerPage = get(limit);
+        // const currentStatus = get(status);
         const token = localStorage.getItem('token');
 
         if (!token) {
