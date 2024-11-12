@@ -5,3 +5,82 @@ It can be updated and re-declared in the same scope.	                           
 It can be declared without initialization.	                                         It can be declared without initialization.                                	                     It cannot be declared without initialization.
 It can be accessed without initialization as its default value is “undefined”.	     It cannot be accessed without initialization otherwise it will give ‘referenceError’.	         It cannot be accessed without initialization, as it cannot be declared without initialization.
 These variables are hoisted.	                                                     These variables are hoisted but stay in the temporal dead zone untill the initialization.	     These variables are hoisted but stays in the temporal dead zone until the initialization.
+
+// How to show JavaScript output?
+Use console.log() for console output, alert() for pop-up messages, document.write() for direct document writing, or update HTML elements via DOM manipulation.
+
+// What is the difference between null and undefined in JavaScript?
+undefined means a variable has been declared but has not yet been assigned a value. null is an assignment value that represents “no value” or “empty”.
+
+// What is hoisting in JavaScript?
+Hoisting is JavaScript’s default behavior of moving variable and function declarations to the top of their containing scope before code execution. Only the declarations are hoisted, not the initializations.
+
+// How does the ternary operator work in JavaScript?
+The ternary operator is a shorthand for the if-else statement. It takes three operands: condition ? expressionIfTrue : expressionIfFalse;
+
+// What does the typeof operator do?
+The typeof operator returns the type of a variable as a string. For example, typeof 42 returns “number”.
+
+// What is the purpose of the instanceof operator?
+The instanceof operator checks if an object is an instance of a specific class or constructor. 
+For example, let date = new Date(); date instanceof Date returns true.
+
+// JavaScript Comma Operator 
+mainly evaluates its operands from left to right sequentially and returns the value of the rightmost operand. 
+It is used as a separator for multiple expressions at a place that requires a single expression. When a comma operator is placed in an expression, 
+it executes each expression and returns the rightmost expression.
+Usage: The comma operator is often used in for loops to include multiple expressions within the loop initialization or increment sections. It can also be used in variable assignments and other contexts where multiple operations need to be performed in sequence.
+
+// How does the += operator work with strings?
+The += operator appends the right-hand string to the left-hand string and assigns the result to the left-hand variable. It is a shorthand for variable = variable + string.
+
+// What happens when you concatenate strings with numbers?
+When concatenating strings with numbers, the number is converted to a string, and then concatenation occurs. The result is always a string.
+
+// Can a switch statement handle range conditions (e.g., x > 10)?
+No, the switch statement is designed for exact matches. For range conditions, use if-else statements or include logical expressions within the cases.
+
+// Break v/s Continue:
+The major difference between the continue and break statement is that the break statement breaks out of the loop completely while continue is used to break one statement and iterate to the next statement. 
+
+// How does the continue statement work for different loops? 
+In a For loop, iteration goes to an updated expression which means the increment expression is first updated.
+In a While loop, it again executes the condition.
+
+// Can a JavaScript function have multiple return statements?
+Yes, a function can have multiple return statements within conditional blocks, but only one return is executed per function call.
+
+// Does the return statement exit the function?
+Yes, when a return statement is encountered, it immediately stops the function’s execution and exits the function.
+
+// JavaScript provides several types of loops:
+for loop: Used when the number of iterations is known.
+while loop: Repeats as long as a specified condition is true.
+do…while loop: Similar to the while loop, but it executes the block of code once before checking the condition.
+for…in loop: Used to iterate over the properties of an object.
+for…of loop: Used to iterate over iterable objects like arrays, strings, maps, etc.
+
+// How does a for loop work?
+A for loop repeats a block of code a certain number of times. It consists of three parts:
+Initialization: Initialize the loop counter variable.
+Condition: The loop runs as long as this condition is true.
+Increment/Decrement: Modify the loop counter variable.
+Example: for (let i = 0; i < 5; i++) { console.log(i); }
+
+// What is the difference between while and do…while loops?
+while loop: Checks the condition before executing the block of code. It is an entry-controlled loop.
+Example: let i = 0; while (i < 5) { console.log(i); i++; }
+do…while loop: Executes the block of code once before checking the condition. It is an exit-controlled loop
+Example: let i = 0; do { console.log(i); i++; } while (i < 5);
+
+// try {
+     Try Block to check for errors.
+}
+catch(err) {
+      Catch Block to display errors.
+} 
+finally {
+      Finally Block executes regardless of the try / catch result.
+}
+
+// 

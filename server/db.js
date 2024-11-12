@@ -9,7 +9,8 @@ const sequelize = new Sequelize({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
-  logging: false,
+  logging: false, // To ease debugging, you can enable logging in Sequelize. 
+  // This is done by setting the logging option to a function that gets executed every time Sequelize needs to log something.
 });
 
 export default sequelize;

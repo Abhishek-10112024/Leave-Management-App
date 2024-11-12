@@ -2,7 +2,11 @@ import { DataTypes } from "sequelize";
 import sequelize from "../db.js";
 import User from './user.js';
 
-const Leave = sequelize.define('Leave', {
+const Leave = sequelize.define('Leave', { //A model in Sequelize has a name. This name does not have to be the same name of the table it represents in the database. 
+    // Usually, models have singular names (such as User) while tables have pluralized names (such as users), although this is fully configurable.
+// All models that don't specify a schema will be created in the "public" schema by default
+// schema: 'public',
+// models: [User],
     leave_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,

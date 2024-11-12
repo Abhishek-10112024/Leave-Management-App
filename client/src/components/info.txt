@@ -325,3 +325,82 @@ Example:
 
 <!-- Child.svelte -->
 <slot></slot>
+
+
+Here's an overview of the key lifecycle methods in Svelte:
+1. onMount
+
+    Runs when the component has been added to the DOM (i.e., when the component has finished rendering).
+    This is often used to run any code that needs access to the DOM, like setting up event listeners, making API calls, or performing animations.
+
+<script>
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    console.log('Component mounted');
+  });
+</script>
+
+2. beforeUpdate
+
+    Runs before the DOM is updated when reactive state changes, but after the component's state has been updated.
+    This can be useful for performing tasks or calculations right before a re-render.
+
+<script>
+  import { beforeUpdate } from 'svelte';
+
+  beforeUpdate(() => {
+    console.log('State is about to update');
+  });
+</script>
+
+3. afterUpdate
+
+    Runs after the DOM has been updated following a state change.
+    This is useful for handling any side effects that depend on the updated DOM or state.
+
+<script>
+  import { afterUpdate } from 'svelte';
+
+  afterUpdate(() => {
+    console.log('Component updated');
+  });
+</script>
+
+4. onDestroy
+
+    Runs when the component is about to be removed from the DOM.
+    It's often used for cleanup tasks, like clearing timers or removing event listeners.
+
+<script>
+  import { onDestroy } from 'svelte';
+
+  onDestroy(() => {
+    console.log('Component destroyed');
+  });
+</script>
+
+5. tick
+
+    A special function that returns a promise which resolves after the DOM has been updated.
+    This can be used when you need to wait for the DOM to finish rendering before doing something else, like setting focus or triggering animations.
+
+<script>
+  import { tick } from 'svelte';
+
+  async function updateAndWait() {
+    // Update the state
+    someState = true;
+    // Wait for DOM to update
+    await tick();
+    console.log('DOM has been updated');
+  }
+</script>
+
+Summary of Lifecycle Methods:
+
+    onMount: Runs once, when the component is mounted (added to the DOM).
+    beforeUpdate: Runs before a reactive state change triggers a DOM update.
+    afterUpdate: Runs after the DOM has been updated following a state change.
+    onDestroy: Runs when the component is about to be removed from the DOM.
+    tick: A promise that resolves after the DOM has been updated.
