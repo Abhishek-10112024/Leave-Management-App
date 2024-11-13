@@ -98,7 +98,9 @@
     <div class="button-container">
 <!-- This listens for the statusChange event from the child and invokes the handleStatusChange method in the parent, 
  which will update the parent's state (currentStatus). -->
+  <!-- currentStatus={currentStatus} syntax, which binds the currentStatus state of the parent to the child component. -->
     <ChangeStatus
+        currentStatus={currentStatus}
         on:statusChange={event => handleStatusChange(event.detail)} 
     />
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
@@ -179,7 +181,9 @@
 </div>
 <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
  which will update the parent's state (currentPage). -->
+ <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
 <Pagination 
+    currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
 />
 <Logout />
