@@ -334,7 +334,7 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 13px;
         transition: background-color 0.3s ease, transform 0.3s;
         background-color: #007bff; /* Default button color */
         color: white; /* Text color */

@@ -61,7 +61,7 @@
     .pagination button {
       margin: 0 8px;
       padding: 8px 15px;
-      font-size: 1rem;
+      font-size: 13px;
       border: 2px solid transparent;
       background-color: #007bff;
       color: white;
@@ -85,7 +85,7 @@
     #pageDisplay {
       margin: 0 12px;
       font-weight: bold;
-      font-size: 1.1rem;
+      font-size: 13px;
     }
   </style>
   
