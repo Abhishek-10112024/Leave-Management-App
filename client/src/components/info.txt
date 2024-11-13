@@ -404,3 +404,53 @@ Summary of Lifecycle Methods:
     afterUpdate: Runs after the DOM has been updated following a state change.
     onDestroy: Runs when the component is about to be removed from the DOM.
     tick: A promise that resolves after the DOM has been updated.
+
+
+
+// Interaction between ChangeStatus and employeeDashboard Component:
+
+    Parent to Child (Prop Binding):
+        The currentStatus value from the parent is passed as a prop to the child component (ChangeStatus).
+        The bind:value={currentStatus} ensures that the selected value in the child’s dropdown is always in sync with the parent’s currentStatus. So if the parent changes currentStatus, it will automatically update the dropdown in the child.
+
+    Child to Parent (Event Dispatching):
+        When the user selects a new status in the dropdown (<select>), the changeStatus function is triggered in the child component.
+        This function dispatches the statusChange event with the newly selected status as the event detail (newStatus).
+        The parent listens for this event using on:statusChange and calls handleStatusChange, which updates the parent's currentStatus.
+
+    Parent Reacting to Changes:
+        After the parent’s currentStatus is updated by the child’s event, the parent calls fetchLeaves with the updated currentStatus and other parameters like currentPage and limitValue.
+        This triggers a data fetch (e.g., an API call) to update the displayed data according to the selected status and page.
+
+
+
+// Reason for removing changeStatus prop and using evenet dispatcher only:
+Why Use Props?
+
+    Two-Way Binding (Syncing Values):
+        Props are useful if you want the child component to be controlled by the parent component. In other words, the parent holds the state, and the child reflects that state.
+        Using bind:value={currentStatus} creates two-way binding between the child’s dropdown and the parent’s currentStatus. When the parent updates currentStatus, the dropdown value in the child will automatically reflect that change. Likewise, when the user changes the dropdown value, the currentStatus in the parent will be updated.
+
+    Parent Needs to Track State:
+        The parent might need to keep track of the selected status because it could be part of the filtering logic (as it is in your code with fetchLeaves). For instance, the parent may use currentStatus to trigger API calls or update other parts of the UI based on the selected status.
+        Props are used to pass down the current value so that the child can reflect the status the parent is currently tracking.
+
+    Default State in Parent:
+        In many cases, you want the parent component to be the source of truth for the status (currentStatus). Using props allows you to have a central place where you manage this state.
+        For example, if you ever need to reset or modify the status from the parent component (perhaps due to some external action like pagination), the child component will automatically reflect those changes without needing extra logic to pass the new value from the parent.
+
+
+When Props Are Not Required (Event Dispatcher Only):
+        If your app is simple and you only want the dropdown in the child to set the status without any need for the parent to track or control the status, then you can definitely omit the prop. You can rely entirely on the event dispatcher to notify the parent of the new status whenever the user changes the dropdown selection.
+
+
+Key Changes:
+    No currentStatus Prop: You no longer need the currentStatus prop to bind the value of the dropdown, because we are no longer syncing the dropdown with the parent state.
+    Event Dispatcher: The changeStatus function still dispatches the statusChange event with the selected value. The parent can listen for this event and update its state accordingly.
+    The parent no longer has to pass currentStatus to the child because we’re not syncing the dropdown value with the parent.
+    The parent only listens to the event and updates its own currentStatus state, which is then used in the fetchLeaves function.
+
+
+So, Do You Need Props?
+    Yes, if you want to control the state in the parent and ensure the dropdown in the child is always synced with that state (i.e., two-way binding with bind:value).
+    No, if you just want the child to independently set the status and don’t need to track or control that status in the parent component (i.e., use the event dispatcher to notify the parent and leave the parent state management separate).
