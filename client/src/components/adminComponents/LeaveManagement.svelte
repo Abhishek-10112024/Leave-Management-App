@@ -138,8 +138,9 @@
       </select> -->
 
       <div class="button-container">
+<!-- This listens for the statusChange event from the child and invokes the handleStatusChange method in the parent, 
+ which will update the parent's state (currentStatus). -->
         <ChangeStatus
-            currentStatus={currentStatus}
             on:statusChange={event => handleStatusChange(event.detail)} 
         />
         <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>

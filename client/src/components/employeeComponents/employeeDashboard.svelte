@@ -95,10 +95,9 @@
 <div class="dashboard">
     <h2>Employee Dashboard</h2>
     <div class="button-container">
-        <!-- the currentStatus={currentStatus} syntax, which binds the currentStatus state of the parent to the child component.
-         The on:statusChange={event => handleStatusChange(event.detail)} listens for the statusChange event from the child and invokes the handleStatusChange method in the parent, which will update the parent's state (currentStatus). -->
+<!-- This listens for the statusChange event from the child and invokes the handleStatusChange method in the parent, 
+ which will update the parent's state (currentStatus). -->
     <ChangeStatus
-        currentStatus={currentStatus}  
         on:statusChange={event => handleStatusChange(event.detail)} 
     />
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
