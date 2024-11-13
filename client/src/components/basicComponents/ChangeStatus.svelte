@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
   
-    const dispatch = createEventDispatcher(); // Event dispatcher to communicate with the parent
+    const dispatch = createEventDispatcher(); // This function creates an event dispatcher, which allows the child component to send custom events (like statusChange) to the parent.
 
     export let currentStatus = ''; // Status filter as a prop
 
@@ -10,11 +10,12 @@
   const changeStatus = (event) => {
     // Access value directly from event.target
     const newStatus = event.target.value;
-    dispatch('statusChange', newStatus);  // Dispatch the new value
+    dispatch('statusChange', newStatus);  // This line sends the updated newStatus value (the selected value from the dropdown) to the parent component through the statusChange event.
   };
   </script> 
   
-  <select on:change={changeStatus} bind:value={currentStatus}>
+  <!-- bind:value={currentStatus}: This creates two-way data binding between the parent’s currentStatus prop and the child’s <select> dropdown. -->
+  <select on:change={changeStatus} bind:value={currentStatus}> 
     <option value={"all"}>All Leaves</option>
     <option value="accepted">Accepted</option>
     <option value="pending">Pending</option>

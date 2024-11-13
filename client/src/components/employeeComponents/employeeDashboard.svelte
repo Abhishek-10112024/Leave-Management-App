@@ -17,19 +17,20 @@
     let currentPage = 1;  // Track the current page in the parent
     let limitValue = 10;   // Track the limit (items per page)
 
-    let currentStatus = 'all'; // Default status to show all leaves
+    let currentStatus = 'all'; // Holds the selected status filter (initialized to default value)
 
 
-    // Function to call when page or filter changes
+   
     const handlePageChange = (newPage) => {
         currentPage = newPage;
         fetchLeaves(currentPage, limitValue, currentStatus);  // Fetch data with the updated page
     };
 
-
+// This function is called whenever the 'statusChange' event is fired from the child. 
+// It updates the currentStatus in the parent to the new value passed from the child.
     const handleStatusChange = (newStatus) => {
         currentStatus = newStatus;
-        fetchLeaves(currentPage, limitValue, currentStatus);  // Fetch data with the updated status
+        fetchLeaves(currentPage, limitValue, currentStatus);  // Fetch data with the updated parameters
     };
 
 //     const changeStatus = (currentstatus) => {
@@ -94,8 +95,10 @@
 <div class="dashboard">
     <h2>Employee Dashboard</h2>
     <div class="button-container">
+        <!-- the currentStatus={currentStatus} syntax, which binds the currentStatus state of the parent to the child component.
+         The on:statusChange={event => handleStatusChange(event.detail)} listens for the statusChange event from the child and invokes the handleStatusChange method in the parent, which will update the parent's state (currentStatus). -->
     <ChangeStatus
-        currentStatus={currentStatus}
+        currentStatus={currentStatus}  
         on:statusChange={event => handleStatusChange(event.detail)} 
     />
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
