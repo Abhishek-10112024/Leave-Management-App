@@ -31,6 +31,7 @@
 // It updates the currentStatus in the parent to the new value passed from the child.
     const handleStatusChange = (newStatus) => {
         currentStatus = newStatus;
+        currentPage = 1;
         fetchLeaves(currentPage, limitValue, currentStatus);  // Fetch data with the updated parameters
     };
 
