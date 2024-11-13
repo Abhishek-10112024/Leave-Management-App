@@ -19,7 +19,8 @@
         navigate('/admin');
     };
 
-        // Function to call when page or filter changes
+// This function is called whenever the 'pageChange' event is fired from the child. 
+// It updates the currentPage in the parent to the new value passed from the child.
         const handlePageChange = (newPage) => {
         currentPage = newPage;
         fetchEmployees(currentPage, limitValue);  // Fetch data with the updated page
@@ -68,8 +69,10 @@
     <button class="btn sign-up" on:click={signUpNewEmployee}>Sign Up New Employee</button>
     <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>
 </div>
+
+<!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
+ which will update the parent's state (currentPage). -->
 <Pagination 
-    currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
 />
 <Logout/>

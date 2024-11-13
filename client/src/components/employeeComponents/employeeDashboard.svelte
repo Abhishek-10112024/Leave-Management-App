@@ -20,7 +20,8 @@
     let currentStatus = 'all'; // Holds the selected status filter (initialized to default value)
 
 
-   
+// This function is called whenever the 'pageChange' event is fired from the child. 
+// It updates the currentPage in the parent to the new value passed from the child.
     const handlePageChange = (newPage) => {
         currentPage = newPage;
         fetchLeaves(currentPage, limitValue, currentStatus);  // Fetch data with the updated page
@@ -176,8 +177,9 @@
 <!-- on:close={closeApplyModal}: This sets up an event listener for a close event emitted from the ApplyLeaveModal. -->
     {/if}
 </div>
+<!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
+ which will update the parent's state (currentPage). -->
 <Pagination 
-    currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
 />
 <Logout />
