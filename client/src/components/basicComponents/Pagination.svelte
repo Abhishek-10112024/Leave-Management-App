@@ -4,7 +4,7 @@
   
     const dispatch = createEventDispatcher(); // Event dispatcher to communicate with the parent
   
-    let currentPage = 1; 
+    export let currentPage = 1;  // The current page value passed from the parent as a prop
   
     // const goToPage = (newPage) => {
     //   if (newPage > 0 && newPage <= $totalPages) {
@@ -44,7 +44,7 @@
   <div class="pagination">
     <button on:click={() => changePage(1)} disabled={currentPage === 1}>First</button>
     <button on:click={() => changePage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-    <span id="pageDisplay">Page {currentPage}</span>
+    <span id="pageDisplay">Page {currentPage} of {$totalPages}</span>
     <button on:click={() => changePage(currentPage + 1)} disabled={currentPage === $totalPages}>Next</button>
     <button on:click={() => changePage($totalPages)} disabled={currentPage === $totalPages}>Last</button>
 

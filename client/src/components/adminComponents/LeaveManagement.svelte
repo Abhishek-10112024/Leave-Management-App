@@ -69,6 +69,7 @@
     // Function to call when status changes
     const handleStatusChange = (newStatus) => {
         currentStatus = newStatus;
+        currentPage = 1;  // reset the page to 1 on change in status
         fetchLeaveRequests(currentPage, limitValue, currentStatus);  // Fetch data with the updated status
     };
 
@@ -141,7 +142,9 @@
       <div class="button-container">
 <!-- This listens for the statusChange event from the child and invokes the handleStatusChange method in the parent, 
  which will update the parent's state (currentStatus). -->
+ <!-- currentStatus={currentStatus} syntax, which binds the currentStatus state of the parent to the child component. -->
         <ChangeStatus
+            currentStatus={currentStatus}
             on:statusChange={event => handleStatusChange(event.detail)} 
         />
         <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>
@@ -216,7 +219,9 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
 <!-- <LeavesPagination/> -->
  <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
  which will update the parent's state (currentPage). -->
+ <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
 <Pagination 
+    currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
 />
 <Logout/>
