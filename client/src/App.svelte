@@ -1,25 +1,27 @@
 <script>
-  import { Router, Route } from 'svelte-routing';
+  import { Router, Route, navigate } from 'svelte-routing';
+  import { onMount } from 'svelte';
   // The Router component acts as the main container for your application's routes
   // It keeps track of the current location in the app and renders the appropriate route based on the URL
   // The Route component defines a specific route in your application
   // You specify a path and the component that should be rendered when that path is matched.
   import Register from './components/authComponents/SignUp.svelte'; 
-  import Login from './components/authComponents/login.svelte';
+  import Login from './components/authComponents/Login.svelte';
   import adminDashboard from './components/adminComponents/adminDashboard.svelte'; 
   import Logout from './components/authComponents/Logout.svelte';
-  import employeeDashboard from './components/employeeComponents/employeeDashboard.svelte';
+  import employeeDashboard from './components/employeeComponents/EmployeeDashboard.svelte';
   import EmployeeManagement from './components/adminComponents/EmployeeManagement.svelte';
   import LeaveManagement from './components/adminComponents/LeaveManagement.svelte';
   
-  export let url = '';
-  // export let url = '';: This line declares a prop named url, which can be passed to the Router component
+  let url = '';
+
+  // let url = '';: This line declares a variable named url, which can be passed to the Router component
   // It allows the Router to be aware of the current URL, enabling navigation and rendering of the appropriate route
 </script>
 
 <Router {url}>
   <!-- This initializes the router, which manages the application's routing -->
-  <!-- The {url} prop allows the router to handle navigation based on the current URL -->
+  <!-- The {url} allows the router to handle navigation based on the current URL -->
   <div>
     <Route path="/" component={Login} />
     <!-- Each <Route> component defines a specific route and the corresponding component to render when that route is active -->
