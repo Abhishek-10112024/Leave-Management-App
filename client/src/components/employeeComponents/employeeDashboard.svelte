@@ -4,7 +4,6 @@
     import ApplyLeaveModal from './AppyLeaveModal.svelte';
     import Logout from '../authComponents/Logout.svelte';
     import { fetchLeaves } from '../../exportFunction';
-    import EmployeeLeavesPagination from '../redundantComponents/EmployeeLeavesPagination.svelte';
     import ChangeStatus from '../basicComponents/ChangeStatus.svelte';
     import {leaveRequests} from '../../store'
     import Pagination from '../basicComponents/Pagination.svelte';

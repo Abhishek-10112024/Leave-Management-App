@@ -4,7 +4,6 @@
     import Logout from '../authComponents/Logout.svelte';
     import { employees } from '../../store';
     import { fetchEmployees } from '../../exportFunction';
-    import EmployeesPagination from '../redundantComponents/EmployeesPagination.svelte';
     import Pagination from '../basicComponents/Pagination.svelte';
 
     let error = '';

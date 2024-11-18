@@ -454,3 +454,205 @@ Key Changes:
 So, Do You Need Props?
     Yes, if you want to control the state in the parent and ensure the dropdown in the child is always synced with that state (i.e., two-way binding with bind:value).
     No, if you just want the child to independently set the status and don’t need to track or control that status in the parent component (i.e., use the event dispatcher to notify the parent and leave the parent state management separate).
+
+
+
+// Current interaction between LeaveManagement, Pagination and ChangeStatus:
+1. LeaveManagement Component
+
+The LeaveManagement component is the parent that controls the overall state and the data fetching process. It holds the currentPage and currentStatus variables and is responsible for updating these values when the user interacts with the child components.
+Key Variables:
+
+    currentPage: Keeps track of the current page number for pagination.
+    currentStatus: Holds the current status filter (e.g., 'all', 'accepted', 'pending', 'rejected').
+
+Functions:
+
+    handlePageChange: This function is called when the user changes the page number. It updates the currentPage and then calls the fetchLeaveRequests function to fetch data for the selected page.
+
+const handlePageChange = (newPage) => {
+    currentPage = newPage;
+    fetchLeaveRequests(currentPage, limitValue, currentStatus);  // Fetch data with the updated page
+};
+
+handleStatusChange: This function is called when the user changes the leave status (via the ChangeStatus component). It updates currentStatus and resets the page to 1 because a new status filter likely requires starting from the first page. After updating the status and resetting the page, it calls fetchLeaveRequests to fetch the data for the first page with the new status.
+
+    const handleStatusChange = (newStatus) => {
+        currentStatus = newStatus;
+        currentPage = 1;  // reset the page to 1 on change in status
+        fetchLeaveRequests(currentPage, limitValue, currentStatus);  // Fetch data with the updated status
+    };
+
+Child Components:
+
+    The ChangeStatus component (which allows the user to change the status) is rendered with the current status passed as a prop. The parent listens to the statusChange event and calls handleStatusChange to update the status in the parent.
+
+<ChangeStatus 
+    currentStatus={currentStatus} 
+    on:statusChange={event => handleStatusChange(event.detail)} 
+/>
+
+The Pagination component (which handles pagination) is rendered with the currentPage passed as a prop. The parent listens for the pageChange event and calls handlePageChange to update the page number in the parent.
+
+    <Pagination 
+        currentPage={currentPage} 
+        on:pageChange={event => handlePageChange(event.detail)}
+    />
+
+2. ChangeStatus Component
+
+The ChangeStatus component is a child component that allows the user to select a new leave status (e.g., "All Leaves", "Accepted", "Pending", "Rejected") from a dropdown.
+Key Features:
+
+    currentStatus is passed from the parent as a prop, and the component allows the user to change it via a select dropdown.
+    The component uses Svelte's createEventDispatcher to dispatch an event when the user selects a new status. The event name is statusChange, and the new status is passed as event.detail to the parent.
+
+Code Flow:
+
+    Dropdown Binding: The select dropdown's value is bound to the currentStatus variable. When the user changes the value, the changeStatus function is triggered.
+
+<select on:change={changeStatus} bind:value={currentStatus}> 
+  <option value={"all"}>All Leaves</option>
+  <option value="accepted">Accepted</option>
+  <option value="pending">Pending</option>
+  <option value="rejected">Rejected</option>
+</select>
+
+Event Dispatching: When the changeStatus function is called (on dropdown change), it gets the new status from the event.target.value and dispatches the statusChange event to the parent component with the new status.
+
+    const changeStatus = (event) => {
+        const newStatus = event.target.value;
+        dispatch('statusChange', newStatus);  // This sends the new status to the parent
+    };
+
+3. Pagination Component
+
+The Pagination component allows the user to navigate through pages of leave requests. It uses buttons for "First", "Previous", "Next", and "Last" page navigation, and shows the current page with the total number of pages (from a Svelte store).
+Key Features:
+
+    currentPage is passed from the parent as a prop, and the component allows the user to change the page using buttons.
+    The component uses createEventDispatcher to send the updated page number back to the parent when the user interacts with the pagination controls.
+
+Code Flow:
+
+    Page Change Handling: The component has a changePage function that gets triggered when the user clicks a button to change the page. It checks if the new page is valid (i.e., within the range of available pages) and dispatches the pageChange event with the new page number.
+
+const changePage = (newPage) => {
+    if (newPage >= 1 && newPage <= $totalPages) {
+        currentPage = newPage;
+        dispatch('pageChange', newPage);  // Send the new page number to the parent
+    }
+};
+
+Pagination UI: The component displays buttons for navigating between pages and shows the current page. The buttons are disabled if the user is on the first or last page to prevent invalid navigation.
+
+    <button on:click={() => changePage(1)} disabled={currentPage === 1}>First</button>
+    <button on:click={() => changePage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
+    <span id="pageDisplay">Page {currentPage} of {$totalPages}</span>
+    <button on:click={() => changePage(currentPage + 1)} disabled={currentPage === $totalPages}>Next</button>
+    <button on:click={() => changePage($totalPages)} disabled={currentPage === $totalPages}>Last</button>
+
+Data Flow and Communication Between Components
+
+    LeaveManagement:
+        Holds currentPage and currentStatus and manages the state of the application.
+        Passes currentStatus and currentPage as props to the child components.
+        Listens for the statusChange and pageChange events from the child components and updates the state accordingly.
+        When either status or page changes, it fetches data using fetchLeaveRequests.
+
+    ChangeStatus:
+        Receives the currentStatus prop from the parent.
+        Lets the user select a new status.
+        Dispatches the statusChange event to the parent with the new status.
+
+    Pagination:
+        Receives the currentPage prop from the parent.
+        Allows the user to navigate between pages and updates the currentPage value when a button is clicked.
+        Dispatches the pageChange event to the parent with the new page number.
+
+Example Flow of Actions:
+
+    Status Change:
+        User selects a new status (e.g., "Accepted") in the ChangeStatus component.
+        The changeStatus function is called, dispatching the statusChange event to the parent (LeaveManagement).
+        The parent updates currentStatus and resets currentPage to 1, then fetches the leave requests for the first page with the new status.
+
+    Page Change:
+        User clicks a pagination button (e.g., "Next") in the Pagination component.
+        The changePage function is called, dispatching the pageChange event to the parent (LeaveManagement).
+        The parent updates currentPage and fetches the leave requests for the new page.
+
+Conclusion
+
+In summary, the LeaveManagement component acts as the central controller, managing the state (status and page), and passing it down to the child components ChangeStatus and Pagination. These child components allow the user to change the status or navigate through pages. Through event dispatching, the child components communicate changes back to the parent, which updates the state and fetches the appropriate data. This creates a clean, modular flow of data and actions across components.
+
+
+
+// Lifecycle Functions:
+If server-side rendering (SSR) is used, the rest of the lifecycle functions will not be executed during SSR execution except for onDestroy.
+Svelte’s lifecycle hooks are:
+
+    onMount
+    beforeUpdate
+    afterUpdate
+    onDestroy
+    tick
+
+Note1: If server-side rendering (SSR) is used, the rest of the lifecycle functions will not be executed during SSR execution except for onDestroy.
+
+Note2: In Svelte, lifecycle functions can only be written when the component is initialized to bind callbacks to instances of the component. Do not place lifecycle functions in asynchronous methods such as setTimeout and setInterval.
+
+1. onMount
+
+    A callback that is executed immediately after the component is mounted to the DOM.
+
+    onMount(callback: () => void)
+
+    onMount(callback: () => () => void)
+
+    onMount receives a callback function as an argument, and if a function is returned within the callback function, it is called when the component is unloaded.
+    For sibling components, onMount is executed from top to bottom according to the order of component calls. 
+    For parent and child components, onMount of the child component is executed before onMount of the parent component is executed, that is, from inside to outside.
+
+2. beforeUpdate & afterUpdate
+
+    beforeUpdate(callback: () => void)
+    afterUpdate(callback: () => void)
+
+    For sibling components, beforeUpdate and afterUpdate are still executed from top to bottom in the order of component calls. 
+    For parent and child components, `beforeUpdate` of the parent component is executed first, and then `beforeUpdate` of the child component is executed.
+    When the beforeUpdate of the child component is completed, the afterUpdate of the parent component is executed, and the afterUpdate of the child component is finally executed.
+
+3. onDestroy
+
+    onDestroy(callback: () => void)
+
+    Between sibling components, onDestroy is still from top to bottom according to the calling order. 
+    The parent and child components are from outside to inside, and the parent component executes onDestroy firstly, and then execute the child component’s onDestroy.
+    The function returned by onMount will be executed when the component is destroyed and after executes onDestroy.
+
+4. tick
+
+    promise: Promise = tick()
+
+    In Svelte, when a state state changes, the DOM is not updated immediately, but will wait until the next microtask to update. 
+    During the waiting period, it will continue to listen for other state state changes, and then update the DOM uniformly in this microtask, which can reduce some unnecessary work and allow the browser to process these things in batches more efficiently.
+
+
+## ORDER OF EXECUTION OF Lifecycle Functions:
+    child destroy 1
+    child destroy 2
+    father destroy
+
+    fater beforeupdate
+    child beforeupdate 1
+    child beforeupdate 2
+
+    child mount 1
+    child afterupdate 1
+
+    child mount 2
+    child afterupdate 2
+
+    father mount
+    father afterupdate

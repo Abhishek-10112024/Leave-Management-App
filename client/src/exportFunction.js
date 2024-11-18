@@ -1,4 +1,3 @@
-import { get } from 'svelte/store';
 import { navigate } from 'svelte-routing';
 import { employees, totalPages, leaves, leaveRequests } from './store';
 
