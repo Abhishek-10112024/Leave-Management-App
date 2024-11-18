@@ -7,6 +7,7 @@
     import ChangeStatus from '../basicComponents/ChangeStatus.svelte';
     import {leaveRequests} from '../../store'
     import Pagination from '../basicComponents/Pagination.svelte';
+    import { navigate } from 'svelte-routing';
 
    
     let selectedLeaveRequest = null;
@@ -89,6 +90,10 @@
     };
 
     onMount(() => {
+        const token = localStorage.getItem('token')
+        if (!token)
+        navigate ('/')
+    else;
         fetchLeaves(currentPage, limitValue, currentStatus);
     });
 </script>

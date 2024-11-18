@@ -26,6 +26,10 @@
     };
 
     onMount(() => {
+        const token = localStorage.getItem('token')
+        if (!token)
+        navigate('/')
+    else;
         fetchEmployees(currentPage, limitValue);
     });
 </script>

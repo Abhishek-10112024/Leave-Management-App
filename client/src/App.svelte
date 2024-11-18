@@ -1,20 +1,18 @@
 <script>
-  import { Router, Route, navigate } from 'svelte-routing';
-  import { onMount } from 'svelte';
+  import { Router, Route } from 'svelte-routing';
   // The Router component acts as the main container for your application's routes
   // It keeps track of the current location in the app and renders the appropriate route based on the URL
   // The Route component defines a specific route in your application
   // You specify a path and the component that should be rendered when that path is matched.
   import Register from './components/authComponents/SignUp.svelte'; 
   import Login from './components/authComponents/Login.svelte';
-  import adminDashboard from './components/adminComponents/adminDashboard.svelte'; 
+  import adminDashboard from './components/adminComponents/AdminDashboard.svelte'; 
   import Logout from './components/authComponents/Logout.svelte';
   import employeeDashboard from './components/employeeComponents/EmployeeDashboard.svelte';
   import EmployeeManagement from './components/adminComponents/EmployeeManagement.svelte';
   import LeaveManagement from './components/adminComponents/LeaveManagement.svelte';
   
   let url = '';
-
   // let url = '';: This line declares a variable named url, which can be passed to the Router component
   // It allows the Router to be aware of the current URL, enabling navigation and rendering of the appropriate route
 </script>
@@ -28,9 +26,9 @@
     <Route path="/logout" component={Logout} />
     <Route path="/register" component={Register} />
     <Route path="/admin" component={adminDashboard} />
-    <Route path="/employee" component={employeeDashboard} />
     <Route path="/leave-management" component={LeaveManagement} />
     <Route path="/employee-management" component={EmployeeManagement} />
+    <Route path="/employee" component={employeeDashboard} />
   </div>
 </Router>
 

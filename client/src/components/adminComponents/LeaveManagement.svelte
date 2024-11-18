@@ -107,6 +107,10 @@
 
     // onMount(fetchLeaveRequests);
     onMount(() => {
+        const token = localStorage.getItem('token')
+        if (!token)
+        navigate('/')
+    else;
         fetchLeaveRequests(currentPage, limitValue, currentStatus);
     });
 </script>

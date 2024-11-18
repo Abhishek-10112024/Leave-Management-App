@@ -1,6 +1,7 @@
 <script>
     import { navigate } from 'svelte-routing';
     import Logout from '../authComponents/Logout.svelte';
+    import { onMount } from 'svelte';
 
     const goToLeaveManagement = () => {
         navigate('/leave-management');
@@ -9,6 +10,12 @@
     const goToEmployeeManagement = () => {
         navigate('/employee-management');
     };
+
+    onMount(() => {
+        const token = localStorage.getItem('token')
+        if (!token)
+        navigate ('/')
+    });
 </script>
 
 <div class="admin-dashboard">
