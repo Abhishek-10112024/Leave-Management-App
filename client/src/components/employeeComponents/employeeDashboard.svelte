@@ -209,6 +209,7 @@
         color: #333;
         text-align: center;
         font-size: 22px;
+        font-weight: bold;
     }
 
     .button-container {
@@ -272,7 +273,7 @@
         padding: 8px;
         text-align: center;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: bold;
         color: #555;
         border-bottom: 2px solid #eaeaea;
     }

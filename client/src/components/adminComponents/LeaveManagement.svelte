@@ -246,6 +246,7 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         color: #333;
         text-align: center;
         font-size: 22px;
+        font-weight: bold;
     }
 
     .error {
@@ -271,7 +272,7 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         padding: 8px;
         text-align: center;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: bold;
         color: #555;
         border-bottom: 2px solid #eaeaea;
     }

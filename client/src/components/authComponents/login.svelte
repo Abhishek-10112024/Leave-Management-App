@@ -64,12 +64,10 @@
 <style>
   .container {
     max-width: 400px;
-    margin: auto;
     padding: 2rem;
-    border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
+    margin: auto; 
   }
 
   h2 {
@@ -77,6 +75,7 @@
     color: #333;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
+    font-weight: bold;
   }
 
   input {
@@ -117,7 +116,4 @@
     transform: scale(1.05);
   }
 
-  .btn1:active {
-    transform: scale(0.98);
-  }
 </style>
