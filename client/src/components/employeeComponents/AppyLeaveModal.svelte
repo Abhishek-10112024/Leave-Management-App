@@ -119,6 +119,7 @@
         font-size: 24px;
     }
 
+    /* This CSS selector targets two types of form elements and applies a common style to both of them: <input type="date"> and <textarea>. */
     input[type="date"],
     textarea {
         width: 100%;
@@ -130,6 +131,7 @@
         transition: border-color 0.3s;
     }
 
+    /* This CSS rule targets the <input type="date"> and <textarea> elements when they are focused (i.e., when the user clicks into them or navigates to them using the keyboard). */
     input[type="date"]:focus,
     textarea:focus {
         border-color: #4CAF50;
@@ -137,7 +139,8 @@
     }
 
     textarea {
-        resize: vertical;
+        resize: vertical; 
+        /* when the content is more than the current box size, then we can increase the text area using the cursor */
         height: 100px;
     }
 
@@ -153,6 +156,7 @@
         margin-top: 20px;
     }
 
+    /* applies same styling for both submit and cancle button, by selecting the class of both buttons using a comma */
     .submit-btn,
     .cancel-btn {
         padding: 12px 20px;
