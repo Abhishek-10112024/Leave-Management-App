@@ -156,8 +156,8 @@
     <table class="leave-table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Employee ID</th>
+                <!-- <th>Leave ID</th>
+                <th>Employee ID</th> -->
                 <th>Employee Name</th>
                 <th>Leave From<br>(DD/MM/YYYY)</th>
                 <th>Leave To<br>(DD/MM/YYYY)</th>
@@ -170,8 +170,8 @@
         <tbody>
             {#each $leaves as leave}
                 <tr>
-                    <td>{leave.leave_id}</td>
-                    <td>{leave.e_id}</td>
+                    <!-- <td>{leave.leave_id}</td>
+                    <td>{leave.e_id}</td> -->
                     <td>{leave.e_name}</td>
                     <td>{new Date(leave.leave_from).toLocaleDateString('en-GB')}</td>
 <!-- The .toLocaleDateString() method in JavaScript is used to convert a Date object into a string, formatted according to the conventions of a specific locale.render
@@ -241,7 +241,7 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
 
     h1 {
         font-family: 'Arial', sans-serif;
-        margin-bottom: none;
+        margin-bottom: 15px;
         margin-top: -10px;
         color: #333;
         text-align: center;
@@ -268,8 +268,8 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
 
     .leave-table thead th {
 /* The CSS selector .leave-table thead th targets all <th> (table header) elements that are inside a <thead> (table header section) within any element that has the class .leave-table. */
-        padding: 15px;
-        text-align: left;
+        padding: 8px;
+        text-align: center;
         font-size: 13px;
         font-weight: 600;
         color: #555;
@@ -290,9 +290,10 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
     }
 
     .leave-table tbody td {
-        padding: 8px;
+        padding: 6px;
         font-size: 13px;
         color: #333;
+        text-align: center;
     }
 
     .leave-table tbody tr:hover {

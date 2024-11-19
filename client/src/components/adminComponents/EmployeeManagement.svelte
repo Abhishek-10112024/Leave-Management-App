@@ -92,7 +92,7 @@
 
     h1 {
         font-family: 'Arial', sans-serif;
-        margin-bottom: none;
+        margin-bottom: 15px;
         margin-top: -10px;
         color: #333;
         text-align: center;
@@ -119,7 +119,7 @@
 
     .employee-table thead th{
         padding: 8px;
-        text-align: left;
+        text-align: center;
         font-size: 14px;
         font-weight: 600;
         color: #555;
@@ -139,9 +139,10 @@
     }
 
     .employee-table tbody td {
-        padding: 10px;
+        padding: 6px;
         font-size: 14px;
         color: #333;
+        text-align: center;
     }
 
     .employee-table tbody tr:hover {
