@@ -171,7 +171,7 @@ Targets <textarea> elements that are currently focused. */
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 13px;
         transition: background-color 0.3s ease, transform 0.3s;
         flex: 1;
         margin: 0 5px;

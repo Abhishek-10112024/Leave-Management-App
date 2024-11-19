@@ -134,7 +134,7 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 13px;
         transition: background-color 0.3s ease, transform 0.3s;
         flex: 1;
 /* The flex: 1; property in CSS is a shorthand for defining how a flex item grows and shrinks within a flex container. 

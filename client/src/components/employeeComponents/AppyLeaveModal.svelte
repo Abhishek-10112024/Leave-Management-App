@@ -54,13 +54,13 @@
 <div class="modal">
     <div class="modal-content">
         <h2>Apply for Leave</h2>
-        <input type="date" bind:value={leave_from} required placeholder="Leave From" />
+        <input type="date" bind:value={leave_from} required/>
 <!-- Binding: This is a Svelte feature that binds the value of the input directly to the leave_from variable in the component's state.
  Two-way Data Binding: If the user selects a date, leave_from will automatically update to reflect that date. 
  Conversely, if leave_from is updated programmatically, the input field will also reflect that change. -->
  <!-- Required: This attribute indicates that the field must be filled out before the form can be submitted. 
   If the user tries to submit the form without selecting a date, the browser will typically display a validation message. -->
-        <input type="date" bind:value={leave_to} required placeholder="Leave To" />
+        <input type="date" bind:value={leave_to} required />
         <textarea bind:value={reason} placeholder="Reason for leave" required></textarea>
 <!-- <textarea>: This element creates a multi-line text input field. 
  Unlike the <input> element, which is typically used for single-line inputs, the <textarea> is designed to accept larger blocks of text. -->
@@ -163,7 +163,7 @@
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 13px;
         transition: background-color 0.3s ease, transform 0.3s;
         flex: 1;
 /* The flex: 1; property in CSS is a shorthand for defining how a flex item grows and shrinks within a flex container. 

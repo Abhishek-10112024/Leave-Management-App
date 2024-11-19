@@ -204,7 +204,7 @@
 
     h2 {
         font-family: 'Arial', sans-serif;
-        margin-bottom: none;
+        margin-bottom: 15px;
         margin-top: -10px;
         color: #333;
         text-align: center;
@@ -218,7 +218,8 @@
         gap: 15px;
     }
 
-    .btn {
+    .btn.apply-leave {
+        background-color: #28a745;
         padding: 12px 20px;  /*right left top bottom*/
         border: none;
         border-radius: 5px;
@@ -227,17 +228,7 @@
         transition: background-color 0.3s ease, transform 0.3s;
         margin: 0 10px; /*right left top bottom*/
         width: 150px;
-        background-color: #007bff; /* Default button color */
         color: white; /* Text color */
-    }
-
-    .btn:hover {
-        transform: translateY(-2px); /* Lift effect on hover */
-    }
-
-    .btn.apply-leave {
-        background-color: #28a745;
-        color: white;
     }
 
     .btn.apply-leave:hover {
@@ -247,7 +238,13 @@
 
     .btn.edit {
         background-color: #007bff;
-        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background-color 0.3s ease, transform 0.3s;
+        margin: 0 10px; /*right left top bottom*/
+        width: 100px;
+        color: white; /* Text color */
     }
 
     .btn.edit:hover {
@@ -272,8 +269,8 @@
     }
 
     .leave-table thead th {
-        padding: 15px;
-        text-align: left;
+        padding: 8px;
+        text-align: center;
         font-size: 13px;
         font-weight: 600;
         color: #555;
@@ -293,9 +290,10 @@
     }
 
     .leave-table tbody td {
-        padding: 10px;
+        padding: 5px;
         font-size: 13px;
         color: #333;
+        text-align: center;
     }
 
     .leave-table tbody tr:hover {
