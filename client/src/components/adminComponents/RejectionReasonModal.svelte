@@ -95,6 +95,9 @@
         text-align: center;
         animation: fadeIn 0.3s;
 /* Applies the fadeIn animation to the modal content, allowing it to smoothly appear over 0.3 seconds when the modal is displayed. */
+        background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
+        background-position: center; /* Position the image */
+        background-size: cover /* Makes sure the background image covers the entire container */
     }
 
     @keyframes fadeIn {
@@ -107,7 +110,7 @@
 
     h2 {
         margin-bottom: 20px;
-        color: #333;
+        color: #f9f9f9;
         font-size: 24px;
     }
 

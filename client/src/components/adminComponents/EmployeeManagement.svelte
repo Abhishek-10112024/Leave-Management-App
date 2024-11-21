@@ -66,19 +66,19 @@
             {/each}
         </tbody>
     </table>
-</div>
 
-<div class="button-container">
-    <button class="btn sign-up" on:click={signUpNewEmployee}>Sign Up New Employee</button>
-    <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>
+    <div class="button-container">
+        <button class="btn sign-up" on:click={signUpNewEmployee}>Sign Up New Employee</button>
+        <button class="btn dashboard" on:click={goToAdminDashboard}>Back to Admin Dashboard</button>
+    </div>
+    
+    <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
+     which will update the parent's state (currentPage). -->
+    <Pagination 
+        on:pageChange={event => handlePageChange(event.detail)}
+    />
+    <Logout/>
 </div>
-
-<!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
- which will update the parent's state (currentPage). -->
-<Pagination 
-    on:pageChange={event => handlePageChange(event.detail)}
-/>
-<Logout/>
 
 <style>
     .employee-management {
@@ -88,13 +88,17 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         max-width: 90%;
         margin: auto;
+        background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
+        background-repeat: no-repeat;
+        background-position: center; /* Position the image */
+        background-size: cover /* Makes sure the background image covers the entire container */
     }
 
     h1 {
         font-family: 'Arial', sans-serif;
         margin-bottom: 15px;
         margin-top: -10px;
-        color: #333;
+        color: #f9f9f9;
         text-align: center;
         font-size: 22px;
         font-weight: bold;
@@ -129,6 +133,7 @@
 
     .employee-table tbody {
         background-color: #ffffff;
+        background: beige;
     }
 
     .employee-table tbody tr {

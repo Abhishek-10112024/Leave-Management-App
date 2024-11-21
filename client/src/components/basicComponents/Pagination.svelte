@@ -6,45 +6,43 @@
   
     export let currentPage = 1;  // The current page value passed from the parent as a prop
   
-    // const goToPage = (newPage) => {
-    //   if (newPage > 0 && newPage <= $totalPages) {
-    //     page.set(newPage);
-    //     fetchLeaveRequests();
-    //   } else {
-    //     console.warn('Page number out of range:', newPage);
-    //   }
-    // };
-  
     
   // Function to handle page changes
   const changePage = (newPage) => {
     if (newPage >= 1 && newPage <= $totalPages) {
       currentPage = newPage;  // Update internal state
+      inputPage = currentPage;
       dispatch('pageChange', newPage);  // Dispatch the new page number to the parent
+    }
+  };
+
+  // Handle the input change and navigate to that page
+  let inputPage = currentPage; // Bind the input field to the currentPage value
+  
+  const goToPage = () => {
+    if (inputPage >= 1 && inputPage <= $totalPages) {
+      changePage(inputPage);
     }
   };
   </script>
     
-  <!-- <div class="pagination-controls">
-    <button on:click={() => changePage(1)}>
-      First
-    </button>
-    <button on:click={() => changePage($page - 1)}>
-      &lt;
-    </button>
-    <span id="pageDisplay">Page {$page} of {$totalPages}</span>
-    <button on:click={() => changePage($page + 1)}>
-      &gt;
-    </button>
-    <button on:click={() => changePage($totalPages)}>
-      Last
-    </button>
-  </div> 
-  -->
   <div class="pagination">
     <button on:click={() => changePage(1)} disabled={currentPage === 1}>First</button>
     <button on:click={() => changePage(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
-    <span id="pageDisplay">Page {currentPage} of {$totalPages}</span>
+    <span id="pageDisplay">
+      Page 
+      {currentPage}
+      of {$totalPages}
+      <input 
+        type="number" 
+        min="1" 
+        max={$totalPages} 
+        placeholder= "go to page"
+        bind:value={inputPage} 
+        on:input={goToPage} 
+        class="page-input" 
+      />
+    </span>
     <button on:click={() => changePage(currentPage + 1)} disabled={currentPage === $totalPages}>Next</button>
     <button on:click={() => changePage($totalPages)} disabled={currentPage === $totalPages}>Last</button>
 
@@ -86,6 +84,7 @@
       margin: 0 12px;
       font-weight: bold;
       font-size: 13px;
-    }
+      color: aliceblue;
+    }  
   </style>
   

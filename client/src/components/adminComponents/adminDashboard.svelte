@@ -24,29 +24,45 @@
         <button on:click={goToLeaveManagement}>Manage Leave Requests</button>
         <button on:click={goToEmployeeManagement}>Manage Employees</button>
     </div>
+
+    <div class="logout">
+        <Logout/>
+    </div>
 </div>
-<Logout/>
+
 <style>
     .admin-dashboard {
-        padding: 20px;
-        max-width: 600px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        max-width: 90%;
         margin: auto;
         text-align: center;
+        background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
+        background-repeat: no-repeat;
+        background-position: center; /* Position the image */
+        background-size: cover /* Makes sure the background image covers the entire container */
     }
 
     h1 {
-        margin-bottom: 20px;
-        color: #333;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 15px;
+        margin-top: -10px;
+        color: #f9f9f9;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
     }
 
 /* Flexbox, or the Flexible Box Layout, is a CSS layout model that provides an efficient way to arrange and distribute space among items in a container, even when their size is unknown or dynamic */
     .button-container {
         display: flex;
 /* An element with display: flex; or display: inline-flex; becomes a flex container, enabling flexbox properties for its children (flex items). */
-        flex-direction: column;
+        flex-direction: row;
 /* set the direction of flex items using the flex-direction property */
         gap: 15px; /* Space between buttons */
-        align-items: center;
+        justify-content: center;
     }
 
     button {
@@ -62,5 +78,9 @@
 
     button:hover {
         background-color: #0056b3;
+    }
+    
+    .logout{
+        margin-top: 35%; 
     }
 </style>

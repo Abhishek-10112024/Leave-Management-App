@@ -54,7 +54,7 @@
 <div class="modal">
     <div class="modal-content">
         <h2>Apply for Leave</h2>
-        <input type="date" bind:value={leave_from} required/>
+        <input type="date" placeholder="Leave From" bind:value={leave_from} required/>
 <!-- Binding: This is a Svelte feature that binds the value of the input directly to the leave_from variable in the component's state.
  Two-way Data Binding: If the user selects a date, leave_from will automatically update to reflect that date. 
  Conversely, if leave_from is updated programmatically, the input field will also reflect that change. -->
@@ -102,6 +102,9 @@
         max-width: 450px;
         text-align: center;
         animation: fadeIn 0.3s;
+        background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
+        background-position: center; /* Position the image */
+        background-size: cover /* Makes sure the background image covers the entire container */
 /* Applies the fadeIn animation to the modal content, allowing it to smoothly appear over 0.3 seconds when the modal is displayed. */
     }
 
@@ -115,7 +118,7 @@
 
     h2 {
         margin-bottom: 20px;
-        color: #333;
+        color: #f9f9f9;
         font-size: 24px;
     }
 
