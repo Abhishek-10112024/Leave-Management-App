@@ -218,16 +218,17 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
     <!-- Props: leaveRequest={selectedLeaveRequest}: This passes the currently selected leave request to the modal as a prop, allowing the modal to display and edit the details of that specific leave request.
      on:close={closeEditModal}: This sets up an event listener that calls the closeEditModal function when a close event is emitted from the EditLeaveModal -->
         {/if}
-</div>
-<!-- <LeavesPagination/> -->
- <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
- which will update the parent's state (currentPage). -->
- <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
-<Pagination 
+
+    <!-- <LeavesPagination/> -->
+    <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
+    which will update the parent's state (currentPage). -->
+    <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
+    <Pagination 
     currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
-/>
-<Logout/>
+    />
+    <Logout/>
+</div>
 
 <style>
     .leave-management {
@@ -237,13 +238,17 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         max-width: 90%;
         margin: auto;
+        background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
+        background-repeat: no-repeat;
+        background-position: center; /* Position the image */
+        background-size: cover /* Makes sure the background image covers the entire container */
     }
 
     h1 {
         font-family: 'Arial', sans-serif;
         margin-bottom: 15px;
         margin-top: -10px;
-        color: #333;
+        color: #f9f9f9;
         text-align: center;
         font-size: 22px;
         font-weight: bold;
@@ -279,6 +284,7 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
 
     .leave-table tbody {
         background-color: #ffffff;
+        background: beige;
     }
 
     .leave-table tbody tr {
@@ -332,6 +338,7 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
     .action-buttons {
         display: flex; 
         gap: 10px; 
+        justify-content: center;
     }
 
     .btn {
