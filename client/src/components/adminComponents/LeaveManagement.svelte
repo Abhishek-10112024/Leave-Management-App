@@ -159,6 +159,9 @@
         </thead>
         <tbody>
             {#each $leaves as leave}
+<!-- The {#each} block allows you to loop over a collection of items.
+$leaves is a reactive store, meaning any changes to it will trigger a re-render.
+The as leave part is where you define a variable (leave) to represent the current item in each iteration of the loop. -->
                 <tr>
                     <!-- <td>{leave.leave_id}</td>
                     <td>{leave.e_id}</td> -->

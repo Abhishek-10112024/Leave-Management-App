@@ -656,3 +656,31 @@ Note2: In Svelte, lifecycle functions can only be written when the component is 
 
     father mount
     father afterupdate
+
+
+// KEYED EACH BLOCK:
+                                    {#each array as item (key)}
+                        Syntax:         <!-- HTML/Template for each item -->
+                                    {/each}
+                                         array is the array or list you're iterating over.
+                        Where:           item is the alias representing each element in the array.
+                                         key is a unique identifier for each element. It's typically a property of the object in the array, like an ID or a unique name.
+
+                                    {#each leaves as leave (leave.id)}
+                        Example:         <li>{leave.name} - {leave.color}</li>
+                                    {/each}
+                                        
+
+    1. Why Use Keyed Each Block?
+        In a regular {#each} loop, when an item changes, Svelte might re-render the entire list, even if only one item has changed. 
+        This can be inefficient, especially when working with large lists or complex DOM structures.
+        The keyed each block improves performance by assigning a unique identifier (the key) to each element. 
+        This way, Svelte can identify which elements in the DOM correspond to the items in the array and only update those specific elements when the list changes, rather than re-rendering the entire list.
+
+    2. How It Works:
+        When you use a keyed each block, Svelte compares the key of each item in the array. 
+        When the array is updated (items added, removed, or reordered), Svelte can compare the keys to see if the DOM elements for those keys already exist. 
+        It will:
+                Reuse elements with matching keys.
+                Move elements that are reordered.
+                Add or remove elements as necessary based on the changes in the array.
