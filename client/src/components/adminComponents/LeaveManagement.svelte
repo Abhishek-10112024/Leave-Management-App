@@ -332,6 +332,8 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         display: flex; 
         gap: 10px; 
         justify-content: center;
+        margin-top: -5px;
+        margin-bottom: -5px;
     }
 
     .btn {

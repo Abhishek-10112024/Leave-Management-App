@@ -74,19 +74,9 @@
 // This line calls the fetchLeaveRequests function, which presumably retrieves the current list of leave requests from an API or data source.
     };
 
-    const truncateReason = (reason, limit) => {
-// This line defines an arrow function named truncateReason, which takes two parameters: reason: A string containing the text that needs to be truncated. & limit: A number specifying the maximum number of words to retain in the truncated result.
-        const formattedReason = reason.replace(/(.{20})/g, '$1 ');
-// This line uses a regular expression to format the reason string by adding a space after every 20 characters. 
-// This ensures that when the text is split into words, it does not break in the middle of a word.
-// /(.{20})/g: Matches any sequence of 20 characters.
-// '$1 ': Replaces the matched sequence with the same characters followed by a space.
-        const words = formattedReason.split(' ');
-// This line splits the formattedReason string into an array of words using space as the delimiter.
-        return words.slice(0, limit).join(' ') + (words.length > limit ? '...' : '');
-// words.slice(0, limit): This takes the first limit words from the words array.
-// .join(' '): This combines the sliced words back into a single string, separated by spaces.
-// (words.length > limit ? '...' : ''): This appends an ellipsis (...) if the original reason had more words than the specified limit, indicating that the text has been truncated.
+    const truncateReason = (reason, limit = 20) => {
+    // This line takes the first `limit` characters from the reason string.
+        return reason.length > limit ? reason.slice(0, limit) + '...' : reason;
     };
 
     onMount(() => {
@@ -149,7 +139,7 @@
                     <td>
                         <span class="truncated-reason" title={leaveRequest.reason}>
                             <!-- The title attribute on the <span> provides a tooltip with the full reason when hovered over. -->
-                            {truncateReason(leaveRequest.reason, 5)}
+                            {truncateReason(leaveRequest.reason)}
                         </span>
                     </td>
                     <td>
@@ -251,6 +241,8 @@ on:pageChange={event => handlePageChange(event.detail)}
         margin: 0 10px; /*right left top bottom*/
         width: 100px;
         color: white; /* Text color */
+        margin-top: -5px;
+        margin-bottom: -5px;
     }
 
     .btn.edit:hover {
