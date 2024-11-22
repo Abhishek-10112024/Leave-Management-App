@@ -138,7 +138,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each $leaveRequests as leaveRequest}
+            {#each $leaveRequests as leaveRequest (leaveRequest.leave_id)}
 <!-- This line uses the Svelte {#each} block to iterate over the filteredLeaves array, where each item is assigned to the variable leaveRequest. 
  This means that for each leave request in the array, a new table row (<tr>) will be created. -->
                 <tr> 

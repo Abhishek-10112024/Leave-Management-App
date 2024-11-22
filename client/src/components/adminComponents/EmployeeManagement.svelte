@@ -53,7 +53,7 @@
             </tr>
         </thead>
         <tbody>
-            {#each $employees as employee}
+            {#each $employees as employee (employee.e_id)}
                 <tr>
                     <td>{employee.e_id}</td>
                     <td>{employee.e_name}</td>
