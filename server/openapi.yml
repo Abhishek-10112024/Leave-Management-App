@@ -388,6 +388,38 @@ paths:
                     type: string
                     example: An error occurred while updating the leave status.
 
+  /employees/profile:
+    get:
+      tags:
+        - Employees
+      summary: Retrieve Profile for the authenticated user
+      description: Fetches profile details associated with the currently logged-in user.
+      security:
+        - bearerAuth: []  # Requires authentication
+      responses:
+        '200':
+          description: Successfully retrieved profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leaves:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Users'
+                  
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred while retrieving employees.
+  
   /employees/leaves:
     get:
       tags:

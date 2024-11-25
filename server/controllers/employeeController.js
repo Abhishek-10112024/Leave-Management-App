@@ -189,3 +189,16 @@ export const getLeaveRequests = async (req, res) => {
         res.status(500).json({ message: "Internal server error." });
     }
 };
+
+
+export const getProfile = async (req, res) => {
+    try {
+        const { id: e_id } = req.user;
+        // The destructuring assignment syntax unpack object properties into variables:
+        const profile = await User.findByPk(e_id); // rows will contain the actual data (the user records), while count will hold the total number of records available in the database (before applying pagination). 
+        return res.status(200).json({
+            profile});  // sends the json response (The object passed to json will be serialized into a JSON string) with status code 200. The return keyword is used to exit the function immediately after sending the response.
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
