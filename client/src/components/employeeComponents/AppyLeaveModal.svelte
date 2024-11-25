@@ -1,8 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     // This function allows the component to dispatch events that can be listened to by its parent components.
-    import { navigate } from 'svelte-routing';
-    //  This function is used to programmatically navigate to different routes in the application using svelte-routing.
 
     const dispatch = createEventDispatcher();
     // Initialize event dispatcher
@@ -34,7 +32,6 @@
 // Here, handleClose would be a function defined in the parent component that executes whatever logic is needed when the modal closes, such as updating the UI or resetting state.
 // Changing the event name does not automatically implement any specific behavior. The logic to close the modal must be defined in the event handler in the parent component. 
 // If the parent does not listen for the dispatched event, nothing will happen when the event is dispatched.
-                navigate('/employee');
             } else {
                 const { message } = await response.json();
                 error = message || 'Error while applying for leave';
