@@ -56,7 +56,7 @@
 
 <div class="modal">
     <div class="modal-content">
-        <h2>User Profile</h2>
+        <h2>{profile.e_name}</h2>
         <table class="employee-table">
             <tbody>
                 <tr>
