@@ -86,7 +86,8 @@
         background-color: #f9f9f9;
         border-radius: 10px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        max-width: 90%;
+        max-width: 100%;
+        height: 100vh;
         margin: auto;
         background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
         background-repeat: no-repeat;

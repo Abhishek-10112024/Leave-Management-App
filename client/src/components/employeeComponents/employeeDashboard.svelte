@@ -8,11 +8,13 @@
     import {leaveRequests} from '../../store'
     import Pagination from '../basicComponents/Pagination.svelte';
     import { navigate } from 'svelte-routing';
+    import ProfileModal from '../basicComponents/ProfileModal.svelte';
 
    
     let selectedLeaveRequest = null;
     let showEditModal = false;
     let showApplyModal = false;
+    let showprofileModal = false;
 
     let currentPage = 1;  // Track the current page in the parent
     let limitValue = 10;   // Track the limit (items per page)
@@ -79,6 +81,17 @@
         return reason.length > limit ? reason.slice(0, limit) + '...' : reason;
     };
 
+    const openprofileModal = () => {
+        showprofileModal = true;
+// This line sets the showApplyModal variable to true, indicating that the modal for applying for leave should be displayed to the user.
+    };
+
+    const closeprofileModal = () => {
+        showprofileModal = false;
+// This line sets the showApplyModal variable to false, indicating that the apply modal should no longer be displayed.
+    };
+
+
     onMount(() => {
         const token = localStorage.getItem('token')
         if (!token)
@@ -99,22 +112,18 @@
         on:statusChange={event => handleStatusChange(event.detail)} 
     />
         <button class="btn apply-leave" on:click={openApplyModal}>Apply for Leave</button>
-        <!-- <div class="status-buttons">
-            <button class="btn" on:click={() => changeStatus(null)}>All Leaves</button> -->
-<!-- on:click={() => changeStatus('all')}: This specifies an event listener for the button's click event. When the button is clicked, the function changeStatus is called with the argument 'all'.
- The use of an arrow function here (() => changeStatus('all')) allows for passing the string 'all' as an argument when the button is clicked. -->
-            <!-- <button class="btn" on:click={() => changeStatus('pending')}>Pending</button>
-            <button class="btn" on:click={() => changeStatus('accepted')}>Accepted</button>
-            <button class="btn" on:click={() => changeStatus('rejected')}>Rejected</button>
-        </div> -->
+
     </div>
 
-    <!-- <select bind:value={currentStatus} on:change={() => changeStatus(currentStatus)}>
-        <option value="all">All</option>
-        <option value="accepted">Accepted</option>
-        <option value="pending">Pending</option>
-        <option value="rejected">Rejected</option>
-    </select> -->
+    <div>
+        <button class="btn user-profile" on:click={openprofileModal}> Profile
+            <!-- Person Icon SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+            </svg>
+        </button>
+     </div>  
 
     <table class="leave-table">
         <thead>
@@ -159,7 +168,7 @@
                 </tr>
             {/each}
         </tbody>
-    </table>
+    </table> 
 
     {#if showEditModal}
 <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
@@ -172,6 +181,12 @@
 <!-- This line uses Svelte's {#if} block to check the value of the showApplyModal variable. If it is true, the content within this block will be rendered; otherwise, it will not be displayed.  -->
         <ApplyLeaveModal on:close={closeApplyModal} />
 <!-- on:close={closeApplyModal}: This sets up an event listener for a close event emitted from the ApplyLeaveModal. -->
+    {/if}
+
+    {#if showprofileModal}
+    <!-- This line uses Svelte's {#if} block to check the value of the showApplyModal variable. If it is true, the content within this block will be rendered; otherwise, it will not be displayed.  -->
+        <ProfileModal on:close={closeprofileModal} />
+    <!-- on:close={closeApplyModal}: This sets up an event listener for a close event emitted from the ApplyLeaveModal. -->
     {/if}
 
     <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
@@ -190,7 +205,8 @@ on:pageChange={event => handlePageChange(event.detail)}
         background-color: #f9f9f9;
         border-radius: 10px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        max-width: 90%;
+        max-width: 100%;
+        height: 100vh;
         margin: auto;
         background: url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp), linear-gradient(45deg, #49a09d, #5f2c82);   /* Image */
         background-position: center; /* Position the image */
@@ -325,25 +341,30 @@ on:pageChange={event => handlePageChange(event.detail)}
         display: inline-block; /* Makes the element behave like an inline element but also allows block-level styling (padding, width, etc.) */
     }
 
-    /* Hover state for the .truncated-reason element */
-    /* .truncated-reason:hover::after { */
-        /* content: attr(title); Uses the value of the 'title' attribute as the content for the tooltip */
-        /* position: absolute; Absolutely positions the tooltip relative to the .truncated-reason element */
-        /* left: 0; Aligns the tooltip's left edge with the left edge of the parent element */
-        /* top: 100%; Positions the tooltip just below the .truncated-reason element (100% means the bottom of the parent) */
-        
-        /* white-space: nowrap; Prevents the tooltip text from wrapping onto multiple lines, keeping it in a single line */
-        
-        /* background: #fff; Sets the background color of the tooltip to white */
-        /* border: 1px solid #ccc; Adds a light gray border around the tooltip */
-        /* padding: 5px; Adds padding inside the tooltip to provide space around the text */
-        
-        /* z-index: 10; Ensures the tooltip appears above other elements on the page (higher z-index means it sits on top) */
-        
-        /* Adds a subtle shadow to the tooltip, making it appear lifted off the page */
-        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); */
-        /* The shadow is 2px vertically offset, with a 10px blur, and a semi-transparent black color (20% opacity) */
-    /* } */
+    /* Position the button in the top-right corner */
+    .btn.user-profile {
+        position: absolute;
+        top: 10px;      /* Distance from the top of the screen */
+        right: 10px;    /* Distance from the right of the screen */
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        color: #eaeaea;
+        font-weight: bold;
+    }
+
+    .user-profile svg {
+        color: #000; /* Set icon color */
+        width: 24px; /* Icon size */
+        height: 24px; /* Icon size */
+        transition: color 0.3s;
+    }
+
+    /* Add hover effect */
+    .user-profile:hover svg {
+        color: #007bff; /* Change color on hover */
+    }
 
 </style>
 
