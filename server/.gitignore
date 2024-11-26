@@ -24,4 +24,3 @@ dist-ssr
 *.sw?
 *learnings.txt
 .env
-.node_modules/*
