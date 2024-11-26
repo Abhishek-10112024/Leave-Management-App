@@ -176,7 +176,19 @@
         </tbody>
     </table> 
 
-    {#if showEditModal}
+    <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
+ which will update the parent's state (currentPage). -->
+ <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
+    <Pagination 
+    currentPage={currentPage} 
+    on:pageChange={event => handlePageChange(event.detail)}
+    />
+    <div class="logout">
+        <Logout/>
+    </div>
+</div>
+
+{#if showEditModal}
 <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
         <EditLeaveModal leaveRequest={selectedLeaveRequest} on:close={closeEditModal} />
 <!-- Props: leaveRequest={selectedLeaveRequest}: This passes the currently selected leave request to the modal as a prop, allowing the modal to display and edit the details of that specific leave request.
@@ -195,17 +207,6 @@
     <!-- on:close={closeApplyModal}: This sets up an event listener for a close event emitted from the ApplyLeaveModal. -->
     {/if}
 
-    <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
- which will update the parent's state (currentPage). -->
- <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
-    <Pagination 
-    currentPage={currentPage} 
-    on:pageChange={event => handlePageChange(event.detail)}
-    />
-    <div class="logout">
-        <Logout/>
-    </div>
-</div>
 
 <style>
     .dashboard {

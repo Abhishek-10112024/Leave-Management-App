@@ -205,14 +205,6 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         </tbody>
     </table>
 
-    {#if showRejectionModal}
-    <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
-            <RejectionReasonModal leave={selectedLeave} on:close={closeRejectionModal} />
-    <!-- Props: leaveRequest={selectedLeaveRequest}: This passes the currently selected leave request to the modal as a prop, allowing the modal to display and edit the details of that specific leave request.
-     on:close={closeEditModal}: This sets up an event listener that calls the closeEditModal function when a close event is emitted from the EditLeaveModal -->
-        {/if}
-
-    <!-- <LeavesPagination/> -->
     <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
     which will update the parent's state (currentPage). -->
     <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
@@ -224,6 +216,12 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
         <Logout/>
     </div>
 </div>
+{#if showRejectionModal}
+<!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
+        <RejectionReasonModal leave={selectedLeave} on:close={closeRejectionModal} />
+<!-- Props: leaveRequest={selectedLeaveRequest}: This passes the currently selected leave request to the modal as a prop, allowing the modal to display and edit the details of that specific leave request.
+ on:close={closeEditModal}: This sets up an event listener that calls the closeEditModal function when a close event is emitted from the EditLeaveModal -->
+{/if}
 
 <style>
     .leave-management {
