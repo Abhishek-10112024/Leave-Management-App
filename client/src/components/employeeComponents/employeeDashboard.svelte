@@ -9,7 +9,7 @@
     import Pagination from '../basicComponents/Pagination.svelte';
     import { navigate } from 'svelte-routing';
     import ProfileModal from '../basicComponents/ProfileModal.svelte';
-
+    import {jwtDecode} from 'jwt-decode';
    
     let selectedLeaveRequest = null;
     let showEditModal = false;
@@ -20,6 +20,12 @@
     let limitValue = 10;   // Track the limit (items per page)
 
     let currentStatus = 'all'; // Holds the selected status filter (initialized to default value)
+
+    let token = localStorage.getItem('token');
+    let username = null;
+    const decodedToken = jwtDecode(token);
+    // @ts-ignore
+    username = decodedToken.name;
 
 
 // This function is called whenever the 'pageChange' event is fired from the child. 
@@ -116,7 +122,7 @@
     </div>
 
     <div>
-        <button class="btn user-profile" on:click={openprofileModal}> User Profile
+        <button class="btn user-profile" on:click={openprofileModal}>Hello, {username}
             <!-- Person Icon SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
@@ -192,11 +198,11 @@
     <!-- This listens for the pageChange event from the child and invokes the handlePageChange method in the parent, 
  which will update the parent's state (currentPage). -->
  <!-- currentPage={currentPage} syntax, which binds the currentPage state of the parent to the child component. -->
-<Pagination 
-currentPage={currentPage} 
-on:pageChange={event => handlePageChange(event.detail)}
-/>
-<Logout />
+    <Pagination 
+    currentPage={currentPage} 
+    on:pageChange={event => handlePageChange(event.detail)}
+    />
+    <Logout />
 </div>
 
 <style>

@@ -1,7 +1,7 @@
 <script>
     import { navigate } from 'svelte-routing';
     import Logout from '../authComponents/Logout.svelte';
-    import { onMount } from 'svelte';
+    import { beforeUpdate, onMount } from 'svelte';
     import ProfileModal from '../basicComponents/ProfileModal.svelte';
     import ApplyLeaveModal from '../employeeComponents/AppyLeaveModal.svelte';
     import EditLeaveModal from '../employeeComponents/EditLeaveModal.svelte';
@@ -9,6 +9,8 @@
     import ChangeStatus from '../basicComponents/ChangeStatus.svelte';
     import {leaveRequests} from '../../store'
     import Pagination from '../basicComponents/Pagination.svelte';
+    import { jwtDecode } from 'jwt-decode';
+
 
     let showprofileModal = false;
     let selectedLeaveRequest = null;
@@ -20,6 +22,11 @@
 
     let currentStatus = 'all'; // Holds the selected status filter (initialized to default value)
 
+    let token = localStorage.getItem('token');
+    let username = null;
+    const decodedToken = jwtDecode(token);
+    // @ts-ignore
+    username = decodedToken.name;
 
 // This function is called whenever the 'pageChange' event is fired from the child. 
 // It updates the currentPage in the parent to the new value passed from the child.
@@ -120,7 +127,7 @@
     </div>
 
     <div>
-        <button class="btn user-profile" on:click={openprofileModal}>User Profile
+        <button class="btn user-profile" on:click={openprofileModal}>Hello, {username}
             <!-- Person Icon SVG -->
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
