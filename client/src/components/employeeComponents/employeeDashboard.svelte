@@ -202,7 +202,9 @@
     currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
     />
-    <Logout />
+    <div class="logout">
+        <Logout/>
+    </div>
 </div>
 
 <style>
@@ -372,5 +374,10 @@
         color: #007bff; /* Change color on hover */
     }
 
+    .logout{
+        position: absolute;
+        bottom: 10px; /* Distance from the bottom of the page */
+        left: 45%;
+    }
 </style>
 

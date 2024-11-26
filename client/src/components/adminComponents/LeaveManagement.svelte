@@ -220,7 +220,9 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
     currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
     />
-    <Logout/>
+    <div class="logout">
+        <Logout/>
+    </div>
 </div>
 
 <style>
@@ -412,5 +414,11 @@ console.log(date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', d
 
     .btn:hover {
         transform: translateY(-2px); /* Lift effect on hover */
+    }
+
+    .logout{
+        position: absolute;
+        bottom: 10px; /* Distance from the bottom of the page */
+        left: 45%;
     }
 </style>

@@ -77,7 +77,9 @@
     <Pagination 
         on:pageChange={event => handlePageChange(event.detail)}
     />
-    <Logout/>
+    <div class="logout">
+        <Logout/>
+    </div>
 </div>
 
 <style>
@@ -191,5 +193,11 @@
     .btn.dashboard:hover {
         background-color: #0069d9;
         transform: translateY(-2px);
+    }
+
+    .logout{
+        position: absolute;
+        bottom: 10px; /* Distance from the bottom of the page */
+        left: 45%;
     }
 </style>

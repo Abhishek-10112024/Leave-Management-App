@@ -400,6 +400,6 @@
     .logout{
         position: absolute;
         bottom: 10px; /* Distance from the bottom of the page */
-        left: 50%;
+        left: 45%;
     }
 </style>
