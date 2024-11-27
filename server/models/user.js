@@ -35,6 +35,11 @@ const User = sequelize.define('User', {
     remaining_leaves: {
         type: DataTypes.INTEGER,
         defaultValue: 30,
+    },    
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
     }},
     {
         timestamps:false

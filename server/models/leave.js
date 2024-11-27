@@ -42,6 +42,11 @@ const Leave = sequelize.define('Leave', { //A model in Sequelize has a name. Thi
     status: {
         type: DataTypes.ENUM('pending', 'rejected', 'accepted'),
         defaultValue: 'pending',
+    },
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
     }},
     {
         timestamps:false
