@@ -3,13 +3,11 @@ import { isBlacklisted } from './tokenBlacklist.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const secretKey = process.env.JWT_SECRET || 'your-jwt-secret-key'; //  initializes a secretKey for JWT operations, using an environment variable if available and falling back to a default value if not.
+const secretKey = process.env.JWT_SECRET; //  initializes a secretKey for JWT operations, using an environment variable if available and falling back to a default value if not.
 
-export const userAuthentication = () => { 
-    // This is a function parameter with a default value. If no argument is provided when the function is called, requiredRoles will be initialized as an empty array.
-    // The purpose of this parameter is to specify roles that are required for a user to access certain resources or routes within the application.
-     return (req, res, next) => {
-        const token = req.headers['authorization']?.split(' ')[1];
+export const userAuthentication = (req, res, next) => { 
+    try{
+        const token = req.headers.authorization.split(' ')[1];
         // req.headers['authorization']: This accesses the Authorization header. It contains a string formatted as Bearer <token>.
         // ?.: The optional chaining operator (?.) is used to safely access the split method. If req.headers['authorization'] is undefined or null, it will not throw an error; instead, token will be undefined.
         // .split(' ')[1]: This splits the string by spaces and retrieves the second part, which is the actual token (after the "Bearer" part).
@@ -44,5 +42,6 @@ export const userAuthentication = () => {
 
             next();
         });
-    };
-};
+    }catch(e){
+        return res.status(401).json({error:`Unauthorized`})
+    }};
