@@ -42,7 +42,7 @@
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/api/employees/leaves/${leaveRequest.leave_id}`, {
+            const response = await fetch(`http://localhost:3000/api/employee/leaves/${leaveRequest.leave_id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
