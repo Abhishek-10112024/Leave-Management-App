@@ -121,16 +121,6 @@
 
     </div>
 
-    <div>
-        <button class="btn user-profile" on:click={openprofileModal}>Hello, {username}
-            <!-- Person Icon SVG -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg>
-        </button>
-     </div>  
-
     <table class="leave-table">
         <thead>
             <tr>
@@ -183,10 +173,21 @@
     currentPage={currentPage} 
     on:pageChange={event => handlePageChange(event.detail)}
     />
-    <div class="logout">
-        <Logout/>
-    </div>
 </div>
+
+<div class="logout">
+    <Logout/>
+</div>
+
+<div>
+    <button class="btn user-profile" on:click={openprofileModal}>Hello, {username}
+        <!-- Person Icon SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+        </svg>
+    </button>
+</div>  
 
 {#if showEditModal}
 <!-- This line uses Svelte's {#if} block to check whether the showEditModal variable is true. If it is, the content within this block will be rendered; otherwise, it will not be displayed.  -->
