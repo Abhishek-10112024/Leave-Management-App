@@ -47,8 +47,7 @@ export const updateLeaveStatus = async (req, res) => { // async function with tw
         if (status === 'accepted') { // if req body has status value set to accepted
             if (user.remaining_leaves <= 0) { // if in user table the remaining leaves is less than or equal to zero, then throw below given error
                 return res.status(400).json({ message: 'Not enough remaining leaves to accept this request' });
-            }
-            
+            }  
         }
         else if (status === 'rejected') { // if req body has status value set to rejected
                 if (user.remaining_leaves + 1 > user.total_leaves) {  // check for the condition, if at present remaining leaves +1 > toatl leaves
@@ -202,11 +201,6 @@ export const modifyLeaveRequest = async (req, res) => {
         const e_id = req.user.id;
         const { leave_from, leave_to, reason } = req.body;
 
-        // const { role: adminRole } = req.user; // This syntax allows you to extract the role property from the req.user object. The role property is then renamed to adminRole for use within the current scope.
-        // if (adminRole !== 'employee') {
-        //     return res.status(403).json({ message: "Only employee can edit leave." });
-        // }
-
         const leave = await Leave.findByPk(leave_id);
 
         if (!leave || leave.status !== 'pending' || leave.e_id !== e_id) {
@@ -250,13 +244,25 @@ export const deleteLeaveRequest = async (req, res) => {
         const { leave_id } = req.params;
         const e_id = req.user.id;
 
-        const leave = await Leave.findByPk(leave_id);
+        const leave = await Leave.findByPk(leave_id); // Leave.findByPk(leave_id) is a method that queries the database for a record in the Leave table with the specified leave_id.
+        if (!leave) {                                 // The await keyword is used to pause execution until the promise returned by findByPk resolves.
+            return res.status(404).json({ message: 'Leave request not found' });
+        }
+
+// This code snippet retrieves a user associated with a leave request and handles the case where the user does not exist.        
+        const user = await User.findByPk(leave.e_id); // The User.findByPk(leave.e_id) method looks for a record in the User table with the specified e_id that we got corrsponding to leave_id in leave variable.
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
         if (!leave || leave.status !== 'pending' || leave.e_id !== e_id) {
             return res.status(404).json({ message: 'Leave request not found or cannot be deleted' });
         }
 
         await leave.destroy(); // If the validation checks pass, this line deletes the leave request from the database using the destroy method.
+        user.remaining_leaves += 1; // if all good, update remaining leaves by adding 1
+        await leave.save(); // saves/updates the leave model, called as "const leave = await Leave.findByPk(leave_id);"
+        await user.save(); // saves/updates the user model, called as "const user = await User.findByPk(leave.e_id);"
         res.status(200).send(); // After successfully deleting the leave request, the send method can be used without any content if no additional information is needed in the response.
     } catch (error) {
         console.error("Error deleting leave request:", error);
