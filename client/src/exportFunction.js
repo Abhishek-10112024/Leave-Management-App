@@ -88,7 +88,7 @@ export const fetchLeaves = async (currentPage, itemsPerPage, currentStatus) => {
             throw new Error('No token found');
         }
 
-        const response = await fetch(`http://localhost:3000/api/employees/leaves?page=${currentPage}&limit=${itemsPerPage}&status=${currentStatus}`, {
+        const response = await fetch(`http://localhost:3000/api/my/leaves?page=${currentPage}&limit=${itemsPerPage}&status=${currentStatus}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`

@@ -12,7 +12,7 @@
     
     const applyLeave = async () => { // asynchronous function declaration
         try {
-            const response = await fetch('http://localhost:3000/api/employees/leaves', {
+            const response = await fetch('http://localhost:3000/api/employee/leaves', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

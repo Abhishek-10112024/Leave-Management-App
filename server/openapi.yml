@@ -10,9 +10,9 @@ tags:
   - name: Authentication
     description: Login, Signup, and Logout
   - name: Employees
-    description: Operations related to the employee's personal account
-  - name: Admin
-    description: Operations related to other employees and leaves. It can only be accessed by admins.
+    description: Operations related to the employees
+  - name: Leaves
+    description: Operations related to leaves
 
 paths:
   /auth/login:
@@ -197,8 +197,8 @@ paths:
   /employees:
     get:
       tags:
-        - Admin
-      summary: Retrieve all employees
+        - Employees
+      summary: Retrieve all employees with admin access only
       description: Fetch a paginated list of all employees.
       parameters:
         - in: query
@@ -247,11 +247,82 @@ paths:
                     type: string
                     example: An error occurred while retrieving employees.
 
+  /employees/myprofile:
+    get:
+      tags:
+        - Employees
+      summary: Retrieve Profile for the authenticated user
+      description: Fetches profile details associated with the currently logged-in user.
+      security:
+        - bearerAuth: []  # Requires authentication
+      responses:
+        '200':
+          description: Successfully retrieved profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leaves:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Users'
+                  
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: An error occurred while retrieving employees.
+
+  /employees/{e_id}:
+    delete:
+        tags:
+          - Employees
+        summary: Delete an employee with admin access only
+        description: Allows the admin to delete an employee.
+        security:
+          - bearerAuth: []  # Requires authentication
+        parameters:
+          - in: path
+            name: e_id
+            required: true
+            schema:
+              type: integer
+            description: ID of the employee to be deleted
+        responses:
+          '200':
+            description: employee deleted successfully
+          '404':
+            description: Not Found - employee not found or cannot be deleted
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: employee not found or cannot be deleted
+          '400':
+            description: Bad Request - Invalid request
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Error message detailing the issue
+
   /leaves:
     get:
       tags:
-        - Admin
-      summary: Retrieve all leave requests
+        - Leaves
+      summary: Retrieve all leave requests with admin access only
       description: Fetch a paginated list of all leave requests, optionally filtered by status.
       parameters:
         - in: query
@@ -310,8 +381,8 @@ paths:
   /leaves/{leave_id}:
     patch:
       tags:
-        - Admin
-      summary: Update the status of a leave request
+        - Leaves
+      summary: Accept or reject leave request with admin access only
       description: Modify the status of a specific leave request based on its ID.
       security:
         - bearerAuth: []
@@ -388,17 +459,83 @@ paths:
                     type: string
                     example: An error occurred while updating the leave status.
 
-  /employees/profile:
+    get:
+        tags:
+          - Leaves
+        summary: Retrieve Leave by it's id with admin access only
+        description: Fetches leave details associated with the the leave id.
+        security:
+          - bearerAuth: []  # Requires authentication
+        parameters:
+          - in: path
+            name: leave_id
+            required: true
+            schema:
+              type: integer
+            description: The ID of the leave request to update.
+        responses:
+          '200':
+            description: Successfully retrieved leave
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    leaves:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Leaves'
+                    
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: An error occurred while retrieving employees.
+
+  /employees/{e_id}/leaves:
     get:
       tags:
-        - Employees
-      summary: Retrieve Profile for the authenticated user
-      description: Fetches profile details associated with the currently logged-in user.
+        - Leaves
+      summary: Retrieve leave requests of a particular user with pagination with admin access only
+      description: Fetches leave requests associated with the requested user, supporting pagination.
       security:
         - bearerAuth: []  # Requires authentication
+      parameters:
+        - in: path
+          name: e_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the the employee whose leaves is to be fetched.
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            example: 1
+          description: The page number to retrieve (default is 1).
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            example: 10
+          description: The number of leave requests per page (default is 10).
+        - in: query
+          name: status
+          required: false
+          schema:
+            type: string
+            example: pending
+          description: Filter leave requests by their status. Valid values are pending, accepted, and rejected.
       responses:
         '200':
-          description: Successfully retrieved profile
+          description: Successfully retrieved leave requests
           content:
             application/json:
               schema:
@@ -407,10 +544,18 @@ paths:
                   leaves:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Users'
-                  
-        '500':
-          description: Internal Server Error
+                      $ref: '#/components/schemas/Leaves'
+                  totalPages:
+                    type: integer
+                    description: The total number of pages available.
+                  currentPage:
+                    type: integer
+                    description: The current page number.
+                  totalCount:
+                    type: integer
+                    description: The total number of leave requests.
+        '400':
+          description: Bad Request - Unable to retrieve leave requests
           content:
             application/json:
               schema:
@@ -418,12 +563,12 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: An error occurred while retrieving employees.
-  
-  /employees/leaves:
+                    example: Unable to retrieve leave requests
+
+  /my/leaves:
     get:
       tags:
-        - Employees
+        - Leaves
       summary: Retrieve leave requests for the authenticated user with pagination
       description: Fetches leave requests associated with the currently logged-in user, supporting pagination.
       security:
@@ -482,9 +627,10 @@ paths:
                     type: string
                     example: Unable to retrieve leave requests
 
+  /employee/leaves:
     post:
       tags:
-        - Employees
+        - Leaves
       summary: Create a new leave request
       description: Allows the authenticated user to submit a new leave request.
       security:
@@ -551,10 +697,10 @@ paths:
                     type: string
                     example: Not enough remaining leaves to apply for this request or Leave request overlaps with an existing request.
 
-  /employees/leaves/{leave_id}:
+  /employee/leaves/{leave_id}:
     patch:
       tags:
-        - Employees
+        - Leaves
       summary: Modify an existing leave request
       description: Allows the authenticated user to modify a pending leave request.
       security:
@@ -634,7 +780,7 @@ paths:
 
     delete:
       tags:
-        - Employees
+        - Leaves
       summary: Delete a pending leave request
       description: Allows the authenticated user to delete a pending leave request.
       security:

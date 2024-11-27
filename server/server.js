@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import sequelize from "./db.js";
 import authRoute from "./routes/authRoute.js";
-import adminRoute from "./routes/adminRoute.js";
-import employeeRoute from "./routes/employeeRoute.js";
+import leavesRoute from "./routes/leavesRoute.js";
+import employeesRoute from "./routes/employeesRoute.js";
 import User from "./models/user.js";
 import Leave from "./models/leave.js";
 import dotenv from 'dotenv';
@@ -76,8 +76,8 @@ app.use(
 );
 
 app.use('/api/auth', authRoute);
-app.use('/api', adminRoute);
-app.use('/api/employees', employeeRoute);
+app.use('/api', leavesRoute);
+app.use('/api/employees', employeesRoute);
 
 // Error handling middleware for OpenAPI validation errors
 app.use((err, req, res, next) => {

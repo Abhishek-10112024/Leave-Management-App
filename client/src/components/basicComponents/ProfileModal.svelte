@@ -22,7 +22,7 @@
             throw new Error('No token found');
         }
 
-        const response = await fetch('http://localhost:3000/api/employees/profile', {
+        const response = await fetch('http://localhost:3000/api/employees/myprofile', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`

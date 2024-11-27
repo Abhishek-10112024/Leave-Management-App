@@ -14,7 +14,7 @@
 
     const updateLeave = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/employees/leaves/${leaveRequest.leave_id}`, {
+            const response = await fetch(`http://localhost:3000/api/employee/leaves/${leaveRequest.leave_id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
