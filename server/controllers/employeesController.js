@@ -6,6 +6,9 @@ export const getProfile = async (req, res) => {
         const { id: e_id } = req.user;
         // The destructuring assignment syntax unpack object properties into variables:
         const profile = await User.findByPk(e_id); // rows will contain the actual data (the user records), while count will hold the total number of records available in the database (before applying pagination). 
+        if (profile.deleted === true){
+            return res.status(401).json({ message: "Employee is already deleted" });
+        }
         return res.status(200).json({
             profile});  // sends the json response (The object passed to json will be serialized into a JSON string) with status code 200. The return keyword is used to exit the function immediately after sending the response.
     } catch (error) {
@@ -25,8 +28,11 @@ export const getAllEmployees = async (req, res) => {
         const limit  = parseInt(req.query.limit, 10) || 10; // Base 10: The decimal system, which uses digits from 0 to 9,  Base 2: The binary system, which uses digits 0 and 1, Base 8: The octal system, which uses digits from 0 to 7, Base 16: The hexadecimal system, which uses digits from 0 to 9 and letters A to F 
         const offset  = (page - 1) * limit; //The offset calculation is essential for implementing pagination in applications, allowing you to control which subset of records to retrieve based on the requested page and limit.
 
+        const where = {deleted: false};
+
         // The destructuring assignment syntax unpack object properties into variables:
         const { rows, count } = await User.findAndCountAll({ // rows will contain the actual data (the user records), while count will hold the total number of records available in the database (before applying pagination). 
+            where,
             order: [['e_id', 'ASC']], // This specifies that the results should be ordered by the e_id field in ascending order.
             limit, // It's set to control how many users are displayed per page (as determined by pagination logic).
             offset // It is used to skip the particular entries/results based on itemsPerPage and currentPage
@@ -58,8 +64,8 @@ export const deleteEmployee = async (req, res) => {
             return res.status(404).json({ message: 'Employee not found' });
         }
 
-        await employee.destroy(); // If the validation checks pass, this line deletes the user from the database using the destroy method.
-        res.status(200).send(); // After successfully deleting the user, the send method can be used without any content if no additional information is needed in the response.
+        await employee.update({ deleted: true }); // If the validation checks pass, this line deletes the user from the database using the destroy method.
+        res.status(200).send(employee); // After successfully deleting the user, the send method can be used without any content if no additional information is needed in the response.
     } catch (error) {
         console.error("Error deleting employee:", error);
         res.status(500).json({ message: "Internal server error." });

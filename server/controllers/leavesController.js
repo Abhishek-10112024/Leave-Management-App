@@ -75,9 +75,18 @@ export const getOneLeaveRequest = async (req, res) => {  // async funtion with t
         }
         const { leave_id } = req.params; //this is getting the leave_id from path parameter in variable leave_id
         // The destructuring assignment syntax unpack object properties into variables:
+        const where = {deleted: false};
         const leave = await Leave.findByPk(leave_id); // rows will contain the actual data (the user records), while count will hold the total number of records available in the database (before applying pagination). 
-        return res.status(200).json({
-            leave});  // sends the json response (The object passed to json will be serialized into a JSON string) with status code 200. The return keyword is used to exit the function immediately after sending the response.
+        if (!leave) {                                 // The await keyword is used to pause execution until the promise returned by findByPk resolves.
+            return res.status(404).json({ message: 'Leave request not found' });
+        }
+        if (leave.deleted === true){
+            return res.status(401).json({ message: "Leave is already deleted" });
+        } 
+        else if (leave.deleted === false) {
+            return res.status(200).json({
+                leave});  // sends the json response (The object passed to json will be serialized into a JSON string) with status code 200. The return keyword is used to exit the function immediately after sending the response.
+        }
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -95,7 +104,7 @@ export const getAllLeaveRequests = async (req, res) => {  // asnnc funtion with 
         const offset = (page - 1) * limit;
         const status = req.query.status; // get the status value being passed in query parameter as string value and saves in status variable
 
-        const where = {}; // This initializes an empty object named where. This object will be used to build the conditions for filtering the data in a database query.
+        const where = {deleted: false}; // This initializes an empty object named where. This object will be used to build the conditions for filtering the data in a database query.
         if (['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
             // This line checks two things:
             //Whether the status variable is defined (not null or undefined).
@@ -259,7 +268,7 @@ export const deleteLeaveRequest = async (req, res) => {
             return res.status(404).json({ message: 'Leave request not found or cannot be deleted' });
         }
 
-        await leave.destroy(); // If the validation checks pass, this line deletes the leave request from the database using the destroy method.
+        await leave.update({ deleted: true }); // If the validation checks pass, this line deletes the leave request from the database using the destroy method.
         user.remaining_leaves += 1; // if all good, update remaining leaves by adding 1
         await leave.save(); // saves/updates the leave model, called as "const leave = await Leave.findByPk(leave_id);"
         await user.save(); // saves/updates the user model, called as "const user = await User.findByPk(leave.e_id);"
@@ -279,7 +288,7 @@ export const getLeaveRequests = async (req, res) => {
         const offset = (page - 1) * limit; 
 
         const status = req.query.status; // get the status value being passed in query parameter as string value and saves in status variable
-        const where = {e_id}; // This initializes an object named where. This object will be used to build the conditions for filtering the data in a database query. It already contains a condition to check the required id which it got from req.user object
+        const where = {e_id, deleted: false}; // This initializes an object named where. This object will be used to build the conditions for filtering the data in a database query. It already contains a condition to check the required id which it got from req.user object
         if (['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
             // This line checks two things:
             //Whether the status variable is defined (not null or undefined).
@@ -334,7 +343,7 @@ export const getEmployeeLeaves = async(req, res) => {
         const offset = (page - 1) * limit; 
 
         const status = req.query.status; // get the status value being passed in query parameter as string value and saves in status variable
-        const where = {e_id}; // This initializes an object named where. This object will be used to build the conditions for filtering the data in a database query. It already contains a condition to check the required id which it got from req.user object
+        const where = {e_id, deleted: false}; // This initializes an object named where. This object will be used to build the conditions for filtering the data in a database query. It already contains a condition to check the required id which it got from req.user object
         if (['pending', 'accepted', 'rejected'].includes(status)) {  //The includes method checks if the status string exists within the array of valid statuses.
             // This line checks two things:
             //Whether the status variable is defined (not null or undefined).

@@ -59,6 +59,9 @@ export const login = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
+        if (user.deleted === true){
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
 
         const passwordMatch = await bcrypt.compare(e_password, user.e_password);
         // passwordMatch will store the result of the password comparison, which will be a boolean (true or false).
