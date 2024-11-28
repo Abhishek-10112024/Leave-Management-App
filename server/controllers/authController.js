@@ -5,7 +5,7 @@ import { addToBlacklist } from '../middlewares/tokenBlacklist.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const secretKey = process.env.JWT_SECRET || 'your-jwt-secret-key';
+const secretKey = process.env.JWT_SECRET;
 
 export const register = async (req, res) => {
     try {
@@ -19,6 +19,21 @@ export const register = async (req, res) => {
         if (!e_name || !e_email || !e_password || !e_dept) {
             return res.status(400).json({ message: 'Please enter all fields' });
         }
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{}|;:'",.<>?]).{8,}$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!passwordRegex.test(e_password)) {
+            return res.status(400).json({
+              error: 'Password must be at least 8 characters long, contain a number, an uppercase letter, and a special character.',
+            });
+        }
+
+        if (!emailRegex.test(e_email)) {
+            return res.status(400).json({
+              error: 'Invalid email address. Please include "@" and a valid domain.',
+            });
+        }        
 
         const userExists = await User.findOne({ where: { e_email } }); //The where clause is used to filter the records in the User table based on the condition provided. {findOne: Search for a single instance. Returns the first instance found, or null if none can be found.}
         if (userExists) {
