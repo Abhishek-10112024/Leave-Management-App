@@ -111,20 +111,20 @@ export const getAllLeaveRequests = async (req, res) => {  // asnnc funtion with 
             //Whether the value of status is one of the valid statuses: 'pending', 'accepted', or 'rejected'.
             where.status = status; // If both conditions in the if statement are met, this line adds a property to the where object, setting where.status to the value of status.
         }
-        else if (status === null || undefined || ''){
-            const { count, rows } = await Leave.findAndCountAll({
-                order: [['leave_id', 'ASC']],
-                limit, 
-                offset 
-            });
+        // else if (status === null || undefined || ''){
+        //     const { count, rows } = await Leave.findAndCountAll({
+        //         order: [['leave_id', 'ASC']],
+        //         limit, 
+        //         offset 
+        //     });
 
-            return res.status(200).json({
-                leaves: rows,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page,
-                totalCount: count
-            });
-        }
+            // return res.status(200).json({
+            //     leaves: rows,
+            //     totalPages: Math.ceil(count / limit),
+            //     currentPage: page,
+            //     totalCount: count
+            // });
+        // }
         const { count, rows } = await Leave.findAndCountAll({
             order: [['leave_id', 'ASC']],
             where,
@@ -295,20 +295,20 @@ export const getLeaveRequests = async (req, res) => {
             //Whether the value of status is one of the valid statuses: 'pending', 'accepted', or 'rejected'.
             where.status = status; // If both conditions in the if statement are met, this line adds a property to the where object, setting where.status to the value of status.
         }
-        else if (status === null || undefined || ''){
-            const { count, rows } = await Leave.findAndCountAll({
-                order: [['leave_id', 'ASC']],
-                limit, 
-                offset 
-            });
+        // else if (status === null || undefined || ''){
+        //     const { count, rows } = await Leave.findAndCountAll({
+        //         order: [['leave_id', 'ASC']],
+        //         limit, 
+        //         offset 
+        //     });
 
-            return res.status(200).json({
-                leaves: rows,
-                totalPages: Math.ceil(count / limit),
-                currentPage: page,
-                totalCount: count
-            });
-        }
+        //     return res.status(200).json({
+        //         leaves: rows,
+        //         totalPages: Math.ceil(count / limit),
+        //         currentPage: page,
+        //         totalCount: count
+        //     });
+        // }
         const { count, rows } = await Leave.findAndCountAll({
             order: [['leave_id', 'ASC']],
             where,

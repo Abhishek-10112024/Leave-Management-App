@@ -5,9 +5,11 @@
   // The Route component defines a specific route in your application
   // You specify a path and the component that should be rendered when that path is matched.
   import Register from './components/authComponents/SignUp.svelte'; 
+  // @ts-ignore
   import Login from './components/authComponents/Login.svelte';
   import adminDashboard from './components/adminComponents/AdminDashboard.svelte'; 
   import Logout from './components/authComponents/Logout.svelte';
+  // @ts-ignore
   import employeeDashboard from './components/employeeComponents/EmployeeDashboard.svelte';
   import EmployeeManagement from './components/adminComponents/EmployeeManagement.svelte';
   import LeaveManagement from './components/adminComponents/LeaveManagement.svelte';
