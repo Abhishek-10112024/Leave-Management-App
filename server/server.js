@@ -80,12 +80,12 @@ app.use('/api', leavesRoute);
 app.use('/api/employees', employeesRoute);
 
 // Error handling middleware for OpenAPI validation errors
-// app.use((err, req, res, next) => {
-//     res.status(err.status || 500).json({
-//       message: err.message,
-//       errors: err.errors,
-//     });
-//   });
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({
+      message: err.message,
+      errors: err.errors,
+    });
+  });
 
 const port = process.env.PORT || 3000;
 
