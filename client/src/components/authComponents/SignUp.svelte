@@ -102,7 +102,7 @@
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="password" id="form3Example4cdg" class="form-control form-control-lg" placeholder="Team" bind:value={team}/>
+                  <input type="email" id="form3Example3cg" class="form-control form-control-lg" placeholder="Team" bind:value={team}/>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">

@@ -80,16 +80,16 @@ app.use('/api', leavesRoute);
 app.use('/api/employees', employeesRoute);
 
 // Error handling middleware for OpenAPI validation errors
-app.use((err, req, res, next) => {
-    res.status(err.status || 500).json({
-      message: err.message,
-      errors: err.errors,
-    });
-  });
+// app.use((err, req, res, next) => {
+//     res.status(err.status || 500).json({
+//       message: err.message,
+//       errors: err.errors,
+//     });
+//   });
 
 const port = process.env.PORT || 3000;
 
-sequelize.sync({ force: false }) // force: false: This option indicates that existing tables should not be dropped and recreated. 
+sequelize.sync({ alter: false }) // force: false: This option indicates that existing tables should not be dropped and recreated. 
 // If set to true, it would drop and recreate tables, which is useful for development but not safe for production data.
     .then(() => { 
         // .then(() => { ... }): This is a promise handler that executes when the database synchronization is successful. 
